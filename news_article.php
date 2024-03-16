@@ -22,6 +22,7 @@ else { echo "Error 404";}
 </head>
 <body>
 <div class="container">
+  <div class = "first_container">
   <div class="maininfo">
       <div class="news_title">Spider-Man: No Way Home Rilis Trailer Terbaru</div>
       <div class="upload_date">17 Nov 2021 | TIX ID</div>
@@ -59,10 +60,10 @@ else { echo "Error 404";}
     nulla facilisi tellus sit lobortis cursus. Venenatis at aliquet auctor ut
     elit, urna. Consequat quis risus turpis amet.
   </div>
- 
   <div class="other_article_txt">Xem thêm các bài viết khác</div>
-</div>
-<div class="other_news">
+  </div>
+  
+  <div class="other_news">
   <div class="news_items">
     <div class="column" id="column_1">
         <img
@@ -99,6 +100,8 @@ else { echo "Error 404";}
     </div>
   </div>
 </div>
+</div>
+
 </body>
 </html>
 

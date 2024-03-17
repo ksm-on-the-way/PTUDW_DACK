@@ -71,10 +71,13 @@ else { echo "Error 404";}
           srcset="https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/ef2a30bb30cd1d60eb924a537f9a3c3bb70a5a76c553fb3532a04139a0017ad7?apiKey=26bc666b112f4cabba6b77c16b9bc389&"
           class="img"
         />
+        <div class ="otnews_content">
+        <div class = "news_category">News</div>
         <div class="other_news_title">
           Ghostbusters: Afterlife Hadir Menampilkan Variasi Hantu Baru
         </div>
         <div class="other_news_date">08 Nov 2021 | TIX ID</div>
+        </div>
     </div>
     <div class="column" id="column_2">
         <img

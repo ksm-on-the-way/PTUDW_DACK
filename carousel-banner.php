@@ -15,35 +15,29 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <style>
-.carousel-film__container {
+.carousel-banner__container {
     width: 1300px;
     margin: 0 auto;
     position: relative;
+    /* Thêm thuộc tính position */
 }
 
-.carousel-film__container .owl-item {
-    display: flex;
-    justify-content: center;
+.carousel-banner__container img {
+    width: 100%;
+    height: 304px;
+    object-fit: fill;
 }
 
-.carousel-film__container .owl-carousel {
+.carousel-banner__container .owl-carousel {
     position: relative;
 }
 
-.carousel-film__container .owl-carousel .owl-nav .owl-prev {
+/* Thêm các thuộc tính sau */
+.carousel-banner__container .owl-carousel .owl-nav .owl-prev,
+.carousel-banner__container .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    left: -25px;
     top: 50%;
-}
-
-.carousel-film__container .owl-carousel .owl-nav .owl-next {
-    position: absolute;
-    right: -25px;
-    top: 50%;
-}
-
-.carousel-film__container .owl-carousel .owl-nav .owl-next,
-.owl-prev {
+    transform: translateY(-50%);
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -52,38 +46,33 @@
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     z-index: 90;
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Màu nền */
+    color: black;
+    /* Màu chữ */
+}
+
+.carousel-banner__container .owl-carousel .owl-nav .owl-prev {
+    left: -25px;
+}
+
+.carousel-banner__container .owl-carousel .owl-nav .owl-next {
+    right: -25px;
 }
 </style>
 
 <body>
-    <div class='carousel-film__container'>
+    <div class='carousel-banner__container'>
         <div class="owl-carousel">
             <div>
-                <?php
-                include "card-film.php";
-                ?>
+                <img class='img' src='./images/banner-1.png' />
             </div>
             <div>
-                <?php
-                include "card-film.php";
-                ?>
+                <img class='img' src='./images/banner-2.png' />
             </div>
             <div>
-                <?php
-                include "card-film.php";
-                ?>
+                <img class='img' src='./images/banner-3.jpg' />
             </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
-
         </div>
     </div>
 </body>
@@ -91,7 +80,7 @@
 </script>
 
 <script>
-$('.carousel-film__container .owl-carousel').owlCarousel({
+$('.carousel-banner__container .owl-carousel').owlCarousel({
     loop: true,
     margin: 0,
     navText: [
@@ -99,15 +88,7 @@ $('.carousel-film__container .owl-carousel').owlCarousel({
         "<i class='fas fa-chevron-right'></i>",
     ],
     nav: true,
-    responsive: {
-        0: {
-            items: 1
-        },
-        600: {
-            items: 2
-        },
-
-    }
+    items: 1
 })
 </script>
 

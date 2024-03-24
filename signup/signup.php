@@ -158,6 +158,7 @@
             var city = document.getElementById("city").value;
             var passwordInput = document.getElementById("password").value;
             var confirmPasswordInput = document.getElementById("confirm_password").value;
+            var termCheckbox = document.getElementById("term_register");   
 
             // Kiểm tra các trường có trống không
             if (fullname === "" || phone === "" || birthdate === "" || email === "" || city === "" || passwordInput === "" || confirmPasswordInput === "") {
@@ -166,6 +167,13 @@
                 // Ngăn chặn việc submit form
                 return false;
             }
+            // Kiểm tra xem checkbox đã được chọn chưa
+            if (!termCheckbox.checked) {
+                document.getElementById("error-message").textContent = "Bạn phải đồng ý với Điều khoản sử dụng!";
+                document.getElementById("error-message").style.display = "block";
+                return false;
+            }
+
             // Người dùng submit thành công
             return true;
         }
@@ -192,12 +200,13 @@
                 var fullname = fullnameInput.value.trim();
                 if (fullname === "") {
                     fullnameError.textContent = "Họ và tên không được để trống";
-                } else if (fullname.split(' ').length < 2 || !fullname.match(/^[a-zA-Z\s]*$/)) {
+                } else if (fullname.split(' ').length < 2 || !fullname.match(/^[a-zA-Z\sÀ-Ỹà-ỹ]*$/)) {
                     fullnameError.textContent = "Họ và tên phải có ít nhất 2 từ và không chứa số hoặc ký tự đặc biệt";
                 } else {
                     fullnameError.textContent = "";
                 }
             }
+
 
             function checkPhone() {
                 var phone = phoneInput.value.trim();

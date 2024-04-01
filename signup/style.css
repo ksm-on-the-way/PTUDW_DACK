@@ -6,6 +6,9 @@ body {
     background-size: contain; 
     background-position: center;
     overflow-x: hidden; /* Ẩn thanh cuộn trái phải */
+    /* căn giữa page */
+    display: flex;
+    align-items: center; 
 }
 
 a {
@@ -16,10 +19,12 @@ a {
     margin-top: 10px; 
     margin-right: 100px;
     margin-left: auto; /* Đảm bảo rằng phần tử được căn bên phải */
-    width: 400px;
+    width: 420px;
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
+    /* thanh cuộn */
+    height: 440px;;
     overflow: auto;
 }
 
@@ -117,6 +122,36 @@ i {
     margin-top: 10px; 
     margin-bottom: 10px;
     font-size: 13px;
+}
+
+#password-message {
+    display: none;
+}
+
+#password-message p {
+    padding: 0px 10px;
+    font-size: 13.5px;
+}
+#password-message h3 {
+    font-size: 15px;
+}
+
+#password-message .valid {
+    color: green !important;
+}
+
+#password-message .valid:before {
+    position: relative;
+    content: "✔";
+}
+
+#password-message .invalid {
+    color: red !important;
+}
+
+#password-message .invalid:before {
+    position: relative;
+    content: "✖";
 }
 
 .forgot-password {

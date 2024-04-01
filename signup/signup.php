@@ -69,26 +69,6 @@
                     <input type="radio" id="other" name="gender" value="other">
                 </div>
             </div>
-
-            <!-- Khu vực -->
-            <div class="form-group">
-                <label for="region">Khu vực:<span class="required">*</span></label>
-                <select class="require" id="city" name="city" aria-label=".form-select-sm">
-                    <option value="">Chọn khu vực</option>
-                    <?php 
-                    // Lấy dữ liệu từ API
-                    $json = file_get_contents('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json');
-                    $data = json_decode($json, true);
-
-                    // Duyệt qua danh sách các tỉnh thành và hiển thị trong dropdown
-                    foreach ($data as $city) {
-                        $selected = ($selected_city == $city['Name']) ? "selected" : "";
-                        echo "<option value='" . $city['Name'] . "' $selected>" . $city['Name'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <div id="city-error" class="error-message"></div>
-            </div>
         
             <!-- Mật khẩu -->
             <div class="form-group">          
@@ -96,8 +76,16 @@
                 <input type="password" id="password" name="password" placeholder="Mật khẩu">
 
                 <!-- tạo eye icon ẩn/hiện mk người dùng (dùng boostrap css, gắn ở phần head html)-->
-                <i class="bi bi-eye-slash" id="togglePassword"></i>
+                <i class="bi bi-eye-slash toggle-password" data-target="password"></i>
                 <div id="password-error" class="error-message"></div>
+                <!-- Phần hiển thị điều kiện  -->
+                <div id="password-message">
+                    <h3>Mật khẩu phải bao gồm ít nhất:</h3>
+                    <p id="length" class="invalid"> 8 chữ số</p>
+                    <p id="letter" class="invalid"> 1 chữ thường</p>
+                    <p id="capital" class="invalid"> 1 chữ in hoa</p>
+                    <p id="number" class="invalid"> 1 ký tự số </p>
+                </div>
             </div>
 
             <!-- Nhập lại mật khẩu -->
@@ -106,7 +94,7 @@
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Nhập lại mật khẩu">
 
                 <!-- tạo eye icon ẩn/hiện mk người dùng -->
-                <i class="bi bi-eye-slash" id="togglePassword"></i>
+                <i class="bi bi-eye-slash toggle-password" data-target="confirm_password"></i>
                 <div id="confirm_password-error" class="error-message"></div>
             </div>
 
@@ -120,7 +108,7 @@
 
 
             <!-- Lỗi chưa điền full thông tin -->
-            <div id="error-message" class="error-message" style="display: none;">Hãy điền đầy đủ thông tin!</div>
+            <div id="error-message" class="error-message"></div>
 
             <!-- Nút submit -->
             <div class="form-group">
@@ -135,38 +123,72 @@
 
 
     <script>  
-        const togglePassword = document.querySelector("#togglePassword");
-        const password = document.querySelector("#password");
+        // Ẩn hiện con mắt ở mk và nhập lại mk
+        const togglePasswords = document.querySelectorAll(".toggle-password");
+        togglePasswords.forEach(togglePassword => {
+            togglePassword.addEventListener("click", function () {
+                const targetId = this.getAttribute("data-target");
+                const targetInput = document.getElementById(targetId);
 
-        togglePassword.addEventListener("click", function () {
-            // toggle the type attribute
-            const type = password.getAttribute("type") === "password" ? "text" : "password";
-            password.setAttribute("type", type);
-            
-            // toggle the icon
-            this.classList.toggle("bi-eye");
+                // toggle the type attribute
+                const type = targetInput.getAttribute("type") === "password" ? "text" : "password";
+                targetInput.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("bi-eye");
+            });
         });
 
+        // Check các error-message còn tồn tại hay ko để có thể submit form, hàm này sẽ dc gọi trong
+        // hàm dưới validateForm()
+        function checkErrorMessages() {
+            // Lấy tất cả các error-message và password-message
+            var errorMessages = document.querySelectorAll(".error-message");
+            var passwordMessages = document.querySelectorAll("#password-message p");
+
+            // Biến để kiểm tra xem có lỗi nào không
+            var hasError = false;
+
+            // Kiểm tra xem có bất kỳ error-message nào không rỗng không
+            for (var i = 0; i < errorMessages.length; i++) {
+                if (errorMessages[i].textContent.trim() !== "") {
+                    // Nếu có, đặt hasError thành true và dừng vòng lặp để kiểm tra tiếp đk dưới
+                    hasError = true;
+                    break;
+                }
+            }
+            // Kiểm tra xem có bất kỳ password-message nào không hợp lệ không
+            for (var j = 0; j < passwordMessages.length; j++) {
+                if (passwordMessages[j].classList.contains("invalid")) {
+                    // Nếu có, đặt hasError thành true và dừng vòng lặp
+                    hasError = true;
+                    break;
+                }
+            }
+            return hasError;
+        }
 
 
-        // Kiểm tra xem người dùng đã nhập hết các ô chưa
+
+        // Phần check chính để kiểm tra xem người dùng đã nhập hết các ô chưa và nhập đúng hết chưa 
         function validateForm() {
             var fullname = document.getElementById("fullname").value;
             var phone = document.getElementById("phone").value;
             var birthdate = document.getElementById("birthdate").value;
             var email = document.getElementById("email").value;
-            var city = document.getElementById("city").value;
             var passwordInput = document.getElementById("password").value;
             var confirmPasswordInput = document.getElementById("confirm_password").value;
             var termCheckbox = document.getElementById("term_register");   
 
             // Kiểm tra các trường có trống không
-            if (fullname === "" || phone === "" || birthdate === "" || email === "" || city === "" || passwordInput === "" || confirmPasswordInput === "") {
+            if (fullname === "" || phone === "" || birthdate === "" || email === "" || passwordInput === "" || confirmPasswordInput === "") {
                 // Hiển thị thông báo lỗi
+                document.getElementById("error-message").textContent = "Hãy điền đầy đủ thông tin!";
                 document.getElementById("error-message").style.display = "block";
                 // Ngăn chặn việc submit form
                 return false;
             }
+
             // Kiểm tra xem checkbox đã được chọn chưa
             if (!termCheckbox.checked) {
                 document.getElementById("error-message").textContent = "Bạn phải đồng ý với Điều khoản sử dụng!";
@@ -174,17 +196,26 @@
                 return false;
             }
 
+            // Nếu không có lỗi nào xảy ra, làm cho thông báo cuối cùng trở thành rỗng
+            document.getElementById("error-message").textContent = "";
+
+            // Kiêmr tra xem còn lỗi nào ở các ô khác hay ko
+            if (checkErrorMessages()) {
+                document.getElementById("error-message").textContent = "Vui lòng kiểm tra lại định dạng các ô dữ liệu!";
+                document.getElementById("error-message").style.display = "block";
+                return false;
+            }
+
             // Người dùng submit thành công
-            return true;
+            return true; 
         }
 
-        // Phần kiểm tra real-time
+        // Phần kiểm tra input real-time
         document.addEventListener("DOMContentLoaded", function() {
             var fullnameInput = document.getElementById("fullname");
             var phoneInput = document.getElementById("phone");
             var birthdateInput = document.getElementById("birthdate");
             var emailInput = document.getElementById("email");
-            var cityInput = document.getElementById("city");
             var passwordInput = document.getElementById("password");
             var confirmPassInput = document.getElementById("confirm_password");
 
@@ -192,7 +223,6 @@
             var phoneError = document.getElementById("phone-error");
             var birthdateError = document.getElementById("birthdate-error");
             var emailError = document.getElementById("email-error");
-            var cityError = document.getElementById("city-error");
             var passwordError = document.getElementById("password-error");
             var confirmPassError = document.getElementById("confirm_password-error");
 
@@ -220,12 +250,22 @@
             }
 
             function checkBirthdate() {
+                var birthdate = new Date(birthdateInput.value); // Chuyển đổi ngày sinh thành đối tượng Date
+                var today = new Date(); // Ngày hiện tại
+
                 if (birthdateInput.value.trim() === "") {
                     birthdateError.textContent = "Vui lòng chọn ngày sinh";
+                } else if (birthdate > today) { // Kiểm tra xem ngày sinh có lớn hơn ngày hiện tại không
+                    birthdateError.textContent = "Ngày sinh không thể lớn hơn ngày hiện tại";
+                } else if (today.getFullYear() - birthdate.getFullYear() < 18) { // So sánh tuổi
+                    birthdateError.textContent = "Bạn phải đủ 18 tuổi trở lên để đăng ký";
+                } else if (today.getFullYear() - birthdate.getFullYear() > 80) { // Kiểm tra người dùng phải dưới 80 tuổi
+                    birthdateError.textContent = "Vui lòng nhập ngày sinh hợp lệ!";
                 } else {
                     birthdateError.textContent = "";
                 }
             }
+
 
             function checkEmail() {
                 var email = emailInput.value.trim();
@@ -238,25 +278,91 @@
                 }
             }
 
-            function checkCity() {
-                if (cityInput.value === "") {
-                    cityError.textContent = "Vui lòng chọn khu vực";
-                } else {
-                    cityError.textContent = "";
-                }
-            }
-
+            // Hiện các điều kiện 8 ký tự, 1 chữ thường,...
             function checkPassword() {
+                var letter = document.getElementById("letter");
+                var capital = document.getElementById("capital");
+                var number = document.getElementById("number");
+                var length = document.getElementById("length");
                 var password = passwordInput.value.trim();
-                if (password === "") {
-                    passwordError.textContent = "Mật khẩu không được để trống";
-                } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
-                    passwordError.textContent = "Mật khẩu phải có ít nhất 8 ký tự và bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt";
+
+                // Hiển thị hộp thông báo khi người dùng bắt đầu nhập
+                document.getElementById("password-message").style.display = "block";
+
+                // Validate lowercase letters
+                var lowerCaseLetters = /[a-z]/g;
+                if (password.match(lowerCaseLetters)) {  
+                    letter.classList.remove("invalid");
+                    letter.classList.add("valid");
                 } else {
-                    passwordError.textContent = "";
+                    letter.classList.remove("valid");
+                    letter.classList.add("invalid");
+                }
+                
+                // Validate capital letters
+                var upperCaseLetters = /[A-Z]/g;
+                if (password.match(upperCaseLetters)) {  
+                    capital.classList.remove("invalid");
+                    capital.classList.add("valid");
+                } else {
+                    capital.classList.remove("valid");
+                    capital.classList.add("invalid");
+                }
+
+                // Validate numbers
+                var numbers = /[0-9]/g;
+                if (password.match(numbers)) {  
+                    number.classList.remove("invalid");
+                    number.classList.add("valid");
+                } else {
+                    number.classList.remove("valid");
+                    number.classList.add("invalid");
+                }
+                
+                // Validate length
+                if (password.length >= 8) {
+                    length.classList.remove("invalid");
+                    length.classList.add("valid");
+                } else {
+                    length.classList.remove("valid");
+                    length.classList.add("invalid");
                 }
             }
 
+            // Hiện nhắc nhở và ẩn điều kiện nếu thoả mãn 4 trường hợp
+            function checkPasswordBlur() {
+                var letter = document.getElementById("letter");
+                var capital = document.getElementById("capital");
+                var number = document.getElementById("number");
+                var length = document.getElementById("length");
+                var password = passwordInput.value.trim();
+
+                // Kiểm tra xem tất cả các điều kiện đã thoả mãn hay không
+                if (password !== "" &&
+                    letter.classList.contains("valid") &&
+                    capital.classList.contains("valid") &&
+                    number.classList.contains("valid") &&
+                    length.classList.contains("valid")) {
+                    // Nếu tất cả các điều kiện đã thoả mãn, ẩn hộp điều kiện
+                    document.getElementById("password-message").style.display = "none";
+                    return true;
+                } 
+                
+                else {
+                    // Nếu mật khẩu trống, hiển thị thông báo lỗi
+                    if (password === "") {
+                        passwordError.textContent = "Password không được để trống";
+                        document.getElementById("password-message").style.display = "none";
+                    } 
+                    // Nếu không, ẩn ô thông báo lỗi
+                    else {
+                        passwordError.textContent = ""; 
+                    }
+                    return false;
+                }
+            }
+
+    
             function checkConfirmPassword() {
                 var password = passwordInput.value.trim();
                 var confirmPass = confirmPassInput.value.trim();
@@ -268,15 +374,17 @@
                     confirmPassError.textContent = "";
                 }
             }
-                    // Khi người dùng đã chọn 1 ô input và sau đó ấn ra ngoài ô input thì báo lỗi "không dc để trống"
-                    fullnameInput.addEventListener("blur", checkFullname);
-                    phoneInput.addEventListener("blur", checkPhone);
-                    birthdateInput.addEventListener("blur", checkBirthdate);
-                    emailInput.addEventListener("blur", checkEmail);
-                    cityInput.addEventListener("blur", checkCity);
-                    passwordInput.addEventListener("blur", checkPassword);
-                    confirmPassInput.addEventListener("blur", checkConfirmPassword);
-                });
+
+            // blur: Khi người dùng đã chọn 1 ô input và sau đó ấn ra ngoài
+            // input: Khi người dùng nhập
+            fullnameInput.addEventListener("blur", checkFullname);
+            phoneInput.addEventListener("blur", checkPhone);
+            birthdateInput.addEventListener("blur", checkBirthdate);
+            emailInput.addEventListener("blur", checkEmail);
+            passwordInput.addEventListener("input", checkPassword);
+            passwordInput.addEventListener("blur", checkPasswordBlur);
+            confirmPassInput.addEventListener("blur", checkConfirmPassword);
+        });
     </script>
 
 </body>

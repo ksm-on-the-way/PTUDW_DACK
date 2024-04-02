@@ -44,11 +44,13 @@
   }
   @media (max-width: 991px) {
     .comingsoon_items {
-      display: flex;
+      /* display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 30px;
-      margin: auto;
+      margin: auto; */
+      display: grid;
+      grid-template-columns: 45% 45%;
     }
   }
   .column {
@@ -68,6 +70,7 @@
     object-fit: auto;
     object-position: center;
     width: 100%;
+    border-radius: 2%;
   }
   .comingsoon_film_title {
     color: var(--Shade-900, #333);
@@ -96,3 +99,31 @@
     transform: scale(1.05);
     box-shadow: 2px 2px 10px #888888;
   }
+  .content {
+    padding-left: 20px;
+  }
+/* .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #333;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+.img_container:hover .overlay {
+    display: flex;
+} 
+*/

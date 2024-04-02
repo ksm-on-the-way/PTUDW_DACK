@@ -32,17 +32,11 @@ $result=chayTruyVanTraVeDL($link,"SELECT * FROM movie WHERE release_date > CURDA
 while($rows=mysqli_fetch_assoc($result)){
 echo '
     <div class="column">
-        <div class = "img_container">
         <img
           loading="lazy"
           srcset="'.$rows['movie_banner_src'].'"
           class="img"
         />
-        <div class="overlay" onmouseover="showButtons()" onmouseout="hideButtons()">
-        <a href="page1.php" class="button">Button 1</a>
-        <a href="page2.php" class="button">Button 2</a>
-        </div>
-        </div>    
         <div class="content">
         <div class="comingsoon_film_title">'.$rows['movie_name'].'</div>
         <div class = "comingsoon_info_container">

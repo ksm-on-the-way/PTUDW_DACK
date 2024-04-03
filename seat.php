@@ -17,8 +17,15 @@
     }
 
     .choosing-seat__container {
-        width: 1300px;
+        width: 100%;
         margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .choosing-seat__container {
+            width: 1300px;
+            margin: 0 auto;
+        }
     }
 
     .choosing-seat__container .title {
@@ -29,17 +36,31 @@
 
     .choosing-seat__container .description {
         color: var(--Shade-600, #5a637a);
-        margin-top: 32px;
+        margin-top: 16px;
         width: 100%;
         font: 400 16px/150% Roboto, sans-serif;
     }
 
+    @media (min-width: 768px) {
+        .choosing-seat__container .description {
+            margin-top: 32px;
+        }
+    }
+
     .choosing-seat__container .heading {
-        display: flex;
-        align-items: center;
-        width: 1100px;
-        margin: 0 auto;
-        justify-content: space-between;
+
+        width: 100%;
+
+    }
+
+    @media (min-width: 768px) {
+        .choosing-seat__container .heading {
+            display: flex;
+            align-items: center;
+            width: 1100px;
+            margin: 0 auto;
+            justify-content: space-between;
+        }
     }
 
     .choosing-seat__container .heading .time-picker {
@@ -61,6 +82,12 @@
         gap: 0 20px;
     }
 
+    @media (max-width: 991px) {
+        .choosing-seat__container .heading .seat-status {
+            margin-top: 15px;
+        }
+    }
+
     .choosing-seat__container .heading .seat-status .item {
         display: flex;
         align-items: center;
@@ -78,11 +105,18 @@
     }
 
     .seat-container {
-        width: 1100px;
-        margin: 0 auto;
-        display: flex;
-        column-gap: 80px;
-        margin-top: 50px;
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    @media (min-width: 768px) {
+        .seat-container {
+            width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            column-gap: 80px;
+            margin-top: 50px;
+        }
     }
 
     .seat-container .seat-left,
@@ -90,6 +124,17 @@
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    @media (min-width: 768px) {
+
+        .seat-container .seat-left,
+        .seat-container .seat-right {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
     }
 
     .seat-container .seat-item {
@@ -294,7 +339,7 @@
     @media (max-width: 991px) {
         .seat-footer__container .title {
             max-width: 100%;
-            padding: 0 20px;
+
         }
     }
 
@@ -307,10 +352,17 @@
         align-items: center;
         gap: 20px;
         justify-content: space-between;
-        padding: 0 20px;
+
     }
 
-    @med ia (max-width: 991px) {
+    @media(min-width: 768px) {
+        .seat-footer__container .seat-info {
+
+            padding: 0 20px;
+        }
+    }
+
+    @media (max-width: 991px) {
         .seat-footer__container .seat-info {
             max-width: 100%;
             flex-wrap: wrap;
@@ -333,7 +385,14 @@
     .seat-footer__container .price-info .price {
         color: var(--Shade-900, #333);
         margin-top: 23px;
-        font: 700 36px Roboto, sans-serif;
+        font: 700 26px Roboto, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+        .seat-footer__container .price-info .price {
+
+            font: 700 36px Roboto, sans-serif;
+        }
     }
 
     .seat-footer__container .seat-chose {
@@ -350,7 +409,14 @@
     .seat-footer__container .seat-chose .seat-number {
         color: var(--Shade-900, #333);
         margin-top: 16px;
-        font: 700 36px/128% Roboto, sans-serif;
+        font: 700 26px/128% Roboto, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+        .seat-footer__container .seat-chose .seat-number {
+
+            font: 700 36px/128% Roboto, sans-serif;
+        }
     }
 
     .seat-footer__container .confirm-container {
@@ -393,23 +459,6 @@
     }
     </style>
 </body>
-<script>
-let vehicle = {
-    wheels: '4',
-    fuelType: 'Gasoline',
-    color: 'Green'
-}
-let carProps = {
-    type: {
-        value: 'Volkswagen'
-    },
-    model: {
-        value: 'Golf'
-    }
-}
 
-var car = Object.create(vehicle, carProps);
-console.log(car);
-</script>
 
 </html>

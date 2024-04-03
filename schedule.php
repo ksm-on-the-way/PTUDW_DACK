@@ -22,11 +22,19 @@
     }
 
     .schedule-container {
-        display: grid;
-        grid-template-columns: 644px 1fr;
-        column-gap: 100px;
-        width: 1200px;
+
+        width: 100%;
         margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .schedule-container {
+            display: grid;
+            grid-template-columns: 644px 1fr;
+            column-gap: 100px;
+            width: 1200px;
+
+        }
 
     }
 
@@ -91,6 +99,17 @@
 
     }
 
+    .carousel-schedule__wrapper {
+        padding: unset;
+    }
+
+    @media (min-width: 768px) {
+        .carousel-schedule__wrapper {
+            padding: 0px 62px;
+        }
+    }
+
+
     .carousel-schedule__container .owl-carousel {
         position: relative;
     }
@@ -146,10 +165,17 @@
     }
 
     .schedule-filter {
-        display: flex;
-        max-width: 644px;
+        width: 100%;
         font-weight: 400;
-        margin-top: 50px;
+        margin-top: 30px
+    }
+
+    @media (min-width: 768px) {
+        .schedule-filter {
+            margin-top: 50px;
+            display: flex;
+            max-width: 644px;
+        }
 
     }
 
@@ -174,6 +200,8 @@
     @media (max-width: 991px) {
         .filter-input input {
             white-space: initial;
+            width: 100%;
+            padding: 0;
         }
     }
 
@@ -203,6 +231,9 @@
     @media (max-width: 991px) {
         .schedule-filter .filter {
             white-space: initial;
+            padding: 0;
+            gap: 20px;
+            margin-top: 15px;
         }
     }
 
@@ -233,7 +264,12 @@
         width: 100%;
         max-width: 413px;
         flex-direction: column;
+    }
 
+    @media (max-width: 991px) {
+        .schedule-right .film-container {
+            margin-top: 30px;
+        }
     }
 
     .schedule-right .film-container .img {
@@ -262,7 +298,7 @@
 
     @media (max-width: 991px) {
         .schedule-right .film-container .detail-film__container {
-            flex-direction: column;
+
             align-items: stretch;
             gap: 0px;
         }
@@ -351,7 +387,7 @@
             <div class="schedule-title">Schedule</div>
             <div class="schedule-desc">Pilih jadwal bioskop yang akan kamu tonton</div>
 
-            <div style='padding: 0 62px;'>
+            <div class='carousel-schedule__wrapper'>
                 <div class='carousel-schedule__container'>
                     <div class="owl-carousel">
                         <div class="schedule-box">
@@ -464,12 +500,22 @@
 <script>
 $('.carousel-schedule__container .owl-carousel').owlCarousel({
     margin: 24,
-    items: 5,
+
     navText: [
         "<i class='fas fa-chevron-left'></i>",
         "<i class='fas fa-chevron-right'></i>",
     ],
     nav: true,
+    responsive: {
+        0: {
+            items: 3,
+            nav: false
+        },
+        600: {
+            items: 5
+        },
+
+    }
 })
 </script>
 

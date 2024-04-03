@@ -25,8 +25,12 @@
         flex-direction: column;
         font-weight: 700;
         text-align: center;
-        padding: 0 20px;
+    }
 
+    @media (min-width: 768px) {
+        .card-film {
+            padding: 0 20px;
+        }
     }
 
     .card-film .img {

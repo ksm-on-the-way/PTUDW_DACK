@@ -28,11 +28,11 @@ body {
 @media (max-width: 991px) {
     .header {
         flex-wrap: wrap;
-        padding: 0 20px;
+        padding: 0;
     }
 }
 
-.img {
+.header .img {
     aspect-ratio: 1;
     object-fit: auto;
     object-position: center;
@@ -42,9 +42,15 @@ body {
 .header-right_container {
     justify-content: flex-end;
     align-items: center;
-    display: flex;
+    display: none;
     gap: 20px;
     margin: auto 0;
+}
+
+@media (min-width: 768px) {
+    .header-right_container {
+        display: flex;
+    }
 }
 
 @media (max-width: 991px) {
@@ -93,6 +99,7 @@ body {
         white-space: initial;
     }
 }
+
 
 .header-right_container .avt {
     font-family: Poppins, sans-serif;

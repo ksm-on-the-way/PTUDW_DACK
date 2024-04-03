@@ -16,9 +16,16 @@
 </head>
 <style>
 .carousel-film__container {
-    width: 1300px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
+}
+
+@media (min-width: 768px) {
+    .carousel-film__container {
+        width: 1300px;
+
+    }
 }
 
 .carousel-film__container .owl-item {
@@ -101,7 +108,8 @@ $('.carousel-film__container .owl-carousel').owlCarousel({
     nav: true,
     responsive: {
         0: {
-            items: 1
+            items: 1,
+            nav: false
         },
         600: {
             items: 2

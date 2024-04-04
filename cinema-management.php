@@ -79,6 +79,68 @@ td:not(:last-child) {
     border: solid 1px black;
 }
 </style>
+<?php
+
+
+
+// Kiểm tra xem có thông báo thành công được lưu trong session không
+if (isset($_SESSION['success_message'])) {
+    // Hiển thị thông báo và xóa nó khỏi session
+    echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+    unset($_SESSION['success_message']);
+}
+?>
+<?php
+require_once './db_module.php';
+
+// Kết nối đến cơ sở dữ liệu
+$link = null;
+taoKetNoi($link);
+
+// Số lượng dòng trên mỗi trang
+$rowsPerPage = 4;
+
+// Lấy trang hiện tại từ biến currentPage
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+$startRow = ($currentPage - 1) * $rowsPerPage;
+
+// Truy vấn để lấy dữ liệu từ bảng cities với phân trang
+$query = "SELECT t.theater_id, t.theater_name, t.theater_address, c.city_name, COUNT(r.room_id) AS room_count
+FROM theaters t
+LEFT JOIN cities c ON t.city_id = c.city_id
+LEFT JOIN rooms r ON t.theater_id = r.theater_id
+GROUP BY t.theater_id
+ORDER BY t.theater_id DESC
+LIMIT $startRow, $rowsPerPage";
+$result = chayTruyVanTraVeDL($link, $query);
+
+// Mảng để lưu trữ các tùy chọn thành phố
+$table_body = "";
+
+// Kiểm tra xem truy vấn có thành công không
+if (mysqli_num_rows($result) > 0) {
+    // Bắt đầu vòng lặp để xây dựng chuỗi HTML
+    while ($row = mysqli_fetch_assoc($result)) {
+        $table_body .= "<tr>";
+        $table_body .= "<td>" . $row['theater_name'] . "</td>";
+        $table_body .= "<td>" . $row['theater_address'] . "</td>";
+        $table_body .= "<td>" . $row['city_name'] . "</td>";
+        $table_body .= "<td>" . $row['room_count'] . "</td>";
+        $table_body .= "<td>
+                        <button class='edit-btn' onclick='redirectToEditCinema()'>Sửa</button>
+                        <button class='delete-btn'>Xóa</button>
+                       </td>";
+        $table_body .= "</tr>";
+    }
+} else {
+    // Nếu không có dữ liệu, hiển thị dòng thông báo
+    $table_body .= "<tr><td colspan='5'>Không có dữ liệu</td></tr>";
+}
+// Giải phóng bộ nhớ sau khi sử dụng
+giaiPhongBoNho($link, $result);
+
+
+?>
 <div class='cinema-admin__container'>
     <div class='cinema-admin__heading'>
         <div class='title'>
@@ -102,36 +164,7 @@ td:not(:last-child) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Rạp A</td>
-                    <td>123 Đường ABC</td>
-                    <td>Hồ Chí Minh</td>
-                    <td>5</td>
-                    <td>
-                        <button class="edit-btn" onclick='redirectToEditCinema()'>Sửa</button>
-                        <button class="delete-btn">Xóa</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rạp B</td>
-                    <td>456 Đường XYZ</td>
-                    <td>Hà Nội</td>
-                    <td>7</td>
-                    <td>
-                        <button class="edit-btn" onclick='redirectToEditCinema()'>Sửa</button>
-                        <button class="delete-btn">Xóa</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rạp C</td>
-                    <td>789 Đường LMN</td>
-                    <td>Đà Nẵng</td>
-                    <td>4</td>
-                    <td>
-                        <button class="edit-btn" onclick='redirectToEditCinema()'>Sửa</button>
-                        <button class="delete-btn">Xóa</button>
-                    </td>
-                </tr>
+                <?php echo $table_body; ?>
             </tbody>
         </table>
         <div>

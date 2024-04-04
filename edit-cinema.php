@@ -116,7 +116,7 @@ td:not(:last-child) {
                     <th>STT</th>
                     <th>Tên phòng</th>
                     <th>Loại phòng</th>
-
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -124,19 +124,28 @@ td:not(:last-child) {
                     <td>1</td>
                     <td>Phòng 1</td>
                     <td>A1</td>
-
+                    <td>
+                        <button onclick='editRoom(this)'>Sửa</button>
+                        <button onclick='deleteRoom(this)'>Xóa</button>
+                    </td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td>Phòng 2</td>
                     <td>A2</td>
-
+                    <td>
+                        <button onclick='editRoom(this)'>Sửa</button>
+                        <button onclick='deleteRoom(this)'>Xóa</button>
+                    </td>
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>Phòng 3</td>
                     <td>A3</td>
-
+                    <td>
+                        <button onclick='editRoom(this)'>Sửa</button>
+                        <button onclick='deleteRoom(this)'>Xóa</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -145,9 +154,55 @@ td:not(:last-child) {
     <div>
         <button onclick='addRoom()'>Thêm phòng</button>
         <button id='saveRoomButton' style='display:none;' onclick='saveRoomOutsideTable()'>Lưu phòng</button>
+        <button id='saveRoomChange' style='display:none;' onclick='saveRoomChanges()'>Lưu phòng</button>
     </div>
 </div>
 <script>
+function editRoom(button) {
+    // Tìm phần tử tr (dòng) chứa nút Sửa được click
+    var row = button.closest('tr');
+
+    // Lấy các giá trị hiện tại của dòng đó
+    var stt = row.querySelector('td:nth-child(1)').innerText;
+    var tenPhong = row.querySelector('td:nth-child(2)').innerText;
+    var loaiPhong = row.querySelector('td:nth-child(3)').innerText;
+
+    // Thay thế nội dung của các cột bằng input
+    row.querySelector('td:nth-child(1)').innerHTML = '<input type="text" value="' + stt + '">';
+    row.querySelector('td:nth-child(2)').innerHTML = '<input type="text" value="' + tenPhong + '">';
+    row.querySelector('td:nth-child(3)').innerHTML = '<input type="text" value="' + loaiPhong + '">';
+
+    // Hiển thị nút Lưu thay đổi
+    document.getElementById('saveRoomChange').style.display = 'block';
+
+    // Đặt sự kiện cho nút Lưu thay đổi để lưu giá trị mới
+    document.getElementById('saveRoomChange').onclick = function() {
+        saveRoomChanges(row);
+    };
+}
+
+function saveRoomChanges(row) {
+    // Lấy các giá trị mới từ input
+    var stt = row.querySelector('td:nth-child(1) input').value;
+    var tenPhong = row.querySelector('td:nth-child(2) input').value;
+    var loaiPhong = row.querySelector('td:nth-child(3) input').value;
+
+    // Thay thế các input bằng giá trị mới
+    row.querySelector('td:nth-child(1)').innerText = stt;
+    row.querySelector('td:nth-child(2)').innerText = tenPhong;
+    row.querySelector('td:nth-child(3)').innerText = loaiPhong;
+
+    // Ẩn nút Lưu thay đổi
+    document.getElementById('saveRoomChange').style.display = 'none';
+}
+
+function deleteRoom(button) {
+    // Tìm phần tử tr (dòng) chứa nút Xóa được click
+    var row = button.closest('tr');
+    // Xóa dòng đó
+    row.remove();
+}
+
 function addRoom() {
     var table = document.getElementById("table").getElementsByTagName('tbody')[0];
     var newRow = table.insertRow(table.rows.length);
@@ -178,6 +233,22 @@ function saveRoomOutsideTable() {
     for (var i = 0; i < values.length; i++) {
         newRow.cells[i].textContent = values[i];
     }
+    // Thêm cell thứ 4 với hai nút "Sửa" và "Xóa"
+    var editCell = newRow.insertCell(3);
+    var editButton = document.createElement('button');
+    editButton.textContent = 'Sửa';
+    editButton.onclick = function() {
+        editRoom(newRow);
+    };
+    editCell.appendChild(editButton);
+
+    var deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Xóa';
+    deleteButton.onclick = function() {
+        deleteRoom(newRow);
+        // table.removeChild(newRow); // Xóa hàng hiện tại khỏi bảng
+    };
+    editCell.appendChild(deleteButton);
 
     document.getElementById('saveRoomButton').style.display = 'none'; // Ẩn nút "Lưu phòng"
 }

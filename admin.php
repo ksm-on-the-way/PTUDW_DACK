@@ -281,6 +281,11 @@
 function redirectTo(handle) {
     window.location.href = 'admin.php?handle=' + handle;
 }
+const arr = [1, 2, 3, 4];
+arr.forEach((number) => {
+    return number * 2;
+})
+console.log(arr);
 </script>
 
 

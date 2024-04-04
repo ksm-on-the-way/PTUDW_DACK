@@ -1,17 +1,15 @@
 <?php
 require_once './db_module.php';
 
-// Kiểm tra xem có tham số được gửi từ form POST không
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy thông tin từ form
-    $fullname = $_POST['fullname'];
-    $phone = $_POST['phone'];
-    $birthdate = $_POST['birthdate'];
-    $email = $_POST['email'];
-    $password = $_POST['password']; // Mật khẩu chưa được mã hóa
-    $gender = $_POST['gender'];
-
-
+    // Lấy thông tin từ form và kiểm tra tính hợp lệ
+    // Sử dụng Prepared statement (Các dấu '?') để tránh bị tấn công theo kiểu SQL Injection
+    $fullname = $_POST['fullname'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $birthdate = $_POST['birthdate'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $gender = $_POST['gender'] ?? '';
 
     // Lưu thông tin vào cookie
     setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
@@ -19,45 +17,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     setcookie('birthdate', $birthdate, time() + 3600, '/');
     setcookie('email', $email, time() + 3600, '/');
     setcookie('gender', $gender, time() + 3600, '/');
-    // Kết nối đến cơ sở dữ liệu
+
+    // Kết nối database
     $link = NULL;
     taoKetNoi($link);
 
     // Kiểm tra số điện thoại đã tồn tại chưa
-    $phoneQuery = "SELECT * FROM users WHERE phone='$phone'";
-    $phoneResult = chayTruyVanTraVeDL($link, $phoneQuery);
+    $phoneQuery = "SELECT * FROM users WHERE phone=?";
+    $phoneStmt = mysqli_prepare($link, $phoneQuery);
+    mysqli_stmt_bind_param($phoneStmt, "s", $phone);
+    mysqli_stmt_execute($phoneStmt);
+    $phoneResult = mysqli_stmt_get_result($phoneStmt);
 
     // Kiểm tra địa chỉ email đã tồn tại chưa
-    $emailQuery = "SELECT * FROM users WHERE email='$email'";
-    $emailResult = chayTruyVanTraVeDL($link, $emailQuery);
+    $emailQuery = "SELECT * FROM users WHERE email=?";
+    $emailStmt = mysqli_prepare($link, $emailQuery);
+    mysqli_stmt_bind_param($emailStmt, "s", $email);
+    mysqli_stmt_execute($emailStmt);
+    $emailResult = mysqli_stmt_get_result($emailStmt);
 
     // Kiểm tra kết quả và hiển thị thông báo tương ứng
     if (mysqli_num_rows($phoneResult) > 0) {
         echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
-        echo '<script>window.location.href = "./signup.php";</script>';
+        echo '<script>window.location.href = "../signup/signup.php";</script>';
     } elseif (mysqli_num_rows($emailResult) > 0) {
         echo '<script>alert("Email đã tồn tại!");</script>';
-        echo '<script>window.location.href = "./signup.php";</script>';
-    } else {
-        // Nếu số điện thoại và địa chỉ email đều chưa tồn tại, tiếp tục xử lý đăng ký
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Thực thi truy vấn để thêm người dùng vào cơ sở dữ liệu
-        $insertQuery = "INSERT INTO users (fullname, password, email, phone, birth_date, gender, role_id)
-                        VALUES ('$fullname', '$hashedPassword', '$email', '$phone', '$birthdate', '$gender', 2)";
-
-        if (mysqli_query($link, $insertQuery)) {
-            // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
-            echo '<script>alert("Đăng ký thành công!");</script>';
-            echo '<script>window.location.href = "../login/login.php";</script>';
-        } else {
-            // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
-            echo "Error: " . $insertQuery . "<br>" . mysqli_error($link);
-        }
+        echo '<script>window.location.href = "../signup/signup.php";</script>';
     }
+    else {
 
+    // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // Thực thi truy vấn để thêm người dùng vào cơ sở dữ liệu
+    $insertQuery = "INSERT INTO users (fullname, password, email, phone, birth_date, gender, role_id)
+                    VALUES (?, ?, ?, ?, ?, ?, 2)";
+
+    $insertStmt = mysqli_prepare($link, $insertQuery);
+    mysqli_stmt_bind_param($insertStmt, "ssssss", $fullname, $hashedPassword, $email, $phone, $birthdate, $gender);
+
+    if (mysqli_stmt_execute($insertStmt)) {
+        // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
+        echo '<script>alert("Đăng ký thành công!");</script>';
+        echo '<script>window.location.href = "../login/login.php";</script>';
+    } else {
+        // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
+        echo '<script>alert("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại sau!");</script>';
+    }
+    }
     // Đóng kết nối và giải phóng bộ nhớ
+    mysqli_stmt_close($phoneStmt);
+    mysqli_stmt_close($emailStmt);
+    mysqli_stmt_close($insertStmt);
     giaiPhongBoNho($link, $phoneResult);
     giaiPhongBoNho($link, $emailResult);
 }
@@ -118,9 +129,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="gender">Giới tính:<span class="required">*</span></label>
             <div class="radio-group">
                 <label for="male">Nam</label>
-                <input type="radio" id="male" name="gender" value=1 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'male') ? 'checked' : ''; ?>>
+                <input type="radio" id="male" name="gender" value=1 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 1) ? 'checked' : ''; ?>>
                 <label for="female">Nữ</label>
-                <input type="radio" id="female" name="gender" value=0 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'female') ? 'checked' : ''; ?>>
+                <input type="radio" id="female" name="gender" value=0 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 0) ? 'checked' : ''; ?>>
             </div>
         </div>
 
@@ -194,6 +205,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
 
+
+        // Phần check chính để kiểm tra xem người dùng đã nhập hết các ô chưa và nhập đúng hết chưa 
+        function validateForm() {
+            var fullname = document.getElementById("fullname").value;
+            var phone = document.getElementById("phone").value;
+            var birthdate = document.getElementById("birthdate").value;
+            var email = document.getElementById("email").value;
+            var passwordInput = document.getElementById("password").value;
+            var confirmPasswordInput = document.getElementById("confirm_password").value;
+            var termCheckbox = document.getElementById("term_register");   
+            var genderMale = document.getElementById("male").checked;
+            var genderFemale = document.getElementById("female").checked;
+
+            // Kiểm tra các trường có trống không
+            if (fullname === "" || phone === "" || birthdate === "" || email === "" || passwordInput === "" || confirmPasswordInput === "" || !genderMale && !genderFemale) {
+                // Hiển thị thông báo lỗi
+                document.getElementById("error-message").textContent = "Hãy điền đầy đủ thông tin!";
+                document.getElementById("error-message").style.display = "block";
+                // Ngăn chặn việc submit form
+                return false;
+            }
+
+            // Kiểm tra xem checkbox đã được chọn chưa
+            if (!termCheckbox.checked) {
+                document.getElementById("error-message").textContent = "Bạn phải đồng ý với Điều khoản sử dụng!";
+                document.getElementById("error-message").style.display = "block";
+                return false;
+            }
+
+            // Nếu không có lỗi nào xảy ra, làm cho thông báo cuối cùng trở thành rỗng
+            document.getElementById("error-message").textContent = "";
+
+            // Kiêmr tra xem còn lỗi nào ở các ô khác hay ko
+            if (checkErrorMessages()) {
+                document.getElementById("error-message").textContent = "Vui lòng kiểm tra lại định dạng các ô dữ liệu!";
+                document.getElementById("error-message").style.display = "block";
+                return false;
+            }
+
+            // Người dùng submit thành công
+            return true; 
+        }
+
         // Check các error-message còn tồn tại hay ko để có thể submit form, hàm này sẽ dc gọi trong
         // hàm dưới validateForm()
         function checkErrorMessages() {
@@ -224,46 +278,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 
-
-        // Phần check chính để kiểm tra xem người dùng đã nhập hết các ô chưa và nhập đúng hết chưa 
-        function validateForm() {
-            var fullname = document.getElementById("fullname").value;
-            var phone = document.getElementById("phone").value;
-            var birthdate = document.getElementById("birthdate").value;
-            var email = document.getElementById("email").value;
-            var passwordInput = document.getElementById("password").value;
-            var confirmPasswordInput = document.getElementById("confirm_password").value;
-            var termCheckbox = document.getElementById("term_register");   
-
-            // Kiểm tra các trường có trống không
-            if (fullname === "" || phone === "" || birthdate === "" || email === "" || passwordInput === "" || confirmPasswordInput === "") {
-                // Hiển thị thông báo lỗi
-                document.getElementById("error-message").textContent = "Hãy điền đầy đủ thông tin!";
-                document.getElementById("error-message").style.display = "block";
-                // Ngăn chặn việc submit form
-                return false;
-            }
-
-            // Kiểm tra xem checkbox đã được chọn chưa
-            if (!termCheckbox.checked) {
-                document.getElementById("error-message").textContent = "Bạn phải đồng ý với Điều khoản sử dụng!";
-                document.getElementById("error-message").style.display = "block";
-                return false;
-            }
-
-            // Nếu không có lỗi nào xảy ra, làm cho thông báo cuối cùng trở thành rỗng
-            document.getElementById("error-message").textContent = "";
-
-            // Kiêmr tra xem còn lỗi nào ở các ô khác hay ko
-            if (checkErrorMessages()) {
-                document.getElementById("error-message").textContent = "Vui lòng kiểm tra lại định dạng các ô dữ liệu!";
-                document.getElementById("error-message").style.display = "block";
-                return false;
-            }
-
-            // Người dùng submit thành công
-            return true; 
-        }
 
         // Phần kiểm tra input real-time
         document.addEventListener("DOMContentLoaded", function() {

@@ -6,6 +6,8 @@ body {
     background-size: contain;
     background-position: center;
     overflow-x: hidden; /* Ẩn thanh cuộn trái phải */
+    display: flex; 
+    align-items: center; 
 }
 
 a {
@@ -15,11 +17,11 @@ a {
     margin-top: 10px;
     margin-right: 100px;
     margin-left: auto; /* Đảm bảo rằng phần tử được căn bên phải */
-    width: 400px;
+    width: 420px;
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
-    height: 500px;
+    height: 440px;
 }
 
 .login-signup-container h2 {

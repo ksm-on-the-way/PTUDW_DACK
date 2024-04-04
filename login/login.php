@@ -1,17 +1,61 @@
 <?php
+require_once './db_module.php';
+
+function authenticateUser($username, $password) {
+    // Kết nối đến cơ sở dữ liệu
+    $link = NULL;
+    taoKetNoi($link);
+
+    // Sử dụng prepared statement để tránh SQL injection
+    $query = "SELECT password FROM users WHERE (email = ? OR phone = ?)";
+
+    if ($stmt = mysqli_prepare($link, $query)) {
+        // Bind các biến vào statement
+        mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+
+        // Thực thi truy vấn
+        mysqli_stmt_execute($stmt);
+
+        // Lưu kết quả
+        mysqli_stmt_store_result($stmt);
+
+        // Kiểm tra xem có bản ghi nào trùng khớp không
+        if (mysqli_stmt_num_rows($stmt) == 1) {
+            // Bind kết quả vào các biến
+            mysqli_stmt_bind_result($stmt, $db_password);
+
+            // Fetch kết quả
+            mysqli_stmt_fetch($stmt);
+
+            // So sánh mật khẩu được cung cấp với mật khẩu trong cơ sở dữ liệu
+            if (password_verify($password, $db_password)) {
+                // Mật khẩu trùng khớp, trả về true
+                return true;
+            }
+        }
+    }
+
+    // Đóng kết nối và giải phóng bộ nhớ
+    giaiPhongBoNho($link, $stmt);
+
+    // Nếu không có kết quả hoặc mật khẩu không trùng khớp, trả về false
+    return false;
+}
+
 $error_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Kiểm tra xem các trường đã được điền đầy đủ hay không
     if (empty($_POST['username']) || empty($_POST['password'])){
         $error_message = "Vui lòng nhập đủ thông tin";
-    } else {
+    } 
+    else {
         // Xác thực và sạch sẽ hóa dữ liệu đầu vào
-        $username = htmlspecialchars($_POST['username']);
-        $password = htmlspecialchars($_POST['password']);
+        $username = $_POST['username'];
+        $password = $_POST['password'];
         
-        
-        // Thực hiện các kiểm tra đăng nhập ở đây 
-        if ($username === 'admin' && $password === 'admin123') {
+        // Thực hiện kiểm tra đăng nhập bằng hàm authenticateUser
+        if (authenticateUser($username, $password)) {
+            
             // Đăng nhập thành công, chuyển hướng người dùng đến trang chính sau khi đăng nhập thành công
             header("Location: dashboard.php");
             exit;
@@ -22,6 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+
 
 <html>
 <head>

@@ -1,11 +1,66 @@
 <?php
-        // Chuyển hướng ng dùng sau khi đăng ký thành công
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Chuyển hướng người dùng đến trang đăng nhập sau khi đăng ký thành công
-        echo '<script>window.location.href = "../login/login.php";</script>';
-            
+require_once './db_module.php';
+
+// Kiểm tra xem có tham số được gửi từ form POST không
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Lấy thông tin từ form
+    $fullname = $_POST['fullname'];
+    $phone = $_POST['phone'];
+    $birthdate = $_POST['birthdate'];
+    $email = $_POST['email'];
+    $password = $_POST['password']; // Mật khẩu chưa được mã hóa
+    $gender = $_POST['gender'];
+
+
+
+    // Lưu thông tin vào cookie
+    setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
+    setcookie('phone', $phone, time() + 3600, '/');
+    setcookie('birthdate', $birthdate, time() + 3600, '/');
+    setcookie('email', $email, time() + 3600, '/');
+    setcookie('gender', $gender, time() + 3600, '/');
+    // Kết nối đến cơ sở dữ liệu
+    $link = NULL;
+    taoKetNoi($link);
+
+    // Kiểm tra số điện thoại đã tồn tại chưa
+    $phoneQuery = "SELECT * FROM users WHERE phone='$phone'";
+    $phoneResult = chayTruyVanTraVeDL($link, $phoneQuery);
+
+    // Kiểm tra địa chỉ email đã tồn tại chưa
+    $emailQuery = "SELECT * FROM users WHERE email='$email'";
+    $emailResult = chayTruyVanTraVeDL($link, $emailQuery);
+
+    // Kiểm tra kết quả và hiển thị thông báo tương ứng
+    if (mysqli_num_rows($phoneResult) > 0) {
+        echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
+        echo '<script>window.location.href = "./signup.php";</script>';
+    } elseif (mysqli_num_rows($emailResult) > 0) {
+        echo '<script>alert("Email đã tồn tại!");</script>';
+        echo '<script>window.location.href = "./signup.php";</script>';
+    } else {
+        // Nếu số điện thoại và địa chỉ email đều chưa tồn tại, tiếp tục xử lý đăng ký
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Thực thi truy vấn để thêm người dùng vào cơ sở dữ liệu
+        $insertQuery = "INSERT INTO users (fullname, password, email, phone, birth_date, gender, role_id)
+                        VALUES ('$fullname', '$hashedPassword', '$email', '$phone', '$birthdate', '$gender', 2)";
+
+        if (mysqli_query($link, $insertQuery)) {
+            // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
+            echo '<script>alert("Đăng ký thành công!");</script>';
+            echo '<script>window.location.href = "../login/login.php";</script>';
+        } else {
+            // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
+            echo "Error: " . $insertQuery . "<br>" . mysqli_error($link);
+        }
     }
 
+    // Đóng kết nối và giải phóng bộ nhớ
+    giaiPhongBoNho($link, $phoneResult);
+    giaiPhongBoNho($link, $emailResult);
+}
 ?>
 
 
@@ -30,46 +85,45 @@
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" onsubmit="return validateForm()">
             <!-- Dưới mỗi ô input đều có 1 chỗ dành cho error-message -->
             <!-- Họ tên -->
-            <div class="form-group">
-                <label for="fullname">Họ và tên:<span class="required">*</span></label>
-                <input type="text" id="fullname" name="fullname" placeholder="Họ và tên" value="">
-                <div id="fullname-error" class="error-message"></div>
-            </div>
+            <!-- Họ tên -->
+        <div class="form-group">
+            <label for="fullname">Họ và tên:<span class="required">*</span></label>
+            <input type="text" id="fullname" name="fullname" placeholder="Họ và tên" value="<?php echo isset($_COOKIE['fullname']) ? $_COOKIE['fullname'] : ''; ?>">
+            <div id="fullname-error" class="error-message"></div>
+        </div>
 
-            <!-- Số điện thoại -->
-            <div class="form-group">
-                <label for="phone">Số điện thoại:<span class="required">*</span></label>
-                <input type="text" id="phone" name="phone" placeholder="Số điện thoại" value="">
-                <div id="phone-error" class="error-message"></div>
-            </div>
+        <!-- Số điện thoại -->
+        <div class="form-group">
+            <label for="phone">Số điện thoại:<span class="required">*</span></label>
+            <input type="text" id="phone" name="phone" placeholder="Số điện thoại" value="<?php echo isset($_COOKIE['phone']) ? $_COOKIE['phone'] : ''; ?>">
+            <div id="phone-error" class="error-message"></div>
+        </div>
 
-            <!-- Ngày sinh -->
-            <div class="form-group">
-                <label for="birthdate">Ngày sinh:<span class="required">*</span></label>
-                <input type="date" id="birthdate" name="birthdate" value="">
-                <div id="birthdate-error" class="error-message"></div>
-            </div>
+        <!-- Ngày sinh -->
+        <div class="form-group">
+            <label for="birthdate">Ngày sinh:<span class="required">*</span></label>
+            <input type="date" id="birthdate" name="birthdate" value="<?php echo isset($_COOKIE['birthdate']) ? $_COOKIE['birthdate'] : ''; ?>">
+            <div id="birthdate-error" class="error-message"></div>
+        </div>
 
-            <!-- Email -->
-            <div class="form-group">
-                <label for="email">Email:<span class="required">*</span></label>
-                <input type="email" id="email" name="email" placeholder="Email" value="">
-                <div id="email-error" class="error-message"></div>
-            </div>
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email:<span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="Email" value="<?php echo isset($_COOKIE['email']) ? $_COOKIE['email'] : ''; ?>">
+            <div id="email-error" class="error-message"></div>
+        </div>
 
-            <!-- Giới tính -->
-            <div class="form-group">
-                <label for="gender">Giới tính:<span class="required">*</span></label>
-                <div class="radio-group">
-                    <label for="male">Nam</label>
-                    <input type="radio" id="male" name="gender" value="male" >
-                    <label for="female">Nữ</label>
-                    <input type="radio" id="female" name="gender" value="female" >
-                    <label for="other">Khác</label>
-                    <input type="radio" id="other" name="gender" value="other">
-                </div>
+        <!-- Giới tính -->
+        <div class="form-group">
+            <label for="gender">Giới tính:<span class="required">*</span></label>
+            <div class="radio-group">
+                <label for="male">Nam</label>
+                <input type="radio" id="male" name="gender" value=1 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'male') ? 'checked' : ''; ?>>
+                <label for="female">Nữ</label>
+                <input type="radio" id="female" name="gender" value=0 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'female') ? 'checked' : ''; ?>>
             </div>
-        
+        </div>
+
             <!-- Mật khẩu -->
             <div class="form-group">          
                 <label for="password">Mật khẩu:<span class="required">*</span></label>
@@ -123,6 +177,7 @@
 
 
     <script>  
+
         // Ẩn hiện con mắt ở mk và nhập lại mk
         const togglePasswords = document.querySelectorAll(".toggle-password");
         togglePasswords.forEach(togglePassword => {

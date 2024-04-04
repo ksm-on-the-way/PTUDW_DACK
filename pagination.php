@@ -115,7 +115,11 @@
     // Get current page from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const currentPage = parseInt(urlParams.get('page')) || 1;
-
+    <?php if (isset($totalPages)): ?>
+    var totalPages = <?php echo $totalPages; ?>;
+    <?php else: ?>
+    var totalPages = 10; // Giá trị mặc định nếu $totalPage không tồn tại
+    <?php endif; ?>
     // Example usage with total pages
-    generatePagination(10, currentPage);
+    generatePagination(totalPages, currentPage);
     </script>

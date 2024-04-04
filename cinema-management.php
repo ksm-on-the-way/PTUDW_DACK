@@ -112,6 +112,13 @@ LEFT JOIN rooms r ON t.theater_id = r.theater_id
 GROUP BY t.theater_id
 ORDER BY t.theater_id DESC
 LIMIT $startRow, $rowsPerPage";
+
+$queryCount = "SELECT COUNT(*) AS total FROM theaters";
+$resultCount = chayTruyVanTraVeDL($link, $queryCount);
+$rowCount = mysqli_fetch_assoc($resultCount);
+$totalPages = ceil($rowCount['total'] / $rowsPerPage);
+
+
 $result = chayTruyVanTraVeDL($link, $query);
 
 $table_body = "";

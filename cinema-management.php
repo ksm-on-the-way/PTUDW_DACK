@@ -114,7 +114,6 @@ ORDER BY t.theater_id DESC
 LIMIT $startRow, $rowsPerPage";
 $result = chayTruyVanTraVeDL($link, $query);
 
-// Mảng để lưu trữ các tùy chọn thành phố
 $table_body = "";
 
 // Kiểm tra xem truy vấn có thành công không

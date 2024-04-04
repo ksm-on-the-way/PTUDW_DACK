@@ -54,6 +54,7 @@
         display: flex;
         margin-top: 67px;
         flex-direction: column;
+        row-gap: 16px;
     }
 
     .menu-item {
@@ -61,6 +62,7 @@
         border-radius: 4px;
         display: flex;
         gap: 20px;
+        cursor: pointer;
         padding: 8px 16px;
     }
 
@@ -70,7 +72,6 @@
 
     .menu-item-default {
         background-color: #118eea;
-        margin-top: 16px;
     }
 
     .menu-item-content {
@@ -163,7 +164,8 @@
                 alt="Logo" class="logo" />
             <h2 class="welcome-text">Welcome</h2>
             <div class="menu-container">
-                <div class="menu-item menu-item-active">
+                <div onclick="redirectTo('cinema-management')"
+                    class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'cinema-management' || $_GET['handle'] == 'create-cinema' || $_GET['handle'] == 'edit-cinema') || !isset($_GET['handle']) ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Quản lý rạp icon" class="menu-item-icon" />
@@ -172,7 +174,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('film-management')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'film-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Quản lý phim icon" class="menu-item-icon" />
@@ -181,7 +184,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('schedule-show')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'schedule-show' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Lên lịch chiếu icon" class="menu-item-icon" />
@@ -190,7 +194,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('news-management')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'news-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Quản lý bài viết icon" class="menu-item-icon" />
@@ -199,7 +204,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('report')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'report' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Xem báo cáo icon" class="menu-item-icon" />
@@ -208,7 +214,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('user-management')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'user-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5554df1a377d30b44bcb9845c044dec02c6b2e4ad78606478e85ba3c42b9003b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Quản lý người dùng icon" class="menu-item-icon" />
@@ -217,7 +224,8 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d1f56a0d8d14a70950ba5a4e02499174d6ad1f18e94daca56d2614da3104b471?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <div class="menu-item menu-item-default">
+                <div onclick="redirectTo('change-password')"
+                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'change-password' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0dc8fa5f91f7673ed8b55eafd9703ee88d057f3b87ba663edaedff37d2eb4483?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="Đổi mật khẩu icon" class="menu-item-icon" />
@@ -236,6 +244,31 @@
                     <button class="logout-button">Đăng xuất</button>
                 </div>
             </div>
+            <div class='content'>
+                <?php
+                // Kiểm tra tham số "handle" trong URL
+                if (isset($_GET['handle'])) {
+                    $handle = $_GET['handle'];
+                    // Kiểm tra giá trị của tham số "handle" và include trang tương ứng
+                    switch ($handle) {
+                        case 'management-cinema':
+                            include 'cinema-management.php';
+                            break;
+                        case 'create-cinema':
+                            include 'create-cinema.php';
+                            break;
+                        case 'edit-cinema':
+                            include 'edit-cinema.php';
+                            break;
+                        default:
+                            include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
+                            break;
+                    }
+                } else {
+                    include 'cinema-management.php'; // Trang mặc định khi không có tham số trong URL
+                }
+                ?>
+            </div>
 
 
 
@@ -244,5 +277,11 @@
     </div>
 
 </body>
+<script>
+function redirectTo(handle) {
+    window.location.href = 'admin.php?handle=' + handle;
+}
+</script>
+
 
 </html>

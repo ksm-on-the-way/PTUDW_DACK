@@ -9,6 +9,7 @@ require_once("module.php");
 echo '<html>
 <head>
     <link rel="stylesheet" href="comingsoon.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <script src="comingsoon.js">
     // function showButtons() {
     //     document.querySelector(".overlay").style.display = "flex";

@@ -16,6 +16,7 @@ echo
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="news_article.css" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container">

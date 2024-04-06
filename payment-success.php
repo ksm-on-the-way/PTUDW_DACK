@@ -76,14 +76,14 @@
     include_once "./header.php";
     ?>
     <div class="payment-success-container">
-        <h1 class="success-title">Pembayaran berhasil!</h1>
+        <h1 class="success-title">THANH TOÁN THÀNH CÔNG!</h1>
         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/f1cca73b1853a9c378b3f4073a452054930f6d24f4a7ffb58ffb4f43a5b5126b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" class="success-image" alt="Illustration of successful payment" />
 
         <p class="success-description">
-            Detail transaksi telah dikirimkan ke email anda, anda juga dapat memeriksa rincian tiket lainnya di tiket saya baik di website ataupun smartphone anda.
+            Chi tiết giao dịch đã được gửi đến email của bạn, bạn cũng có thể kiểm tra các chi tiết vé khác trong mục "Vé của tôi" trên trang web hoặc trên điện thoại thông minh của bạn.
         </p>
 
-        <button class="tickets-button">Tiket Saya</button>
+        <button class="tickets-button">Xem vé</button>
 
     </div>
     <?php

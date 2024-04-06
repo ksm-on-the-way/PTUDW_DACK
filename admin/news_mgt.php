@@ -82,7 +82,7 @@ td:not(:last-child) {
 </style>
 
 <?php
-require_once '../module.php';
+require_once '../db_module.php';
 
 // Kết nối đến cơ sở dữ liệu
 $link = null;
@@ -96,7 +96,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $startRow = ($currentPage - 1) * $rowsPerPage;
 
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
-$query = "SELECT n.news_title, n.news_date, c.news_category_name
+$query = "SELECT n.newsid, n.news_title, n.news_date, c.news_category_name
 FROM news n
 LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
 ORDER BY n.news_date DESC
@@ -120,10 +120,10 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_title'] . "</td>";
         $table_body .= "<td>" . $row['news_date'] . "</td>";
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
-        $table_body .= "<td>
-                        <button class='edit-btn' onclick='redirectToEditNews()'>Sửa</button>
-                        <button class='delete-btn'>Xóa</button>
-                       </td>";
+        $table_body .= '<td>
+                        <button class="edit-btn" onclick="redirectToEditNews('.$row['newsid'].')">Sửa</button>
+                        <button class="delete-btn">Xóa</button>
+                       </td>';
         $table_body .= "</tr>";
     }
 } else {
@@ -169,13 +169,13 @@ giaiPhongBoNho($link, $result);
     </div>
 </div>
 <script>
-function redirectToCreateNews()) {
+function redirectToCreateNews() {
     // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
     window.location.href = 'admin.php?handle=create-news';
 }
 
-function redirectToEditNews() {
+function redirectToEditNews(id) {
 
-    window.location.href = 'admin.php?handle=edit-news';
+    window.location.href = 'admin.php?handle=edit-news&id=id'+id;
 }
 </script>

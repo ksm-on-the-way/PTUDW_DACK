@@ -122,4 +122,4 @@
     <?php endif; ?>
     // Example usage with total pages
     generatePagination(totalPages, currentPage);
-    </script>s
+    </script>

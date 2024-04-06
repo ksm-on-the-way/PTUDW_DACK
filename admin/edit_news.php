@@ -1,23 +1,40 @@
 <?php
     if(isset($_GET['id'])) {
         $news_id = $_GET['id'];
-        require_once "../module.php";
+        require_once "../db_module.php";
         $link = NULL;
         taoKetNoi($link);
-        $sql = "SELECT * FROM news WHERE newsid=$news_id";
+        $sql = " SELECT n.newsid, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
+        FROM news n
+        LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
+        WHERE newsid = $news_id
+        ";
+        
         $result = chayTruyVanTraVeDL($link,$sql);
         if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $gettitle = $row['news_title'];
         $getcontent = $row['news_content'];
         $getbanner = $row['news_banner_src'];
-        $getcategory = $row['news_category'];
+        $getcategory = $row['news_category_name'];
         $getdate = $row['news_date'];
+        $q = "SELECT * FROM news_categories";
+        $catelist = chayTruyVanTraVeDL($link,$q);
+        $options ="";
+        while ($cate = mysqli_fetch_assoc($catelist)) {
+        $selectedcate = chayTruyVanTraVeDL($link,$sql);
+        $selected = mysqli_fetch_assoc($selectedcate);
+        $cate_id = $cate['news_category_id'];
+        $cate_name = $cate['news_category_name'];
+        if ($selected['news_category_id'] == $cate_id) {
+            $options .= "<option value='$cate_id' selected>$cate_name</option>";
+        }
+        else $options .= "<option value='$cate_id'>$cate_name</option>";
+        }
         echo '
         <html>
             <head>
                 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet">
-                <link href ="new_news.css" rel="stylesheet">
                 <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
                 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>';
                 echo '<script>var getcontent = '.json_encode($getcontent).';</script>';//encode bien thanh json object
@@ -94,13 +111,9 @@
                             <label>Ngày đăng bài</label>
                             <input type="date" name="date" required value = '.$getdate.'>
                             <label>Phân loại</label>
-                            <select name="category" required>
-                                <option value="" disabled selected hidden>Chọn phân loại</option>
-                                <option value="volvo">Volvo</option>
-                                <option value="saab">Saab</option>
-                                <option value="mercedes">Mercedes</option>
-                                <option value="audi">Audi</option>
-                            </select>
+                            <select name="category" required>';
+                            echo $options;                
+                         echo '</select>
                             <label>Banner</label>
                             <input type="text" name="banner" value = '.$getbanner.' required>
                             <label>Nội dung</label>
@@ -113,7 +126,7 @@
                             <input type="hidden" id="content" name="content"> <!-- Hidden input cho div id "editor" -->
                             <input type="hidden" id="newsid" name="newsid" value= '.$news_id.'> <!-- Hidden input cho newsid -->
                             <div class="action">
-                                <button type="button">Hủy</button>
+                                <button type="button" onclick="Cancel()">Hủy</button>
                                 <button type="submit" style="background-color: var(--Royal-Blue, #1a2c50); color: var(--Shade-100, #fff);">Lưu bài viết</button>
                             </div>
                         </form>
@@ -131,6 +144,10 @@
                                 var htmlContent = document.querySelector(".ql-editor").innerHTML;
                                 editorContentInput.value = htmlContent;
                             });
+                            function Cancel() {
+
+                                window.location.href = "admin.php?handle=dashboard"; //ve dashboard
+                            }
                         </script>
                     </div>
                 </div>
@@ -185,3 +202,229 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Redirect to the form page if form is not submitted
 }
 ?>
+<style>
+    body {
+    margin: 0px;
+}
+
+.admin-management {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    width: 100%;
+}
+
+.sidebar {
+    background-color: #1a2c50;
+    display: flex;
+    max-width: 241px;
+    flex-direction: column;
+    align-items: center;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 400;
+    line-height: 150%;
+    padding: 25px 25px 80px;
+}
+
+.logo {
+aspect-ratio: 1.96;
+object-fit: auto;
+object-position: center;
+width: 119px;
+max-width: 100%;
+}
+
+.welcome-text {
+font-family: Roboto, sans-serif;
+border-radius: 8px;
+margin-top: 32px;
+white-space: nowrap;
+justify-content: center;
+}
+
+.menu-container {
+align-self: stretch;
+display: flex;
+margin-top: 67px;
+flex-direction: column;
+}
+
+.menu-item {
+    justify-content: center;
+    border-radius: 4px;
+    display: flex;
+    gap: 20px;
+    padding: 8px 16px;
+}
+
+.menu-item-active {
+    background-color: #ffbe00;
+}
+
+.menu-item-default {
+    background-color: #118eea;
+    margin-top: 16px;
+}
+
+.menu-item-content {
+display: flex;
+gap: 16px;
+}
+
+.menu-item-icon {
+    aspect-ratio: 1;
+    object-fit: auto;
+    object-position: center;
+    width: 16px;
+    margin: auto 0;
+}
+
+        .menu-item-text {
+            font-family: Roboto, sans-serif;
+        }
+
+        .menu-item-arrow {
+            aspect-ratio: 0.6;
+            object-fit: auto;
+            object-position: center;
+            width: 6px;
+            stroke-width: 2px;
+            stroke: #fff;
+            border-color: rgba(255, 255, 255, 1);
+            border-style: solid;
+            border-width: 2px;
+            margin: auto 0;
+        }
+
+        .menu-item-text-multiline {
+            line-height: 24px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 8px 60px;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 1);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--Pastel-Yellow, #f2c46f);
+            text-align: center;
+        }
+
+        @media (max-width: 991px) {
+            .header {
+                padding: 0 20px;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        @media (max-width: 991px) {
+            .user-info {
+                margin-right: 10px;
+            }
+        }
+
+        .user-avatar {
+            width: 32px;
+            aspect-ratio: 1;
+            object-fit: cover;
+            object-position: center;
+            margin: auto 0;
+        }
+
+        .logout-button {
+            padding: 12px 8px;
+            font-family: Roboto, sans-serif;
+            background-color: var(--Royal-Blue, #1a2c50);
+            border-radius: 5.067px;
+            color: inherit;
+            cursor: pointer;
+        }
+/* Nội dung */
+.content {
+    margin: 25px 55px;
+    font-family: Roboto, sans-serif;
+}
+
+.content .title {
+    color: var(--Grey-400, #4f4f4f);
+    margin: 25px 0;
+    font-size: 24px;
+    font-weight: 550;
+}
+
+#editor {
+    width: 100%; /* Set the desired width */
+    max-width: 100%; /* Limit the width to the viewport width */
+    height: 300px; /* Set the desired height */
+    overflow-y: auto; /* Add vertical scrollbar when content overflows */
+    border: 1px solid #ccc; /* Add border for visual clarity */
+    padding: 5px; /* Add padding for spacing */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+form {
+    width: 75%;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 560;
+}
+
+input {
+    margin-bottom: 25px;
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    padding: 5px;
+}
+
+select {
+    margin-bottom: 25px;
+    width: 40%;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    padding: 5px;
+}
+.action {
+    display: flex;
+    margin-top: 87px;
+    gap: 20px;
+    font-size: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+
+.action button {
+    justify-content: center;
+    width: 216px;
+    border-radius: 5.067px;
+    border-color: rgba(90, 99, 122, 1);
+    border-style: solid;
+    border-width: 1px;
+    background-color: var(--White, #fff);
+    color: var(--Shade-600, #5a637a);
+    white-space: nowrap;
+    padding: 12px 8px;
+  }
+
+  select:required:invalid {
+    color: rgba(189, 197, 212, 1);
+  }
+
+  option {
+    color: black;
+  }
+  
+
+</style>

@@ -88,6 +88,138 @@ td:not(:last-child) {
     padding: 8px;
 }
 </style>
+<?php
+require_once './db_module.php';
+
+// Kết nối đến cơ sở dữ liệu
+$link = null;
+taoKetNoi($link);
+
+$theaterId = isset($_GET['theaterId']) ? $_GET['theaterId'] : null;
+
+// Khởi tạo biến để lưu trữ thông tin rạp
+$theaterName = "";
+$theaterAddress = "";
+$selectedCityId = "";
+
+// Nếu theaterId tồn tại, thực hiện truy vấn để lấy thông tin rạp
+if ($theaterId) {
+    $query = "SELECT * FROM theaters WHERE theater_id = '$theaterId' ";
+    $result = chayTruyVanTraVeDL($link, $query);
+
+    // Kiểm tra xem có dữ liệu trả về không
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $theaterName = $row['theater_name'];
+        $theaterAddress = $row['theater_address'];
+        $selectedCityId = $row['city_id'];
+    }
+}
+
+// Truy vấn để lấy dữ liệu từ bảng cities
+$queryCity = "SELECT city_id, city_name FROM cities";
+$resultCity = chayTruyVanTraVeDL($link, $queryCity);
+
+// Mảng để lưu trữ các tùy chọn thành phố
+$options = "";
+
+// Kiểm tra xem truy vấn có thành công không
+if ($resultCity) {
+    // Duyệt qua kết quả và tạo tùy chọn cho từng thành phố
+    while ($row = mysqli_fetch_assoc($resultCity)) {
+        $city_id = $row['city_id'];
+        $city_name = $row['city_name'];
+        $selected = ($city_id == $selectedCityId) ? "selected" : "";
+        $options .= "<option value='$city_id' $selected>$city_name</option>";
+    }
+
+
+} else {
+    echo "Không thể lấy dữ liệu từ cơ sở dữ liệu.";
+}
+
+$queryRoom = "SELECT r.room_id, r.room_name, rt.room_type_name 
+        FROM rooms r
+        INNER JOIN room_types rt ON r.room_type_id = rt.room_type_id
+        WHERE r.theater_id = $theaterId";
+$resultRoom = chayTruyVanTraVeDL($link, $queryRoom);
+$dataRoom = "";
+if (mysqli_num_rows($resultRoom) > 0) {
+    // In ra dữ liệu dưới dạng bảng HTML
+
+
+    while ($row = $resultRoom->fetch_assoc()) {
+        $dataRoom .= "<tr>";
+        $dataRoom .= "<td>" . $row["room_id"] . "</td>";
+        $dataRoom .= "<td>" . $row["room_name"] . "</td>";
+        $dataRoom .= "<td>" . $row["room_type_name"] . "</td>";
+        $dataRoom .= "<td><button onclick='editRoom(this)'>Sửa</button><button onclick='deleteRoom(this)'>Xóa</button></td>";
+        $dataRoom .= "</tr>";
+
+    }
+
+} else {
+    echo "Không có dữ liệu.";
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'saveChangeRoom') {
+    // Lấy dữ liệu từ POST request
+    $room_id = $_POST['roomId'];
+    $room_name = $_POST['roomName'];
+
+    // Prepare and execute the SQL query
+    $queryRoomChange = "UPDATE rooms SET room_name='$room_name' WHERE room_id=$room_id";
+    if (chayTruyVanKhongTraVeDL($link, $queryRoomChange)) {
+        // Redirect or update page as needed
+        echo "Data updated successfully";
+    } else {
+        echo "Failed to update data";
+    }
+}
+
+// Truy vấn để lấy dữ liệu từ bảng cities
+$queryRoomType = "SELECT room_type_id, room_type_name FROM room_types";
+$resultRoomType = chayTruyVanTraVeDL($link, $queryRoomType);
+
+// Mảng để lưu trữ các tùy chọn thành phố
+$roomTypeOptions = "";
+
+// Kiểm tra xem truy vấn có thành công không
+if ($resultRoomType) {
+    // Duyệt qua kết quả và tạo tùy chọn cho từng thành phố
+    while ($row = mysqli_fetch_assoc($resultRoomType)) {
+        $room_type_id = $row['room_type_id'];
+        $room_type_name = $row['room_type_name'];
+        // $selected = ($room_type_id == $selectedCityId) ? "selected" : "";
+        $roomTypeOptions .= "<option value='$room_type_id' >$room_type_name</option>";
+    }
+
+
+} else {
+    echo "Không thể lấy dữ liệu từ cơ sở dữ liệu.";
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'saveRoomToTheater') {
+    // Lấy dữ liệu từ POST request
+    $room_name = $_POST['room_name'];
+    $room_type_id = $_POST['room_type_id'];
+
+    // Prepare and execute the SQL query
+    $queryRoomToTheater = "INSERT INTO rooms (room_name, room_type_id,theater_id) VALUES ('$room_name', '$room_type_id', '$theaterId')";
+    $resultRoomToTheater = chayTruyVanKhongTraVeDL($link, $queryRoomToTheater);
+    if ($resultRoomToTheater) {
+        echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
+
+    } else {
+        echo "Failed to update data";
+    }
+}
+
+// Giải phóng bộ nhớ sau khi sử dụng
+giaiPhongBoNho($link, $result);
+
+
+?>
 <div class='edit-cinema__container'>
     <div>
         <h3>Thông tin rạp</h3>
@@ -96,15 +228,17 @@ td:not(:last-child) {
         <form>
             <div class='form-input'>
                 <label>Tên rạp</label>
-                <input placeholder='Nhập tên rạp'>
+                <input placeholder='Nhập tên rạp' value='<?php echo $theaterName; ?>'>
             </div>
             <div class='form-input'>
                 <label>Địa chỉ</label>
-                <input placeholder='Nhập địa chỉ'>
+                <input placeholder='Nhập địa chỉ' value='<?php echo $theaterAddress; ?>'>
             </div>
             <div class='form-input'>
                 <label>Thành phố</label>
-                <select></select>
+                <select>
+                    <?php echo $options; ?>
+                </select>
             </div>
 
         </form>
@@ -120,41 +254,18 @@ td:not(:last-child) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Phòng 1</td>
-                    <td>A1</td>
-                    <td>
-                        <button onclick='editRoom(this)'>Sửa</button>
-                        <button onclick='deleteRoom(this)'>Xóa</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Phòng 2</td>
-                    <td>A2</td>
-                    <td>
-                        <button onclick='editRoom(this)'>Sửa</button>
-                        <button onclick='deleteRoom(this)'>Xóa</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Phòng 3</td>
-                    <td>A3</td>
-                    <td>
-                        <button onclick='editRoom(this)'>Sửa</button>
-                        <button onclick='deleteRoom(this)'>Xóa</button>
-                    </td>
-                </tr>
+                <?php echo $dataRoom; ?>
             </tbody>
         </table>
 
     </div>
     <div>
         <button onclick='addRoom()'>Thêm phòng</button>
-        <button id='saveRoomButton' style='display:none;' onclick='saveRoomOutsideTable()'>Lưu phòng</button>
-        <button id='saveRoomChange' style='display:none;' onclick='saveRoomChanges()'>Lưu phòng</button>
+        <button id='saveRoomButton' style='display:none;' onclick='saveRoom()'>Lưu phòng</button>
+        <button id='cancelRoomButton' style='display:none;' onclick='cancelRoom()'>Hủy</button>
+
+        <button id='saveRoomChange' style='display:none;'>Lưu phòng</button>
+        <button id='cancelRoomChange' style='display:none;'>Hủy</button>
     </div>
 </div>
 <script>
@@ -171,14 +282,53 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1)').innerHTML = '<input type="text" value="' + stt + '">';
     row.querySelector('td:nth-child(2)').innerHTML = '<input type="text" value="' + tenPhong + '">';
     row.querySelector('td:nth-child(3)').innerHTML = '<input type="text" value="' + loaiPhong + '">';
+    // Disable nút Thêm phòng
 
+    document.querySelector('button[onclick="addRoom()"]').disabled = true;
+
+    //disable input id
+    row.querySelector('td:nth-child(1) input').disabled = true;
+
+    //disable nut xoa va nut sua luon
+    row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = true;
+    row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = true;
     // Hiển thị nút Lưu thay đổi
     document.getElementById('saveRoomChange').style.display = 'block';
+    // Hiển thị nút Hủy thay đổi
+    document.getElementById('cancelRoomChange').style.display = 'block';
 
     // Đặt sự kiện cho nút Lưu thay đổi để lưu giá trị mới
     document.getElementById('saveRoomChange').onclick = function() {
         saveRoomChanges(row);
     };
+    document.getElementById('cancelRoomChange').onclick = function() {
+        cancelRoomChanges(row);
+    };
+}
+
+function updateRowValues(row, stt, tenPhong, loaiPhong) {
+    // Thay thế các input bằng giá trị mới
+    row.querySelector('td:nth-child(1)').innerText = stt;
+    row.querySelector('td:nth-child(2)').innerText = tenPhong;
+    row.querySelector('td:nth-child(3)').innerText = loaiPhong;
+    document.getElementById('cancelRoomChange').style.display = 'none';
+    document.getElementById('saveRoomChange').style.display = 'none';
+
+    // enable nút Thêm phòng
+    document.querySelector('button[onclick="addRoom()"]').disabled = false;
+
+    //enable nut xoa va nut sua luon
+    row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = false;
+    row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = false;
+}
+
+function cancelRoomChanges(row) {
+    // Lấy các giá trị mới từ input
+    var stt = row.querySelector('td:nth-child(1) input').value;
+    var tenPhong = row.querySelector('td:nth-child(2) input').value;
+    var loaiPhong = row.querySelector('td:nth-child(3) input').value;
+
+    updateRowValues(row, stt, tenPhong, loaiPhong);
 }
 
 function saveRoomChanges(row) {
@@ -187,13 +337,23 @@ function saveRoomChanges(row) {
     var tenPhong = row.querySelector('td:nth-child(2) input').value;
     var loaiPhong = row.querySelector('td:nth-child(3) input').value;
 
-    // Thay thế các input bằng giá trị mới
-    row.querySelector('td:nth-child(1)').innerText = stt;
-    row.querySelector('td:nth-child(2)').innerText = tenPhong;
-    row.querySelector('td:nth-child(3)').innerText = loaiPhong;
+    updateRowValues(row, stt, tenPhong, loaiPhong);
 
-    // Ẩn nút Lưu thay đổi
-    document.getElementById('saveRoomChange').style.display = 'none';
+    // Prepare data to be sent
+    var formData = new FormData();
+    formData.append('action', 'saveChangeRoom');
+    formData.append('roomId', stt);
+    formData.append('roomName', tenPhong);
+
+    // AJAX request
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", window.location.href, true);
+    xhttp.send(formData); // Send form data
 }
 
 function deleteRoom(button) {
@@ -203,37 +363,79 @@ function deleteRoom(button) {
     row.remove();
 }
 
+function getTableBody() {
+    return document.getElementById("table").getElementsByTagName('tbody')[0];
+}
+
+function updateButtonState(disableAdd, hideSaveCancel) {
+    document.querySelector('button[onclick="addRoom()"]').disabled = disableAdd;
+    document.getElementById('saveRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
+    document.getElementById('cancelRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
+}
+
 function addRoom() {
-    var table = document.getElementById("table").getElementsByTagName('tbody')[0];
+    var table = getTableBody();
     var newRow = table.insertRow(table.rows.length);
     var cols = 3; // Số cột trong bảng
 
     for (var i = 0; i < cols; i++) {
         var cell = newRow.insertCell(i);
         cell.innerHTML = `<input type='text' />`;
-    }
+        var options = <?php echo json_encode($roomTypeOptions); ?>;
+        if (i == 2) {
+            cell.innerHTML = `
+            <select class='select-room-type'>
+             ${options}
+            </select>
+            `
+        }
 
-    // Hiển thị nút "Lưu phòng"
-    document.getElementById('saveRoomButton').style.display = 'inline-block';
+    }
+    updateButtonState(true, false);
+
 }
 
-function saveRoomOutsideTable() {
-    var table = document.getElementById("table").getElementsByTagName('tbody')[0];
-    var newRow = table.rows[table.rows.length - 1]; // Lấy hàng cuối cùng (hàng vừa thêm)
+function cancelRoom() {
+    var table = getTableBody();
+    table.deleteRow(table.rows.length - 1);
+    updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
+}
+
+function saveRoom() {
+    var table = getTableBody();
+    var newRow = table.rows[table.rows.length - 1];
 
     var inputs = newRow.getElementsByTagName('input');
-    var values = []; // Mảng để lưu trữ giá trị của các input
+    var values = [];
 
-    // Lưu giá trị của các input vào mảng values
     for (var i = 0; i < inputs.length; i++) {
         values.push(inputs[i].value);
     }
+    var select = newRow.getElementsByTagName('select')[0]; // Truy cập phần tử select đầu tiên
+    var selectedOptionText = select.options[select.selectedIndex].textContent;
+    var selectedOptionValue = select.value;
+    values.push(selectedOptionText)
 
-    // Ghi đè nội dung của các ô cell với giá trị từ mảng values
+    // Prepare data to be sent
+    var formData = new FormData();
+    formData.append('action', 'saveRoomToTheater');
+    formData.append('room_name', inputs[1].value);
+    formData.append('room_type_id', selectedOptionValue);
+
+    // AJAX request
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+        }
+    };
+    xhttp.open("POST", window.location.href, true);
+    xhttp.send(formData); // Send form data
+
     for (var i = 0; i < values.length; i++) {
         newRow.cells[i].textContent = values[i];
     }
-    // Thêm cell thứ 4 với hai nút "Sửa" và "Xóa"
+
     var editCell = newRow.insertCell(3);
     var editButton = document.createElement('button');
     editButton.textContent = 'Sửa';
@@ -246,10 +448,9 @@ function saveRoomOutsideTable() {
     deleteButton.textContent = 'Xóa';
     deleteButton.onclick = function() {
         deleteRoom(newRow);
-        // table.removeChild(newRow); // Xóa hàng hiện tại khỏi bảng
     };
     editCell.appendChild(deleteButton);
 
-    document.getElementById('saveRoomButton').style.display = 'none'; // Ẩn nút "Lưu phòng"
+    updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
 }
 </script>

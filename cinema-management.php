@@ -133,14 +133,27 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['city_name'] . "</td>";
         $table_body .= "<td>" . $row['room_count'] . "</td>";
         $table_body .= "<td>
-                        <button class='edit-btn' onclick='redirectToEditCinema()'>Sửa</button>
-                        <button class='delete-btn'>Xóa</button>
+                        <button class='edit-btn' onclick='redirectToEditCinema(" . $row['theater_id'] . ")'>Sửa</button>
+                        <form method='post' action=''>
+                        <input type='hidden' name='theater_id' value='" . $row['theater_id'] . "'>
+                        <button type='submit' class='delete-btn' >Xóa</button>
+                    </form>
                        </td>";
         $table_body .= "</tr>";
     }
 } else {
     // Nếu không có dữ liệu, hiển thị dòng thông báo
     $table_body .= "<tr><td colspan='5'>Không có dữ liệu</td></tr>";
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $theater_id = $_POST['theater_id'];
+    $query = "DELETE FROM theaters WHERE theater_id = '$theater_id'";
+    if (chayTruyVanKhongTraVeDL($link, $query)) {
+        // Redirect hoặc cập nhật trang tại đây nếu cần thiết
+        echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
+    } else {
+        echo "Xóa dữ liệu thất bại: ";
+    }
 }
 // Giải phóng bộ nhớ sau khi sử dụng
 giaiPhongBoNho($link, $result);
@@ -186,8 +199,8 @@ function redirectToCreateCinema() {
     window.location.href = 'admin.php?handle=create-cinema';
 }
 
-function redirectToEditCinema() {
+function redirectToEditCinema(theaterId) {
 
-    window.location.href = 'admin.php?handle=edit-cinema';
+    window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
 }
 </script>

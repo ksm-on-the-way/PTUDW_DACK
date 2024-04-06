@@ -50,7 +50,7 @@ const data = [
     { id: 5, name: 'Charlie', email: 'charlie@example.com' },
     { id: 5, name: 'Charlie', email: 'charlie@example.com' },
     { id: 5, name: 'Charlie', email: 'charlie@example.com' },
-    { id: 5, name: 'Charlie', email: 'charlie@example.com' },
+    { id: 10, name: 'Charlie', email: 'charlie@example.com' },
     // Add more data as needed
 ];
 

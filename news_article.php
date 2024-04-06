@@ -35,7 +35,12 @@ echo
   </div>';
   $link = null;
   taoKetNoi($link);
-  $sql = "SELECT * FROM news WHERE newsid != $article_id ORDER BY news_date DESC";
+  $sql = "SELECT news.*, news_categories.*
+  FROM news
+  JOIN news_categories ON news.news_category_id = news_categories.news_category_id
+  WHERE news.newsid != $article_id
+  ORDER BY news.news_date DESC
+  ";
   $result = chayTruyVanTraVeDL($link, $sql);
   // mysqli_num_rows($result);
   echo '
@@ -51,7 +56,7 @@ echo
           class="img"
         />
         <div class ="otnews_content">
-        <div class = "news_category">'.$rows['news_category'].'</div>
+        <div class = "news_category">'.$rows['news_category_name'].'</div>
         <div class="other_news_title">
         '.$rows['news_title'].'
         </div>

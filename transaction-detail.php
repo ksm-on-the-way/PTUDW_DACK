@@ -10,24 +10,21 @@
 
 <body>
     <style>
-        .transaction-detail-heading {
-            color: #333;
-            max-width: 255px;
-            font: 700 36px Roboto, sans-serif;
-        }
-
         .ticket {
-            border-radius: 16px 16px 0px 0px;
             display: flex;
             max-width: 638px;
             flex-direction: column;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .ticket-header {
             background-color: #1a2c50;
             z-index: 10;
-            width: 100%;
             padding: 44px 80px 44px 32px;
+            border-radius: 16px 16px 0px 0px;
+            max-width: 100%;
         }
 
         @media (max-width: 991px) {
@@ -78,7 +75,7 @@
             }
         }
 
-        .movie-info-details {
+        .movie-title-container {
             align-self: start;
             display: flex;
             flex-direction: column;
@@ -104,7 +101,7 @@
             font: 18px Roboto, sans-serif;
         }
 
-        .date-time {
+        .date-time-info {
             display: flex;
             margin-top: 39px;
             gap: 20px;
@@ -112,12 +109,12 @@
         }
 
         @media (max-width: 991px) {
-            .date-time {
+            .date-time-info {
                 padding-right: 20px;
             }
         }
 
-        .date-details {
+        .date-container {
             display: flex;
             flex-direction: column;
         }
@@ -133,7 +130,7 @@
             font: 18px Roboto, sans-serif;
         }
 
-        .time-details {
+        .time-container {
             align-self: start;
             display: flex;
             flex-direction: column;
@@ -141,7 +138,7 @@
         }
 
         @media (max-width: 991px) {
-            .time-details {
+            .time-container {
                 white-space: initial;
             }
         }
@@ -157,12 +154,12 @@
             font: 18px Roboto, sans-serif;
         }
 
-        .divider {
+        .divider-movie-info {
             background-color: #9da8be;
-
+            align-self: end;
             margin-top: 56px;
             width: 1px;
-            height: 300px;
+            height: 250px;
         }
 
         @media (max-width: 991px) {
@@ -171,22 +168,22 @@
             }
         }
 
-        .ticket-details {
+        .ticket-class-info {
             display: flex;
             flex-direction: column;
             line-height: normal;
             width: 23%;
             margin-left: 20px;
-
+            padding-top: 25px;
         }
 
         @media (max-width: 991px) {
-            .ticket-details {
+            .ticket-class-info {
                 width: 100%;
             }
         }
 
-        .ticket-info-details {
+        .ticket-class-details {
             display: flex;
             margin-top: 59px;
             flex-direction: column;
@@ -196,7 +193,7 @@
         }
 
         @media (max-width: 991px) {
-            .ticket-info-details {
+            .ticket-class-details {
                 margin-top: 40px;
             }
         }
@@ -214,6 +211,7 @@
         .studio-label {
             font-family: Roboto, sans-serif;
             margin-top: 35px;
+            padding-top: 19px;
         }
 
         .studio {
@@ -223,11 +221,10 @@
         }
 
         .ticket-footer {
-            fill: #f2c46f;
             overflow: hidden;
-            width: 100%;
             padding: 71px 32px;
             background-color: #F2C46F;
+            max-width: 100%;
         }
 
         @media (max-width: 991px) {
@@ -250,36 +247,35 @@
             }
         }
 
-        .ticket-footer-details {
+        .booking-details {
             display: flex;
             flex-direction: column;
-            line-height: normal;
+            line-height: 20px;
             width: 83%;
             margin-left: 0px;
         }
 
         @media (max-width: 991px) {
-            .ticket-footer-details {
+            .booking-details {
                 width: 100%;
             }
         }
 
-        .ticket-footer-info-details {
+        .booking-info {
             display: flex;
             flex-grow: 1;
             gap: 20px;
             color: #333;
             font-weight: 500;
-            justify-content: space-between;
         }
 
         @media (max-width: 991px) {
-            .ticket-footer-info-details {
+            .booking-info {
                 margin-top: 40px;
             }
         }
 
-        .ticket-footer-info-labels {
+        .booking-labels {
             align-self: start;
             display: flex;
             flex-direction: column;
@@ -288,19 +284,20 @@
 
         .booking-code-label {
             font-family: Roboto, sans-serif;
+
         }
 
-        .password-key-label {
+        .password-label {
             font-family: Roboto, sans-serif;
-            margin-top: 22px;
+            margin-top: 16px;
         }
 
         .seat-label {
             font-family: Roboto, sans-serif;
-            margin-top: 22px;
+            margin-top: 16px;
         }
 
-        .ticket-footer-info-values {
+        .booking-values {
             display: flex;
             flex-direction: column;
             font-size: 18px;
@@ -308,19 +305,20 @@
 
         .booking-code {
             font-family: Roboto, sans-serif;
+            margin: 16px;
         }
 
-        .password-key {
+        .password {
             font-family: Roboto, sans-serif;
-            margin-top: 24px;
+            margin: 16px;
         }
 
         .seat {
             font-family: Roboto, sans-serif;
-            margin-top: 24px;
+            margin: 16px;
         }
 
-        .ticket-footer-qr {
+        .qr-code-container {
             display: flex;
             flex-direction: column;
             line-height: normal;
@@ -329,7 +327,7 @@
         }
 
         @media (max-width: 991px) {
-            .ticket-footer-qr {
+            .qr-code-container {
                 width: 100%;
             }
         }
@@ -347,36 +345,285 @@
                 margin-top: 40px;
             }
         }
+
+        .purchase-details {
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+            max-width: 638px;
+        }
+
+        .purchase-details__title {
+            color: #000;
+            font: 500 24px/133% Roboto, sans-serif;
+            width: 100%;
+        }
+
+        @media (max-width: 991px) {
+            .purchase-details__title {
+                max-width: 100%;
+            }
+        }
+
+        .order-number {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
+            width: 100%;
+            gap: 20px;
+        }
+
+        @media (max-width: 991px) {
+            .order-number {
+                flex-wrap: wrap;
+                max-width: 100%;
+            }
+        }
+
+        .order-number__label {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+        }
+
+        .order-number__details {
+            display: flex;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .order-number__price {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+        .order-number__quantity {
+            color: var(--Shade-700, #414a63);
+            font-family: Roboto, sans-serif;
+            font-weight: 700;
+        }
+
+        .seat-type {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 13px;
+            width: 100%;
+            gap: 20px;
+            padding: 0 1px;
+        }
+
+        @media (max-width: 991px) {
+            .seat-type {
+                flex-wrap: wrap;
+                max-width: 100%;
+            }
+        }
+
+        .seat-type__label {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+        }
+
+        .seat-type__details {
+            display: flex;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .seat-type__price {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+        .seat-type__quantity {
+            color: var(--Shade-700, #414a63);
+            font-family: Roboto, sans-serif;
+            font-weight: 700;
+        }
+
+        .service-fee {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 13px;
+            width: 100%;
+            gap: 20px;
+            padding: 0 1px;
+        }
+
+        @media (max-width: 991px) {
+            .service-fee {
+                flex-wrap: wrap;
+                max-width: 100%;
+            }
+        }
+
+        .service-fee__label {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+        }
+
+        .service-fee__details {
+            display: flex;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .service-fee__price {
+            color: var(--Shade-900, #333);
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+        .service-fee__quantity {
+            color: var(--Shade-700, #414a63);
+            font-family: Roboto, sans-serif;
+            font-weight: 700;
+        }
+
+        .promo {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 13px;
+            width: 100%;
+            gap: 20px;
+            color: var(--Shade-900, #333);
+            font-weight: 400;
+            padding: 0 1px;
+        }
+
+        @media (max-width: 991px) {
+            .promo {
+                flex-wrap: wrap;
+                max-width: 100%;
+            }
+        }
+
+        .promo__label {
+            font-family: Roboto, sans-serif;
+        }
+
+        .promo__discount {
+            font-family: Roboto, sans-serif;
+            text-align: right;
+            line-height: 150%;
+            justify-content: center;
+        }
+
+        .divider-purchase-detail {
+            background-color: var(--Shade-200, #dadfe8);
+            min-height: 1px;
+            margin-top: 11px;
+            width: 100%;
+        }
+
+        @media (max-width: 991px) {
+            .divider {
+                max-width: 100%;
+            }
+        }
+
+        .total-payment {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            width: 100%;
+            gap: 20px;
+            color: var(--Shade-900, #333);
+        }
+
+        @media (max-width: 991px) {
+            .total-payment {
+                flex-wrap: wrap;
+                max-width: 100%;
+            }
+        }
+
+        .total-payment__label {
+            font-family: Roboto, sans-serif;
+            font-weight: 400;
+        }
+
+        .total-payment__amount {
+            font-family: Roboto, sans-serif;
+            font-weight: 700;
+            text-align: right;
+            justify-content: center;
+        }
+
+        .back-button {
+            align-self: start;
+            display: flex;
+            margin-top: 48px;
+            gap: 20px;
+            font-size: 24px;
+            color: var(--Royal-Blue, #1a2c50);
+            font-weight: 700;
+            white-space: nowrap;
+            justify-content: space-between;
+        }
+
+        .back-button:hover {
+            cursor: pointer;
+        }
+
+        @media (max-width: 991px) {
+            .back-button {
+                margin-top: 40px;
+                white-space: initial;
+            }
+        }
+
+        .back-button__icon {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 32px;
+        }
+
+        .back-button__text {
+            font-family: Roboto, sans-serif;
+            margin: auto 0;
+        }
+
+        .transaction-detail-header {
+            color: #333;
+            font: 700 36px Roboto, sans-serif;
+            text-align: center;
+        }
     </style>
-
-
-
-    <h1 class="transaction-detail-heading">Detail Transaksi</h1>
+    <h1 class="transaction-detail-header">Detail Transaksi</h1>
     <div class="ticket">
         <div class="ticket-header">
             <div class="ticket-info">
                 <div class="movie-details">
                     <div class="movie-info">
-                        <div class="movie-info-details">
+                        <div class="movie-title-container">
                             <h1 class="movie-title">Spiderman: No Way Home</h1>
                             <p class="location-label">Lokasi</p>
                             <p class="location">Grand Indonesia CGV</p>
-                            <div class="date-time">
-                                <div class="date-details">
+                            <div class="date-time-info">
+                                <div class="date-container">
                                     <p class="date-label">Tanggal</p>
                                     <p class="date">16 December 2021</p>
                                 </div>
-                                <div class="time-details">
+                                <div class="time-container">
                                     <p class="time-label">Jam</p>
                                     <p class="time">14:40</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="divider"></div>
+                        <div class="divider-movie-info"></div>
                     </div>
                 </div>
-                <div class="ticket-details">
-                    <div class="ticket-info-details">
+                <div class="ticket-class-info">
+                    <div class="ticket-class-details">
                         <p class="ticket-class-label">Kelas</p>
                         <p class="ticket-class">Regular 2D</p>
                         <p class="studio-label">Studio</p>
@@ -385,29 +632,74 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="ticket-footer">
-        <div class="ticket-footer-info">
-            <div class="ticket-footer-details">
-                <div class="ticket-footer-info-details">
-                    <div class="ticket-footer-info-labels">
-                        <p class="booking-code-label">Kode Booking</p>
-                        <p class="password-key-label">Password Key</p>
-                        <p class="seat-label">Kursi</p>
-                    </div>
-                    <div class="ticket-footer-info-values">
-                        <p class="booking-code">037491740184392</p>
-                        <p class="password-key">147294</p>
-                        <p class="seat">C8, C9, 10</p>
+        <div class="ticket-footer">
+            <div class="ticket-footer-info">
+                <div class="booking-details">
+                    <div class="booking-info">
+                        <div class="booking-labels">
+                            <p class="booking-code-label">Kode Booking</p>
+                            <p class="password-label">Password Key</p>
+                            <p class="seat-label">Kursi</p>
+                        </div>
+                        <div class="booking-values">
+                            <p class="booking-code">037491740184392</p>
+                            <p class="password">147294</p>
+                            <p class="seat">C8, C9, 10</p>
+                        </div>
                     </div>
                 </div>
+                <div class="qr-code-container">
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95336c6984e73b5c71ab8a9d67da8b1016f21bd0fc143b7244a7fd49dba87c24?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="QR code for ticket" class="qr-code" />
+                </div>
             </div>
-            <div class="ticket-footer-qr">
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95336c6984e73b5c71ab8a9d67da8b1016f21bd0fc143b7244a7fd49dba87c24?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="QR code for ticket" class="qr-code" />
+        </div>
+        <div class="purchase-details">
+            <h2 class="purchase-details__title">Rincian Pembelian</h2>
+
+            <div class="order-number">
+                <div class="order-number__label">NO ORDER</div>
+                <div class="order-number__details">
+                    <div class="order-number__price">Rp. 70.000</div>
+                    <div class="order-number__quantity">X3</div>
+                </div>
+            </div>
+
+            <div class="seat-type">
+                <div class="seat-type__label">REGULAR SEAT</div>
+                <div class="seat-type__details">
+                    <div class="seat-type__price">Rp. 70.000</div>
+                    <div class="seat-type__quantity">X3</div>
+                </div>
+            </div>
+
+            <div class="service-fee">
+                <div class="service-fee__label">BIAYA LAYANAN</div>
+                <div class="service-fee__details">
+                    <div class="service-fee__price">Rp. 3.000</div>
+                    <div class="service-fee__quantity">X3</div>
+                </div>
+            </div>
+
+            <div class="promo">
+                <div class="promo__label">PROMO TIX ID</div>
+                <div class="promo__discount">- Rp. 50.000</div>
+            </div>
+
+            <div class="divider-purchase-detail"></div>
+
+            <div class="total-payment">
+                <div class="total-payment__label">TOTAL PEMBAYARAN</div>
+                <div class="total-payment__amount">Rp. 129.000</div>
+            </div>
+
+            <div class="back-button">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/8defa1d0c0d2b0c48d57096c1cf569b9d3e95cf373eb8bb8255570a6043b56ed?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="back-button__icon" />
+                <div class="back-button__text">Kembali</div>
             </div>
         </div>
     </div>
-    </div>
+
+
 
     <?php include_once './footer.php'; ?>
 </body>

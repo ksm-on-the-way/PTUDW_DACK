@@ -1,6 +1,7 @@
 <?php
-require_once './db_module.php';
+require_once '../db_module.php';
 
+// Hàm check tài khoản, mật khẩu có trùng trong DB hay không
 function authenticateUser($username, $password) {
     // Kết nối đến cơ sở dữ liệu
     $link = NULL;
@@ -12,21 +13,16 @@ function authenticateUser($username, $password) {
     if ($stmt = mysqli_prepare($link, $query)) {
         // Bind các biến vào statement
         mysqli_stmt_bind_param($stmt, "ss", $username, $username);
-
         // Thực thi truy vấn
         mysqli_stmt_execute($stmt);
-
         // Lưu kết quả
         mysqli_stmt_store_result($stmt);
-
         // Kiểm tra xem có bản ghi nào trùng khớp không
         if (mysqli_stmt_num_rows($stmt) == 1) {
             // Bind kết quả vào các biến
             mysqli_stmt_bind_result($stmt, $db_password);
-
             // Fetch kết quả
             mysqli_stmt_fetch($stmt);
-
             // So sánh mật khẩu được cung cấp với mật khẩu trong cơ sở dữ liệu
             if (password_verify($password, $db_password)) {
                 // Mật khẩu trùng khớp, trả về true
@@ -41,7 +37,77 @@ function authenticateUser($username, $password) {
     // Nếu không có kết quả hoặc mật khẩu không trùng khớp, trả về false
     return false;
 }
+// Hàm lấy role của người dùng
+function getUserRole($username) {
+    // Connect to the database
+    $link = NULL;
+    taoKetNoi($link);
 
+    // Prepare SQL statement
+    $query = "SELECT role_id FROM users WHERE (email = ? OR phone = ?)";
+
+    // Execute SQL statement
+    if ($stmt = mysqli_prepare($link, $query)) {
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+        // Execute query
+        mysqli_stmt_execute($stmt);
+        // Bind result variables
+        mysqli_stmt_bind_result($stmt, $role_id);
+        // Fetch result
+        mysqli_stmt_fetch($stmt);
+        // Close statement
+        mysqli_stmt_close($stmt);
+        // Close connection
+        giaiPhongBoNho($link, $stmt);
+
+        // Return role_id
+        return $role_id;
+    } else {
+        // Handle error
+        return null;
+    }
+}
+
+// Hàm trả về thông tin của người dùng từ cơ sở dữ liệu
+function getUserInfoFromDatabase($username) {
+    // Connect to the database
+    $link = NULL;
+    taoKetNoi($link);
+
+    // Prepare SQL statement
+    $query = "SELECT * FROM users WHERE (email = ? OR phone = ?)";
+
+    // Execute SQL statement
+    if ($stmt = mysqli_prepare($link, $query)) {
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, "ss", $username, $username);
+
+        // Execute query
+        mysqli_stmt_execute($stmt);
+
+        // Get result
+        $result = mysqli_stmt_get_result($stmt);
+        
+        // Fetch user info
+        $user_info = mysqli_fetch_assoc($result);
+        
+        // Close statement
+        mysqli_stmt_close($stmt);
+
+        // Close connection
+        giaiPhongBoNho($link, $stmt);
+
+        // Return user info
+        return $user_info;
+    } else {
+        // Handle error
+        return null;
+    }
+}
+
+
+// Hàm tổng kiểm tra (gọi 3 hàm ở trên)
 $error_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Kiểm tra xem các trường đã được điền đầy đủ hay không
@@ -49,16 +115,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Vui lòng nhập đủ thông tin";
     } 
     else {
-        // Xác thực và sạch sẽ hóa dữ liệu đầu vào
+        // Lấy dữ liệu từ ô input
         $username = $_POST['username'];
         $password = $_POST['password'];
         
         // Thực hiện kiểm tra đăng nhập bằng hàm authenticateUser
         if (authenticateUser($username, $password)) {
-            
-            // Đăng nhập thành công, chuyển hướng người dùng đến trang chính sau khi đăng nhập thành công
-            header("Location: dashboard.php");
-            exit;
+            // Nếu đăng nhập thành công, lấy thông tin người dùng từ DB bằng hàm dưới  
+            session_start();                 
+            $userInfo = getUserInfoFromDatabase($username); 
+            // Lưu thông tin người dùng vào session
+            $_SESSION['email'] = $userInfo['email'];
+            $_SESSION['phone'] = $userInfo['phone'];
+            $_SESSION['fullname'] = $userInfo['fullname'];
+            $_SESSION['birth_date'] = $userInfo['birth_date'];
+            $_SESSION['gender'] = $userInfo['gender'];
+
+            // Lấy role của người dùng để xem là admin hay user
+            $user_role_id = getUserRole($username); 
+
+            // Kiểm tra role_id của người dùng
+            if ($user_role_id == 1) {
+                // Lưu thông tin người dùng vào session
+                $_SESSION['username'] = $username;
+        
+                // Đăng nhập thành công, chuyển hướng người dùng đến trang admin.php
+                header("Location: ../admin.php");
+                exit;
+            } else {
+                // Người dùng không có quyền admin, có thể chuyển hướng đến một trang thông báo hoặc trang khác
+                header("Location: ../user.php");
+                exit;
+            }
         } else {
             // Đăng nhập thất bại, hiển thị thông báo lỗi
             $error_message = "Thông tin đăng nhập không chính xác!";

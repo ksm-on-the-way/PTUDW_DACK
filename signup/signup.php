@@ -1,77 +1,77 @@
 <?php
-require_once './db_module.php';
+    require_once '../db_module.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy thông tin từ form và kiểm tra tính hợp lệ
-    // Sử dụng Prepared statement (Các dấu '?') để tránh bị tấn công theo kiểu SQL Injection
-    $fullname = $_POST['fullname'] ?? '';
-    $phone = $_POST['phone'] ?? '';
-    $birthdate = $_POST['birthdate'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $gender = $_POST['gender'] ?? '';
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Lấy thông tin từ form và kiểm tra tính hợp lệ
+        // Sử dụng Prepared statement (Các dấu '?') để tránh bị tấn công theo kiểu SQL Injection
+        $fullname = $_POST['fullname'] ?? '';
+        $phone = $_POST['phone'] ?? '';
+        $birthdate = $_POST['birthdate'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $gender = $_POST['gender'] ?? '';
 
-    // Lưu thông tin vào cookie
-    setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
-    setcookie('phone', $phone, time() + 3600, '/');
-    setcookie('birthdate', $birthdate, time() + 3600, '/');
-    setcookie('email', $email, time() + 3600, '/');
-    setcookie('gender', $gender, time() + 3600, '/');
+        // Lưu thông tin vào cookie
+        setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
+        setcookie('phone', $phone, time() + 3600, '/');
+        setcookie('birthdate', $birthdate, time() + 3600, '/');
+        setcookie('email', $email, time() + 3600, '/');
+        setcookie('gender', $gender, time() + 3600, '/');
 
-    // Kết nối database
-    $link = NULL;
-    taoKetNoi($link);
+        // Kết nối database
+        $link = NULL;
+        taoKetNoi($link);
 
-    // Kiểm tra số điện thoại đã tồn tại chưa
-    $phoneQuery = "SELECT * FROM users WHERE phone=?";
-    $phoneStmt = mysqli_prepare($link, $phoneQuery);
-    mysqli_stmt_bind_param($phoneStmt, "s", $phone);
-    mysqli_stmt_execute($phoneStmt);
-    $phoneResult = mysqli_stmt_get_result($phoneStmt);
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        $phoneQuery = "SELECT * FROM users WHERE phone=?";
+        $phoneStmt = mysqli_prepare($link, $phoneQuery);
+        mysqli_stmt_bind_param($phoneStmt, "s", $phone);
+        mysqli_stmt_execute($phoneStmt);
+        $phoneResult = mysqli_stmt_get_result($phoneStmt);
 
-    // Kiểm tra địa chỉ email đã tồn tại chưa
-    $emailQuery = "SELECT * FROM users WHERE email=?";
-    $emailStmt = mysqli_prepare($link, $emailQuery);
-    mysqli_stmt_bind_param($emailStmt, "s", $email);
-    mysqli_stmt_execute($emailStmt);
-    $emailResult = mysqli_stmt_get_result($emailStmt);
+        // Kiểm tra địa chỉ email đã tồn tại chưa
+        $emailQuery = "SELECT * FROM users WHERE email=?";
+        $emailStmt = mysqli_prepare($link, $emailQuery);
+        mysqli_stmt_bind_param($emailStmt, "s", $email);
+        mysqli_stmt_execute($emailStmt);
+        $emailResult = mysqli_stmt_get_result($emailStmt);
 
-    // Kiểm tra kết quả và hiển thị thông báo tương ứng
-    if (mysqli_num_rows($phoneResult) > 0) {
-        echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
-        echo '<script>window.location.href = "../signup/signup.php";</script>';
-    } elseif (mysqli_num_rows($emailResult) > 0) {
-        echo '<script>alert("Email đã tồn tại!");</script>';
-        echo '<script>window.location.href = "../signup/signup.php";</script>';
+        // Kiểm tra kết quả và hiển thị thông báo tương ứng
+        if (mysqli_num_rows($phoneResult) > 0) {
+            echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
+            echo '<script>window.location.href = "../signup/signup.php";</script>';
+        } elseif (mysqli_num_rows($emailResult) > 0) {
+            echo '<script>alert("Email đã tồn tại!");</script>';
+            echo '<script>window.location.href = "../signup/signup.php";</script>';
+        }
+        else {
+
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Thực thi truy vấn để thêm người dùng vào cơ sở dữ liệu
+        $insertQuery = "INSERT INTO users (fullname, password, email, phone, birth_date, gender, role_id)
+                        VALUES (?, ?, ?, ?, ?, ?, 2)";
+
+        $insertStmt = mysqli_prepare($link, $insertQuery);
+        mysqli_stmt_bind_param($insertStmt, "ssssss", $fullname, $hashedPassword, $email, $phone, $birthdate, $gender);
+
+        if (mysqli_stmt_execute($insertStmt)) {
+            // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
+            echo '<script>alert("Đăng ký thành công!");</script>';
+            echo '<script>window.location.href = "../login/login.php";</script>';
+        } else {
+            // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
+            echo '<script>alert("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại sau!");</script>';
+        }
+        }
+        // Đóng kết nối và giải phóng bộ nhớ
+        mysqli_stmt_close($phoneStmt);
+        mysqli_stmt_close($emailStmt);
+        mysqli_stmt_close($insertStmt);
+        giaiPhongBoNho($link, $phoneResult);
+        giaiPhongBoNho($link, $emailResult);
     }
-    else {
-
-    // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // Thực thi truy vấn để thêm người dùng vào cơ sở dữ liệu
-    $insertQuery = "INSERT INTO users (fullname, password, email, phone, birth_date, gender, role_id)
-                    VALUES (?, ?, ?, ?, ?, ?, 2)";
-
-    $insertStmt = mysqli_prepare($link, $insertQuery);
-    mysqli_stmt_bind_param($insertStmt, "ssssss", $fullname, $hashedPassword, $email, $phone, $birthdate, $gender);
-
-    if (mysqli_stmt_execute($insertStmt)) {
-        // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
-        echo '<script>alert("Đăng ký thành công!");</script>';
-        echo '<script>window.location.href = "../login/login.php";</script>';
-    } else {
-        // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
-        echo '<script>alert("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại sau!");</script>';
-    }
-    }
-    // Đóng kết nối và giải phóng bộ nhớ
-    mysqli_stmt_close($phoneStmt);
-    mysqli_stmt_close($emailStmt);
-    mysqli_stmt_close($insertStmt);
-    giaiPhongBoNho($link, $phoneResult);
-    giaiPhongBoNho($link, $emailResult);
-}
 ?>
 
 
@@ -80,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css"> <!-- Liên kết tệp CSS -->
+    <!-- Gọi hàm để gọi eye-icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
 </head>
 <body>

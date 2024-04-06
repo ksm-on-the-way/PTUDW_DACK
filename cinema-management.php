@@ -58,7 +58,7 @@ td:not(:last-child) {
 }
 
 .cinema-admin__container table .edit-btn,
-.cinema-admin__container table .delete-btn {
+.cinema-admin__container table #delete-btn {
     padding: 6px 10px;
     margin-right: 5px;
     border: none;
@@ -73,7 +73,7 @@ td:not(:last-child) {
     border: solid 1px #1A2C50;
 }
 
-.cinema-admin__container table .delete-btn {
+.cinema-admin__container table #delete-btn {
     background-color: white;
     color: #1A2C50;
     border: solid 1px black;
@@ -109,11 +109,12 @@ $query = "SELECT t.theater_id, t.theater_name, t.theater_address, c.city_name, C
 FROM theaters t
 LEFT JOIN cities c ON t.city_id = c.city_id
 LEFT JOIN rooms r ON t.theater_id = r.theater_id
+WHERE is_deleted = '0'
 GROUP BY t.theater_id
 ORDER BY t.theater_id DESC
 LIMIT $startRow, $rowsPerPage";
 
-$queryCount = "SELECT COUNT(*) AS total FROM theaters";
+$queryCount = "SELECT COUNT(*) AS total FROM theaters WHERE is_deleted = '0'";
 $resultCount = chayTruyVanTraVeDL($link, $queryCount);
 $rowCount = mysqli_fetch_assoc($resultCount);
 $totalPages = ceil($rowCount['total'] / $rowsPerPage);
@@ -134,9 +135,9 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['room_count'] . "</td>";
         $table_body .= "<td>
                         <button class='edit-btn' onclick='redirectToEditCinema(" . $row['theater_id'] . ")'>Sửa</button>
-                        <form method='post' action=''>
+                        <form method='post' action='' id='form-delete-theater'>
                         <input type='hidden' name='theater_id' value='" . $row['theater_id'] . "'>
-                        <button type='submit' class='delete-btn' >Xóa</button>
+                        <button type='button'  id='delete-btn' >Xóa</button>
                     </form>
                        </td>";
         $table_body .= "</tr>";
@@ -147,7 +148,7 @@ if (mysqli_num_rows($result) > 0) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $theater_id = $_POST['theater_id'];
-    $query = "DELETE FROM theaters WHERE theater_id = '$theater_id'";
+    $query = "UPDATE theaters SET is_deleted = '1' WHERE theater_id = '$theater_id'";
     if (chayTruyVanKhongTraVeDL($link, $query)) {
         // Redirect hoặc cập nhật trang tại đây nếu cần thiết
         echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
@@ -203,4 +204,11 @@ function redirectToEditCinema(theaterId) {
 
     window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
 }
+
+document.getElementById("delete-btn").addEventListener("click", function() {
+    if (confirm("Bạn có chắc chắn muốn xóa?")) {
+        // Nếu người dùng xác nhận muốn xóa
+        document.getElementById("form-delete-theater").submit(); // Gửi form
+    }
+});
 </script>

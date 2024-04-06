@@ -1,3 +1,6 @@
+<?php
+include_once("header.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,25 +33,25 @@
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .detail-jadwal {
+        .detail-schedule {
             display: flex;
             max-width: 421px;
             flex-direction: column;
         }
 
 
-        .judul-film-label {
+        .film-title-label {
             color: #414a63;
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .judul-film {
+        .film-title {
             color: #333;
             margin-top: 8px;
             font: 500 24px Roboto, sans-serif;
         }
 
-        .judul-film-container {
+        .film-title-container {
             display: flex;
             margin-top: 36px;
             flex-direction: column;
@@ -61,80 +64,105 @@
             width: 100%;
         }
 
-        .tanggal-label {
+        .date-label {
             color: #414a63;
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .tanggal {
+        .date {
             color: #333;
             margin-top: 8px;
             font: 500 24px Roboto, sans-serif;
         }
 
-        .tanggal-container {
+        .date-container {
             display: flex;
             margin-top: 17px;
             flex-direction: column;
         }
 
-        .kelas-jam-container {
+        .class-hours-container {
             display: flex;
             margin-top: 17px;
             gap: 20px;
         }
 
-        .kelas-label {
+        .class-label {
             color: #414a63;
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .kelas {
+        .class {
             color: #333;
             margin-top: 8px;
             font: 500 24px Roboto, sans-serif;
         }
 
-        .kelas-container {
+        .class-container {
             display: flex;
             flex-direction: column;
         }
 
-        .jam-label {
+        .hours-label {
             color: #414a63;
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .jam {
+        .hours {
             color: #333;
             margin-top: 8px;
             font: 500 24px Roboto, sans-serif;
         }
 
-        .jam-container {
+        .hours-container {
             display: flex;
             flex-direction: column;
             white-space: nowrap;
         }
 
-        .tiket-label {
+        .ticket-label {
             color: #414a63;
             font: 400 16px/150% Roboto, sans-serif;
         }
 
-        .tiket {
+        .ticket {
             color: #333;
             margin-top: 8px;
             font: 500 24px Roboto, sans-serif;
         }
 
-        .tiket-container {
+        .ticket-container {
             align-self: start;
             display: flex;
             margin-top: 17px;
             flex-direction: column;
         }
 
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 24px;
+            color: #5a637a;
+            font-weight: 700;
+            white-space: nowrap;
+            justify-content: space-between;
+            font-family: Roboto, sans-serif;
+            width: 50px;
+        }
+
+        .back-button:hover {
+            cursor: pointer;
+        }
+
+        .back-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .back-text {
+            margin: 0;
+        }
 
         /* left */
         .order-summary {
@@ -305,9 +333,13 @@
             font: 16px Roboto, sans-serif;
         }
 
-        .payment-method-link {
+        .payment-method-show-all {
             color: #118eea;
             font: 12px Roboto, sans-serif;
+        }
+
+        .payment-method-show-all:hover {
+            cursor: pointer;
         }
 
         .dana-payment {
@@ -356,57 +388,84 @@
             font: 500 24px/133% Roboto, sans-serif;
             justify-content: center;
         }
+
+        .modal-popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .modal-choose-payment-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .open {
+            display: block;
+        }
     </style>
-    <?php
-    include_once("header.php");
-    ?>
+
     <div class="confirm-payment-schedule">
         <div class="confirm-payment-right">
-            <div class="confirm-payment-title">CONFIRM PAYMENT</div>
-            <div class="confirm-payment-desc">Pilih jadwal bioskop yang akan kamu tonton</div>
-            <section class="detail-jadwal">
-                <h2 id="detail-jadwal-header">Detail Jadwal</h2>
+            <div class="confirm-payment-title">XÁC NHẬN THANH TOÁN</div>
+            <div class="confirm-payment-desc">Xác nhận thanh toán cho số ghế bạn đã đặt</div>
+            <div class="detail-schedule">
+                <h2 id="detail-schedule-header">Chi tiết lịch trình</h2>
 
-                <div class="judul-film-container">
-                    <p class="judul-film-label">Judul Film</p>
-                    <p class="judul-film">SPIDERMAN NO WAY HOME</p>
+                <div class="film-title-container">
+                    <p class="film-title-label">Tiêu đề phim</p>
+                    <p class="film-title"><?php echo $_SESSION['film-title'] ?></p>
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="tanggal-container">
-                    <p class="tanggal-label">Tanggal</p>
-                    <p class="tanggal">KAMIS, 17 DESEMBER 2021</p>
+                <div class="date-container">
+                    <p class="date-label">Ngày</p>
+                    <p class="date"><?php echo $_SESSION['date'] ?></p>
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="kelas-jam-container">
-                    <div class="kelas-container">
-                        <p class="kelas-label">Kelas</p>
-                        <p class="kelas">REGULAR 2D</p>
+                <div class="class-hours-container">
+                    <div class="class-container">
+                        <p class="class-label">Hạng vé</p>
+                        <p class="class"><?php echo $_SESSION['class'] ?></p>
                     </div>
-                    <div class="jam-container">
-                        <p class="jam-label">Jam</p>
-                        <p class="jam">14:40</p>
+                    <div class="hours-container">
+                        <p class="hours-label">Thời gian</p>
+                        <p class="hours"><?php echo $_SESSION['hours'] ?></p>
                     </div>
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="tiket-container">
-                    <p class="tiket-label">Tiket (3)</p>
-                    <p class="tiket">C8, C9, C10</p>
+                <div class="ticket-container">
+                    <p class="ticket-label">Vé (3)</p>
+                    <p class="ticket"><?php echo $_SESSION['ticket'] ?></p>
                 </div>
-            </section>
+            </div>
+
+            <div class="back-button">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fa81bf27bdbcf81e4202ab55cff292aaf6de617f290bcea10f235477064da8e3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Back icon" class="back-icon" />
+                <p class="back-text">Quay lại</p>
+            </div>
         </div>
         <div class="confirm-payment-left">
-            <section class="order-summary">
-                <h2 class="order-summary-title">Ringkasan Order</h2>
-                <h3 class="transaction-details-title">Detail Transaksi</h3>
+            <div class="order-summary">
+                <h2 class="order-summary-title">TÓM TẮT ĐẶT VÉ</h2>
+                <h3 class="transaction-details-title">Chi tiết giao dịch</h3>
 
                 <div class="regular-seat">
-                    <div class="regular-seat-label">REGULAR SEAT</div>
+                    <div class="regular-seat-label">GHẾ THƯỜNG</div>
                     <div class="regular-seat-details">
                         <div class="regular-seat-price">Rp. 50.000</div>
                         <div class="regular-seat-quantity">X3</div>
@@ -414,7 +473,7 @@
                 </div>
 
                 <div class="service-fee">
-                    <div class="service-fee-label">BIAYA LAYANAN</div>
+                    <div class="service-fee-label">PHÍ DỊCH VỤ</div>
                     <div class="service-fee-details">
                         <div class="service-fee-price">Rp.3.000</div>
                         <div class="service-fee-quantity">X3</div>
@@ -423,7 +482,7 @@
 
                 <div class="divider"></div>
 
-                <h3 class="promo-voucher-title">Promo & Voucher</h3>
+                <h3 class="promo-voucher-title">Khuyến mãi & Phiếu quà tặng</h3>
                 <div class="promo-tix-id">
                     <div class="promo-tix-id-label">PROMO TIX ID</div>
                     <div class="promo-tix-id-amount">- Rp. 70.000</div>
@@ -432,15 +491,16 @@
                 <div class="divider"></div>
 
                 <div class="total-payment">
-                    <div class="total-payment-label">Total Bayar</div>
+                    <div class="total-payment-label">Tổng thanh toán</div>
                     <div class="total-payment-amount">Rp. 89.000</div>
                 </div>
 
                 <div class="divider"></div>
 
                 <div class="payment-method-title">
-                    <div class="payment-method-label">Metode Pembayaran</div>
-                    <a href="#" class="payment-method-link">Lihat Semua</a>
+                    <div class="payment-method-label">Phương thức thanh toán</div>
+                    <span class="payment-method-show-all">Xem tất cả</span>
+
                 </div>
 
                 <div class="dana-payment">
@@ -448,12 +508,88 @@
                     <div class="dana-label">DANA</div>
                 </div>
 
-                <div class="non-refundable-notice">*Pembelian tiket tidak dapat dibatalkan</div>
-                <button class="buy-ticket-button">BELI TIKET</button>
-            </section>
+                <div class="non-refundable-notice">*Vé đã mua không thể hoàn lại</div>
+                <button class="buy-ticket-button">MUA VÉ</button>
+            </div>
         </div>
     </div>
+    <div class="modal-popup-container">
+        <?php include_once './popup-message.php'; ?>
+    </div>
+    <div class="modal-choose-payment-container">
+        <?php include_once './choose-payment.php'; ?>
+    </div>
     <?php include_once './footer.php'; ?>
+
+    <!-- Popup -->
+    <script>
+        // Open
+        var backButtons = document.getElementsByClassName("back-button");
+        var modalContainers = document.getElementsByClassName("modal-popup-container");
+
+        function openBackDialog() {
+            for (var modalContainer of modalContainers) {
+                modalContainer.classList.add('open');
+            }
+        }
+        for (var backButton of backButtons) {}
+        backButton.addEventListener("click", openBackDialog);
+
+        // Cancel
+        var cancelButtons = document.getElementsByClassName("modal-cancel-btn");
+        var modalContainers = document.getElementsByClassName("modal-popup-container");
+        var exitButtons = document.getElementsByClassName("modal-icon");
+
+        function closeBackDialog() {
+            for (var modalContainer of modalContainers) {
+                modalContainer.classList.remove('open');
+            }
+        }
+        for (var cancelButton of cancelButtons) {
+            cancelButton.addEventListener("click", closeBackDialog);
+        }
+        for (var exitButton of exitButtons) {
+            exitButton.addEventListener("click", closeBackDialog);
+        }
+
+        // back
+        var backButtons = document.getElementsByClassName("modal-back-btn");
+
+        function goBackPage() {
+            window.location = "admin.php";
+        }
+        for (var backButton of backButtons) {
+            backButton.addEventListener("click", goBackPage);
+        }
+    </script>
+
+    <!-- Choose payment-->
+    <script>
+        // Open
+        var showAllPaymentMethodButtons = document.getElementsByClassName("payment-method-show-all");
+        var modalChoosePaymentContainers = document.getElementsByClassName("modal-choose-payment-container");
+
+        function openShowAllPaymentMethodDialog() {
+            for (var modalChoosePaymentContainer of modalChoosePaymentContainers) {
+                modalChoosePaymentContainer.classList.add('open');
+            }
+        }
+        for (var showAllPaymentMethodButton of showAllPaymentMethodButtons) {}
+        showAllPaymentMethodButton.addEventListener("click", openShowAllPaymentMethodDialog);
+
+        // Close
+        var closeButtons = document.getElementsByClassName("payment-icon-close")
+        var modalChoosePaymentContainers = document.getElementsByClassName("modal-choose-payment-container");
+
+        function closeShowAllPaymentMethodDialog() {
+            for (var modalChoosePaymentContainer of modalChoosePaymentContainers) {
+                modalChoosePaymentContainer.classList.remove('open');
+            }
+        }
+        for (var closeButton of closeButtons) {
+            closeButton.addEventListener("click", closeShowAllPaymentMethodDialog);
+        }
+    </script>
 </body>
 
 </html>

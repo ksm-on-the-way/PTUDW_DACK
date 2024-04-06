@@ -36,9 +36,13 @@
             flex: 1;
         }
 
-        .payment-icon {
+        .payment-icon-close {
             width: 24px;
             margin: auto 0;
+        }
+
+        .payment-icon-close:hover {
+            cursor: pointer;
         }
 
         .payment-section-title {
@@ -109,7 +113,7 @@
     <section class="payment-container">
         <header class="payment-header">
             <h2 class="payment-title">Pilih Pembayaran</h2>
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/099ed96059166ea65c7ab58186160d633f479de257bfe14b761606955ac1d486?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="payment-icon" />
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/099ed96059166ea65c7ab58186160d633f479de257bfe14b761606955ac1d486?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="payment-icon-close" />
         </header>
 
         <h3 class="payment-section-title">Dompet Virtual</h3>

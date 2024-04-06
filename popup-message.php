@@ -18,6 +18,11 @@
             flex-direction: column;
             font-size: 16px;
             padding: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 500px;
         }
 
         @media (max-width: 991px) {
@@ -113,25 +118,31 @@
             padding: 6px 16px;
         }
 
+        .modal-cancel-btn:hover,
+        .modal-back-btn:hover,
+        .modal-icon:hover {
+            cursor: pointer;
+        }
+
         @media (max-width: 991px) {
             .modal-cancel-btn {
                 white-space: initial;
             }
         }
     </style>
-    <section class="modal">
+    <div class="modal">
         <header class="modal-header">
             <h2 class="modal-title">Ingin Kembali?</h2>
             <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/f81257c114b9ce81c9d79bc859466d8531f3ab5865853b1354d15963ecf610cb?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="modal-icon" />
         </header>
         <p class="modal-description">
-            Kursi yang kamu pilih sebelumnya akan dibatalkan dan kamu harus memilih ulang
+            Bạn có muốn quay lại?
         </p>
         <div class="modal-actions">
-            <button class="modal-back-btn">Kembali</button>
-            <button class="modal-cancel-btn">Batal</button>
+            <button class="modal-back-btn">Back</button>
+            <button class="modal-cancel-btn">Cancel</button>
         </div>
-    </section>
+    </div>
 </body>
 
 </html>

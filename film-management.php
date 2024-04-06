@@ -1,22 +1,22 @@
 <style>
-    .cinema-admin__container {
+    .movie-admin__container {
         width: 100%;
         max-width: 1075px;
         margin: 0 auto;
         margin-top: 30px;
     }
 
-    .cinema-admin__container .cinema-admin__heading {
+    .movie-admin__container .movie-admin__heading {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
 
-    .cinema-admin__container .cinema-admin__heading .title {
+    .movie-admin__container .movie-admin__heading .title {
         color: #4F4F4F;
     }
 
-    .cinema-admin__container .cinema-admin__heading .button button {
+    .movie-admin__container .movie-admin__heading .button button {
         padding: 12px 14px;
         background-color: #FFBE00;
         color: white;
@@ -25,40 +25,40 @@
         border: none;
     }
 
-    .cinema-admin__container .table-container {
+    .movie-admin__container .table-container {
         margin-top: 20px;
     }
 
-    .cinema-admin__container table {
+    .movie-admin__container table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    .cinema-admin__container th,
+    .movie-admin__container th,
     td {
         padding: 8px;
         text-align: center;
 
     }
 
-    .cinema-admin__container th:not(:last-child),
+    .movie-admin__container th:not(:last-child),
     td:not(:last-child) {
 
 
         border-right: 1px solid #ddd;
     }
 
-    .cinema-admin__container th {
+    .movie-admin__container th {
         background-color: #1A2C50;
         color: white;
     }
 
-    .cinema-admin__container tr:nth-child(even) {
+    .movie-admin__container tr:nth-child(even) {
         background-color: #f2f2f2;
     }
 
-    .cinema-admin__container table .edit-btn,
-    .cinema-admin__container table .delete-btn {
+    .movie-admin__container table .edit-btn,
+    .movie-admin__container table .delete-btn {
         padding: 6px 10px;
         margin-right: 5px;
         border: none;
@@ -67,13 +67,13 @@
         color: white;
     }
 
-    .cinema-admin__container table .edit-btn {
+    .movie-admin__container table .edit-btn {
         background-color: #1A2C50;
         color: white;
         border: solid 1px #1A2C50;
     }
 
-    .cinema-admin__container table .delete-btn {
+    .movie-admin__container table .delete-btn {
         background-color: white;
         color: #1A2C50;
         border: solid 1px black;
@@ -105,7 +105,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $startRow = ($currentPage - 1) * $rowsPerPage;
 
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
-$query = "SELECT m.movie_id, m.movie_name, m.release_date, m.end_name
+$query = "SELECT m.movie_id, m.movie_name, m.release_date, m.end_date
 FROM movies m
 ORDER BY m.movie_id DESC
 LIMIT $startRow, $rowsPerPage";
@@ -157,8 +157,8 @@ giaiPhongBoNho($link, $result);
 
 
 ?>
-<div class='cinema-admin__container'>
-    <div class='cinema-admin__heading'>
+<div class='movie-admin__container'>
+    <div class='movie-admin__heading'>
         <div class='title'>
             Danh sách phim
         </div>
@@ -192,12 +192,12 @@ giaiPhongBoNho($link, $result);
 </div>
 <script>
     function redirectToCreateMovie() {
-        // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
+        // Chuyển hướng đến URL chứa tham số "handle=create-movie"
         window.location.href = 'admin.php?handle=create-movie';
     }
 
-    function redirectToEditMovie(theaterId) {
+    function redirectToEditMovie(movieId) {
 
-        window.location.href = `admin.php?handle=edit-movie&theaterId=${theaterId}`;
+        window.location.href = `admin.php?handle=edit-movie&movieId=${movieId}`;
     }
 </script>

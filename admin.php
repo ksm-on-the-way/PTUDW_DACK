@@ -241,6 +241,9 @@
                         case 'change-password':
                             include 'change-password.php';
                             break;
+                        case 'film-management':
+                            include 'film-management.php';
+                            break;
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

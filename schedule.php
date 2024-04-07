@@ -84,7 +84,7 @@
 
     .schedule-box .date {
         color: var(--Shade-600, #5a637a);
-        font: 500 16px Roboto, sans-serif;
+        font: 500 15px Roboto, sans-serif;
     }
 
     .schedule-box .day {
@@ -389,8 +389,8 @@
 
             <div class='carousel-schedule__wrapper'>
                 <div class='carousel-schedule__container'>
-                    <div class="owl-carousel">
-                        <div class="schedule-box">
+                    <div class="owl-carousel" id="schedule-carousel">
+                        <!-- <div class="schedule-box">
                             <div class="date">15 Des</div>
                             <div class="day">RAB</div>
                         </div>
@@ -417,7 +417,7 @@
                         <div class="schedule-box">
                             <div class="date">15 Des</div>
                             <div class="day">RAB</div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -498,25 +498,70 @@
     ?>
 </body>
 <script>
-$('.carousel-schedule__container .owl-carousel').owlCarousel({
-    margin: 24,
+// Function to get date in format DD MMM (e.g., 15 Apr)
+function getFormattedDate(date) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    return date.getDate() + " " + monthNames[date.getMonth()];
+}
 
-    navText: [
-        "<i class='fas fa-chevron-left'></i>",
-        "<i class='fas fa-chevron-right'></i>",
-    ],
-    nav: true,
-    responsive: {
-        0: {
-            items: 3,
-            nav: false
-        },
-        600: {
-            items: 5
-        },
+// Function to render schedule boxes with dates greater than current date
+function renderSchedule() {
 
+    const today = new Date();
+    const scheduleContainer = document.getElementById('schedule-carousel');
+    console.log(scheduleContainer)
+    scheduleContainer.innerHTML = ''; // Clear existing content
+
+    // Loop through each day in the current month
+    for (let i = today.getDate(); i <= new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate(); i++) {
+        const currentDate = new Date(today.getFullYear(), today.getMonth(), i);
+        // Only render dates greater than current date
+        if (currentDate > today) {
+            const scheduleBox = document.createElement('div');
+            scheduleBox.classList.add('schedule-box');
+            const dateDiv = document.createElement('div');
+            dateDiv.classList.add('date');
+            dateDiv.textContent = getFormattedDate(currentDate);
+            const dayDiv = document.createElement('div');
+            dayDiv.classList.add('day');
+            // Get the day of the week (0: Sunday, 1: Monday, ..., 6: Saturday)
+            const dayOfWeek = currentDate.getDay();
+            const dayNames = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+            dayDiv.textContent = dayNames[dayOfWeek];
+            scheduleBox.appendChild(dateDiv);
+            scheduleBox.appendChild(dayDiv);
+            scheduleBox.addEventListener('click', function() {
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                console.log(formattedDate); // In yyyy-MM-dd format
+            });
+            scheduleContainer.appendChild(scheduleBox);
+        }
     }
-})
+    $('.carousel-schedule__container .owl-carousel').owlCarousel({
+        margin: 24,
+
+        navText: [
+            "<i class='fas fa-chevron-left'></i>",
+            "<i class='fas fa-chevron-right'></i>",
+        ],
+        nav: true,
+        responsive: {
+            0: {
+                items: 3,
+                nav: false
+            },
+            600: {
+                items: 5
+            },
+
+        }
+    })
+}
+
+// Call the render function when the page loads
+window.onload = renderSchedule;
 </script>
 
 </html>

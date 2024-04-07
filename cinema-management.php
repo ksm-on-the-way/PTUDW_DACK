@@ -137,7 +137,7 @@ if (mysqli_num_rows($result) > 0) {
                         <button class='edit-btn' onclick='redirectToEditCinema(" . $row['theater_id'] . ")'>Sửa</button>
                         <form method='post' action='' id='form-delete-theater'>
                         <input type='hidden' name='theater_id' value='" . $row['theater_id'] . "'>
-                        <button type='button'  id='delete-btn' >Xóa</button>
+                        <button type='button' onclick='handleClick()' id='delete-btn' >Xóa</button>
                     </form>
                        </td>";
         $table_body .= "</tr>";
@@ -205,10 +205,10 @@ function redirectToEditCinema(theaterId) {
     window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
 }
 
-document.getElementById("delete-btn").addEventListener("click", function() {
+function handleClick() {
     if (confirm("Bạn có chắc chắn muốn xóa?")) {
         // Nếu người dùng xác nhận muốn xóa
         document.getElementById("form-delete-theater").submit(); // Gửi form
     }
-});
+}
 </script>

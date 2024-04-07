@@ -196,11 +196,11 @@ giaiPhongBoNho($link, $result);
 <script>
 function redirectToCreateCinema() {
     // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
-    window.location.href = './?handle=create-cinema';
+    window.location.href = 'admin.php?handle=create-cinema';
 }
 
 function redirectToEditCinema(theaterId) {
 
-    window.location.href = `./?handle=edit-cinema&theaterId=${theaterId}`;
+    window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
 }
 </script>

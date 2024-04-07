@@ -171,7 +171,7 @@
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
-                <div onclick="redirectTo('movie-management')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'movie-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                <div onclick="redirectTo('film-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'film-management' || $_GET['handle'] == 'create-movie' || $_GET['handle'] == 'edit-movie')  ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý phim icon" class="menu-item-icon" />
                         <span class="menu-item-text">Quản lý phim</span>
@@ -238,9 +238,15 @@
                         case 'edit-cinema':
                             include 'edit-cinema.php';
                             break;
-                        case 'movie-management':
-                            include 'movie-management.php';  
-                            break; 
+                        case 'film-management':
+                            include 'film-management.php';
+                            break;
+                        case 'create-movie':
+                            include 'create-movie.php';
+                            break;
+                        case 'edit-movie':
+                            include 'edit-movie.php';
+                            break;
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

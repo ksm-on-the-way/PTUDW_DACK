@@ -19,6 +19,7 @@
     gap: 5px;
 }
 
+
 .edit-cinema__container .edit-cinema__form .form-btn {
     display: flex;
     justify-content: center;
@@ -26,13 +27,14 @@
     gap: 20px;
 }
 
+
 .edit-cinema__container .edit-cinema__form .form-btn button {
     width: 150px;
     border-radius: 8px;
     padding: 10px 0px;
     border: 1px solid #1A2C50;
+    cursor: pointer
 }
-
 .edit-cinema__container .edit-cinema__form .form-btn .btn-add {
     background-color: #1A2C50;
     color: white;
@@ -215,6 +217,45 @@ if (isset($_POST['action']) && $_POST['action'] == 'saveRoomToTheater') {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $link = null;
+    taoKetNoi($link);
+    // Kiểm tra xem tên rạp và địa chỉ có được gửi không
+    if (isset($_POST['theater_name']) && isset($_POST['theater_address']) && $_POST['city_id']) {
+        $name = $_POST['theater_name'];
+        $address = $_POST['theater_address'];
+        $city = $_POST['city_id'];
+
+        // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
+        $querySaveTheater = "UPDATE theaters SET theater_name='$name', theater_address='$address', city_id='$city' WHERE theater_id = $theaterId";
+        $resultSaveTheater = chayTruyVanKhongTraVeDL($link, $querySaveTheater);
+
+        if ($resultSaveTheater) {
+            $_SESSION['success_message'] = "Sửa thông tin rạp thành công.";
+            echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
+        } else {
+            echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+
+        }
+    }
+
+}
+if (isset($_POST['action']) && $_POST['action'] == 'deleteRoom') {
+    // Lấy dữ liệu từ POST request
+    $room_id = $_POST['roomId'];
+
+    // Prepare and execute the SQL query
+    $queryDeleteRoom = "DELETE FROM rooms WHERE room_id = $room_id";
+    $resultDeleteRoom = chayTruyVanKhongTraVeDL($link, $queryDeleteRoom);
+    if ($resultDeleteRoom) {
+        echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
+
+    } else {
+        echo "Failed to update data";
+    }
+}
+
 // Giải phóng bộ nhớ sau khi sử dụng
 giaiPhongBoNho($link, $result);
 
@@ -225,6 +266,24 @@ giaiPhongBoNho($link, $result);
         <h3>Thông tin rạp</h3>
     </div>
     <div class='edit-cinema__form'>
+
+        <form method="POST" action="admin.php?handle=edit-cinema&theaterId=<?php echo $theaterId; ?>"
+            id='form-edit-cinema'>
+            <div class='form-input'>
+                <label>Tên rạp</label>
+                <input placeholder='Nhập tên rạp' name='theater_name' value='<?php echo $theaterName; ?>'>
+            </div>
+            <div class='form-input'>
+                <label>Địa chỉ</label>
+                <input placeholder='Nhập địa chỉ' name='theater_address' value='<?php echo $theaterAddress; ?>'>
+            </div>
+            <div class='form-input'>
+                <label>Thành phố</label>
+                <select name='city_id'>
+                    <?php echo $options; ?>
+                </select>
+            </div>
+
         <form>
             <div class='form-input'>
                 <label>Tên rạp</label>
@@ -240,6 +299,7 @@ giaiPhongBoNho($link, $result);
                     <?php echo $options; ?>
                 </select>
             </div>
+
 
         </form>
     </div>
@@ -267,6 +327,12 @@ giaiPhongBoNho($link, $result);
         <button id='saveRoomChange' style='display:none;'>Lưu phòng</button>
         <button id='cancelRoomChange' style='display:none;'>Hủy</button>
     </div>
+
+    <div class='form-btn'>
+        <button type="button" id='btn-cancel'>Hủy</button>
+        <button type="submit" id='btn-add'>Lưu thông tin</button>
+    </div>
+
 </div>
 <script>
 function editRoom(button) {
@@ -290,8 +356,14 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1) input').disabled = true;
 
     //disable nut xoa va nut sua luon
+
+    var table = getTableBody();
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+
     row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = true;
     row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = true;
+
     // Hiển thị nút Lưu thay đổi
     document.getElementById('saveRoomChange').style.display = 'block';
     // Hiển thị nút Hủy thay đổi
@@ -318,8 +390,15 @@ function updateRowValues(row, stt, tenPhong, loaiPhong) {
     document.querySelector('button[onclick="addRoom()"]').disabled = false;
 
     //enable nut xoa va nut sua luon
+
+
+    var table = getTableBody();
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = false);
+
     row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = false;
     row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = false;
+
 }
 
 function cancelRoomChanges(row) {
@@ -359,8 +438,30 @@ function saveRoomChanges(row) {
 function deleteRoom(button) {
     // Tìm phần tử tr (dòng) chứa nút Xóa được click
     var row = button.closest('tr');
+
+    var room_id = row.querySelector('td:nth-child(1)').innerText;
+    if (confirm("Bạn có chắc chắn muốn xóa phòng này không?")) {
+        var formData = new FormData();
+        formData.append('action', 'deleteRoom');
+        formData.append('roomId', room_id);
+
+        // AJAX request
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", window.location.href, true);
+        xhttp.send(formData); // Send form data
+
+        // Xóa dòng đó
+        row.remove();
+    }
+
     // Xóa dòng đó
     row.remove();
+
 }
 
 function getTableBody() {
@@ -453,4 +554,13 @@ function saveRoom() {
 
     updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
 }
+
+document.getElementById('btn-add').addEventListener('click', function() {
+    var form = document.getElementById('form-edit-cinema');
+    form.submit();
+});
+document.getElementById('btn-cancel').addEventListener('click', function() {
+    window.location.href = 'admin.php?handle=cinema-management';
+
+});
 </script>

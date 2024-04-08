@@ -31,3 +31,4 @@ function giaiPhongBoNho($link, $result)
 }
 
 ?>
+

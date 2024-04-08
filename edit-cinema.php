@@ -459,9 +459,6 @@ function deleteRoom(button) {
         row.remove();
     }
 
-    // Xóa dòng đó
-    row.remove();
-
 }
 
 function getTableBody() {

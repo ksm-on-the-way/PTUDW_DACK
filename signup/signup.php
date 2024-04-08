@@ -168,7 +168,10 @@
             <div class="form-group">
                 <label for="term-register" class="term_register">
                     <input type="checkbox" id="term_register" name="term_register"> 
-                    Tôi đồng ý và tuân theo các <a href="">&nbsp Điều khoản sử dụng của TIX ID</a>
+                    <div>
+                        Tôi đồng ý và tuân theo các<a href="">&nbspĐiều khoản sử dụng của TIX ID</a>
+                    </div>
+
                 </label> 
             </div>
 

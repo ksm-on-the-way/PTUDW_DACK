@@ -111,14 +111,18 @@ function getUserInfoFromDatabase($username) {
 $error_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Kiểm tra xem các trường đã được điền đầy đủ hay không
+    
     if (empty($_POST['username']) || empty($_POST['password'])){
         $error_message = "Vui lòng nhập đủ thông tin";
     } 
     else {
         // Lấy dữ liệu từ ô input
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        // Lưu cookie biến username để hiển thị lại nếu đăng nhập sai
+        setcookie('username', $username, time() + 3600, '/'); 
+
         // Thực hiện kiểm tra đăng nhập bằng hàm authenticateUser
         if (authenticateUser($username, $password)) {
             // Nếu đăng nhập thành công, lấy thông tin người dùng từ DB bằng hàm dưới  
@@ -144,12 +148,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             } else {
                 // Người dùng không có quyền admin, có thể chuyển hướng đến một trang thông báo hoặc trang khác
-                header("Location: ../user.php");
+                header("Location: ../homepage.php");
                 exit;
             }
         } else {
-            // Đăng nhập thất bại, hiển thị thông báo lỗi
-            $error_message = "Thông tin đăng nhập không chính xác!";
+            // Đăng nhập thất bại, hiển thị thông báo lỗi         
+            echo '<script>alert("Thông tin đăng nhập không chính xác!");</script>';
+            echo '<script>window.location.href = "./login.php";</script>';
         }
     }
 }
@@ -178,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Tên đăng nhập -->
             <div class="form-group">
                 <label for="username">Email hoặc số điện thoại:</label>
-                <input type="text" id="username" name="username" placeholder="Email hoặc SĐT" value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
+                <input type="text" id="username" name="username" placeholder="Email hoặc SĐT" value="<?php echo isset($_COOKIE['username']) ? $_COOKIE['username'] : ''; ?>">              
                 <div id="username-error" class="error-message"></div>
             </div>
 

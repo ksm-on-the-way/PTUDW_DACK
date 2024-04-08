@@ -67,13 +67,14 @@ a {
     margin-bottom: 5px;
 }
 
-.form-group input,
-.form-group select {
+.form-group input
+{
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
 
 .form-group button {
     width: 100%;
@@ -169,5 +170,10 @@ i {
     gap: 10px;
     margin-top: 20px;
     margin-left: 20px;
+    justify-content: center;
 } 
 
+.radio-group #male, .radio-group #female
+{
+    width: 100px;
+}

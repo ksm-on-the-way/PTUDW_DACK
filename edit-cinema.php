@@ -19,22 +19,23 @@
     gap: 5px;
 }
 
-.form-btn {
+
+.edit-cinema__container .edit-cinema__form .form-btn {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
 }
 
-.form-btn button {
+
+.edit-cinema__container .edit-cinema__form .form-btn button {
     width: 150px;
     border-radius: 8px;
     padding: 10px 0px;
     border: 1px solid #1A2C50;
     cursor: pointer
 }
-
-.form-btn .btn-add {
+.edit-cinema__container .edit-cinema__form .form-btn .btn-add {
     background-color: #1A2C50;
     color: white;
 }
@@ -140,9 +141,9 @@ if ($resultCity) {
 }
 
 $queryRoom = "SELECT r.room_id, r.room_name, rt.room_type_name 
-FROM rooms r
-INNER JOIN room_types rt ON r.room_type_id = rt.room_type_id
-WHERE r.theater_id = $theaterId";
+        FROM rooms r
+        INNER JOIN room_types rt ON r.room_type_id = rt.room_type_id
+        WHERE r.theater_id = $theaterId";
 $resultRoom = chayTruyVanTraVeDL($link, $queryRoom);
 $dataRoom = "";
 if (mysqli_num_rows($resultRoom) > 0) {
@@ -210,6 +211,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'saveRoomToTheater') {
     $resultRoomToTheater = chayTruyVanKhongTraVeDL($link, $queryRoomToTheater);
     if ($resultRoomToTheater) {
         echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
+
     } else {
         echo "Failed to update data";
     }
@@ -248,6 +250,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'deleteRoom') {
     $resultDeleteRoom = chayTruyVanKhongTraVeDL($link, $queryDeleteRoom);
     if ($resultDeleteRoom) {
         echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
+
     } else {
         echo "Failed to update data";
     }
@@ -263,6 +266,7 @@ giaiPhongBoNho($link, $result);
         <h3>Thông tin rạp</h3>
     </div>
     <div class='edit-cinema__form'>
+
         <form method="POST" action="admin.php?handle=edit-cinema&theaterId=<?php echo $theaterId; ?>"
             id='form-edit-cinema'>
             <div class='form-input'>
@@ -279,6 +283,24 @@ giaiPhongBoNho($link, $result);
                     <?php echo $options; ?>
                 </select>
             </div>
+
+        <form>
+            <div class='form-input'>
+                <label>Tên rạp</label>
+                <input placeholder='Nhập tên rạp' value='<?php echo $theaterName; ?>'>
+            </div>
+            <div class='form-input'>
+                <label>Địa chỉ</label>
+                <input placeholder='Nhập địa chỉ' value='<?php echo $theaterAddress; ?>'>
+            </div>
+            <div class='form-input'>
+                <label>Thành phố</label>
+                <select>
+                    <?php echo $options; ?>
+                </select>
+            </div>
+
+
         </form>
     </div>
     <div class='table-container'>
@@ -305,10 +327,12 @@ giaiPhongBoNho($link, $result);
         <button id='saveRoomChange' style='display:none;'>Lưu phòng</button>
         <button id='cancelRoomChange' style='display:none;'>Hủy</button>
     </div>
+
     <div class='form-btn'>
         <button type="button" id='btn-cancel'>Hủy</button>
         <button type="submit" id='btn-add'>Lưu thông tin</button>
     </div>
+
 </div>
 <script>
 function editRoom(button) {
@@ -332,9 +356,14 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1) input').disabled = true;
 
     //disable nut xoa va nut sua luon
+
     var table = getTableBody();
     var buttons = table.querySelectorAll('button');
     buttons.forEach(button => button.disabled = true);
+
+    row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = true;
+    row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = true;
+
     // Hiển thị nút Lưu thay đổi
     document.getElementById('saveRoomChange').style.display = 'block';
     // Hiển thị nút Hủy thay đổi
@@ -362,9 +391,14 @@ function updateRowValues(row, stt, tenPhong, loaiPhong) {
 
     //enable nut xoa va nut sua luon
 
+
     var table = getTableBody();
     var buttons = table.querySelectorAll('button');
     buttons.forEach(button => button.disabled = false);
+
+    row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = false;
+    row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = false;
+
 }
 
 function cancelRoomChanges(row) {
@@ -404,6 +438,7 @@ function saveRoomChanges(row) {
 function deleteRoom(button) {
     // Tìm phần tử tr (dòng) chứa nút Xóa được click
     var row = button.closest('tr');
+
     var room_id = row.querySelector('td:nth-child(1)').innerText;
     if (confirm("Bạn có chắc chắn muốn xóa phòng này không?")) {
         var formData = new FormData();
@@ -423,6 +458,10 @@ function deleteRoom(button) {
         // Xóa dòng đó
         row.remove();
     }
+
+    // Xóa dòng đó
+    row.remove();
+
 }
 
 function getTableBody() {
@@ -515,6 +554,7 @@ function saveRoom() {
 
     updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
 }
+
 document.getElementById('btn-add').addEventListener('click', function() {
     var form = document.getElementById('form-edit-cinema');
     form.submit();

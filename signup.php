@@ -273,7 +273,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Header chuyển đổi giữa đăng ký và đăng nhập  -->
         <h2>
             <span id="login-header" class="inactive">
-                <a href="../login/login.php">Đăng nhập</a>
+                <a href="./login.php">Đăng nhập</a>
             </span>
             <span id="signup-header" class="active">Đăng ký</span>
         </h2>

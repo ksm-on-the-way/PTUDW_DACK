@@ -37,6 +37,12 @@
         background-color: #1A2C50;
         color: white;
     }
+    .btn-add:hover {
+        cursor: pointer;
+    }
+    .btn-cancel:hover{
+        cursor: pointer;
+    }
 </style>
 <?php
 require_once './db_module.php';
@@ -44,16 +50,21 @@ require_once './db_module.php';
 // Kết nối đến cơ sở dữ liệu
 $link = null;
 taoKetNoi($link);
+$movieId = isset($_GET['movieId']) ? $_GET['movieId'] : null;
+
 
 // Truy vấn để lấy dữ liệu từ bảng cities
 $queryGenre = "SELECT movie_genre_id, movie_genre_name FROM movie_genres";
 $queryRate = "SELECT movie_rate_id, movie_rate_name FROM movie_rates";
+$queryDirector = "SELECT movie_director_id, movie_director_name FROM movie_directors";
 $resultGenre = chayTruyVanTraVeDL($link, $queryGenre);
 $resultRate = chayTruyVanTraVeDL($link, $queryRate);
+$resultDirector = chayTruyVanTraVeDL($link, $queryDirector);
 
 // Mảng để lưu trữ các tùy chọn thành phố
 $optionsGenre = "";
 $optionsRate = "";
+$optionsDirector = "";
 
 // Kiểm tra xem truy vấn có thành công không
 if ($resultGenre) {
@@ -76,6 +87,16 @@ if ($resultRate) {
 } else {
     echo "Không thể lấy dữ liệu từ cơ sở dữ liệu.";
 }
+if ($resultDirector) {
+    // Duyệt qua kết quả và tạo tùy chọn cho từng thành phố
+    while ($row = mysqli_fetch_assoc($resultDirector)) {
+        $director_id = $row['movie_director_id'];
+        $director_name = $row['movie_director_name'];
+        $optionsDirector .= "<option value='$director_id'>$director_name</option>";
+    }
+} else {
+    echo "Không thể lấy dữ liệu từ cơ sở dữ liệu.";
+}
 
 
 // Giải phóng bộ nhớ sau khi sử dụng
@@ -85,41 +106,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $link = null;
     taoKetNoi($link);
-    // Kiểm tra xem tên rạp và địa chỉ có được gửi không
+
     function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
     {
-    $filetemp = $_FILES[".$uploadfile."]['tmp_name'];
-    $oldfilename = $_FILES[".$uploadfile."]['name'];
-    return move_uploaded_file($filetemp, $uploaddir . $oldfilename);
+        $filetemp = $_FILES["$uploadfile"]['tmp_name'];
+        $oldfilename = $_FILES["$uploadfile"]['name'];
+        return move_uploaded_file($filetemp, $uploaddir . $oldfilename);
     }
 
-    $folderSaveFileUpload="./uploadFile/";
+    $folderSaveFileUpload = "./uploadFile/";
     $fileNameBanner = '';
     $fileNameTrailer = '';
-    $result_upload_banner = uploadFileTo("banner",$folderSaveFileUpload,$fileNameBanner);
-    $result_upload_trailer = uploadFileTo("trailer",$folderSaveFileUpload,$fileNameTrailer);
+    $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
+    $result_upload_trailer = uploadFileTo("trailer", $folderSaveFileUpload, $fileNameTrailer);
+    // Kiểm tra xem các thông số có được gửi không
     if (
         isset($_POST['movie-name']) && isset($_POST['actor-name']) && $result_upload_banner && $result_upload_trailer && isset($_POST['genre']) && isset($_POST['description'])
         && isset($_POST['duration']) && isset($_POST['rate']) && isset($_POST['director']) && isset($_POST['release-date']) && isset($_POST['end-date'])
     ) {
         $moviename = $_POST['movie-name'];
         $actorname = $_POST['actor-name'];
-        $banner = $folderSaveFileUpload.$fileNameBanner;
-        $trailer = $folderSaveFileUpload.$fileNameTrailer;
-        $genreid = $_POST['genre'];
+        $banner = $folderSaveFileUpload . $fileNameBanner;
+        $trailer = $folderSaveFileUpload . $fileNameTrailer;
+        $genre = $_POST['genre'];
         $description = $_POST['description'];
         $duration = $_POST['duration'];
-        $rateid = $_POST['rate'];
-        $directorId = $_POST['director'];
+        $rate = $_POST['rate'];
+        $director = $_POST['director'];
         $releaseDate = $_POST['release-date'];
         $endDate = $_POST['end-date'];
         // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
-        $query = "INSERT INTO movies (movie_name, actor, movie_description, movie_duration, release_date, end_date, trailer_url, movie_director_id, movie_genre_id, movie_rate_id) VALUES ('$name', '$actorname', '$description','$duration','$releaseDate', '$endDate', '$trailer', )";
+        $query = "INSERT INTO movies (movie_name, actor, movie_description, movie_duration, release_date, end_date, trailer_url, movie_director_id, movie_genre_id, movie_rate_id) VALUES ('$moviename', '$actorname', '$description','$duration','$releaseDate', '$endDate', '$trailer','$director','$genre', '$rate' )";
         $result = chayTruyVanKhongTraVeDL($link, $query);
+        $query_movieid = "SELECT movie_id FROM movies WHERE movie_name = '$moviename'";
+        $result_movieid = chayTruyVanTraVeDL($link, $query_movieid);
+        $queryBanner = '';
+        while ($row = mysqli_fetch_assoc($result_movieid)) {
+            $movieid = $row['movie_id'];
+            $queryBanner = "INSERT INTO movie_banner_images(movie_id,image_url) VALUES ('$movieid','$banner')";
+        }
+        $resultQueryBanner = chayTruyVanKhongTraVeDL($link, $queryBanner);
 
-        if ($result) {
-            $_SESSION['success_message'] = "Thêm rạp thành công.";
-            echo "<script> window.location.href='admin.php?handle-movie-management';</script>";
+
+        if ($result && $resultQueryBanner) {
+            $_SESSION['success_message'] = "Thêm phim thành công.";
+            echo "<script> window.location.href='admin.php?handle=film-management';</script>";
         } else {
             echo "<script>alert('Đã có lỗi xảy ra.');</script>";
         }
@@ -173,9 +204,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class='form-input'>
-            <label>Đạo diễn</label>
+                <label>Đạo diễn</label>
                 <select name='director'>
-                    <?php echo $options; ?>
+                    <?php echo $optionsDirector; ?>
                 </select>
             </div>
             <div class="date">
@@ -190,9 +221,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class='form-btn'>
-                <button type="button" class='btn-cancel'>Hủy</button>
+                <button type="button" onclick="redirectToFilmManagement()" class='btn-cancel'>Hủy</button>
                 <button type="submit" class='btn-add'>Tạo phim</button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    function redirectToFilmManagement() {
+        window.location.href = 'admin.php?handle=film-management';
+    }
+</script>

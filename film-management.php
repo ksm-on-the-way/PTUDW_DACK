@@ -24,7 +24,12 @@
         border-radius: 8px;
         border: none;
     }
-
+    .movie-admin__container .movie-admin__heading .button button:hover {
+        cursor: pointer;
+    }
+    .button:hover{
+        cursor: pointer;
+    }
     .movie-admin__container .table-container {
         margin-top: 20px;
     }

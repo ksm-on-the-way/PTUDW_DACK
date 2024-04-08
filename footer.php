@@ -6,36 +6,35 @@
             <div class="footer-category__container">
                 <div class="footer-category__item">
 
-                    <div>Perusahaan</div>
-                    <div>Kontak Kami</div>
-                    <div>Tentang</div>
-                    <div>Partner</div>
+                    <div><strong>TIX ID</strong></div>
+                    <div>Liên hệ</div>
+                    <div>Về chúng tôi</div>
+                    <div>Đối tác</div>
 
                 </div>
                 <div class="footer-category__item">
 
-                    <div>Seputar</div>
-                    <div>TIX ID News</div>
-                    <div>Bioskop</div>
-                    <div>Tiket Saya</div>
-                    <div>Pembayaran</div>
-                    <div>Cicilan</div>
+                    <div><strong>Mua vé xem phim</strong></div>
+                    <div>Tin tức</div>
+                    <div>Rạp chiếu phim</div>
+                    <div>Vé của tôi</div>
+                    <div>Thanh toán</div>
+                    <div>Trả góp</div>
 
                 </div>
                 <div class="footer-category__item">
 
-                    <div>Dukungan</div>
-                    <div>Pusat Bantuan</div>
-                    <div>Kebijakan Privasi</div>
+                    <div><strong>Hỗ trợ</strong></div>
+                    <div>Trung tâm trợ giúp</div>
+                    <div>Chính sách bảo mật</div>
                     <div>FAQ</div>
-                    <div>Syarat dan Ketentuan</div>
-                    <div>Update Covid-19</div>
+                    <div>Điều khoản & Điều kiện</div>
 
                 </div>
             </div>
         </div>
         <div class="footer-social">
-            <div class="follow-title">Follow Social Media</div>
+            <div class="follow-title">Theo dõi TIX ID</div>
             <div class="social-container">
                 <img loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/5b8fa93cc29d50df9760b627d48135a7dbadd49b8b1e585d1e8eed284fa0e1cc?"
@@ -47,12 +46,12 @@
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/24a966dd74f3fe546af8ace34e38507b34e6a2648b933814d50a9cd72800ffb4?"
                     class="img" />
             </div>
-            <div class="download-title">Download Aplikasi TIX ID</div>
+            <div class="download-title">Tải ứng dụng TIX ID</div>
             <div class="download-container">
                 <img loading="lazy" srcset="./images/google-play.png" class="img-download" />
                 <img loading="lazy" srcset="./images/app-store.png" class="img-download" />
             </div>
-            <div class="term">2021 TIX ID - PT Nusantara Elang Sejahtera.</div>
+            <div class="term">Công ty TNHH TIX ID</div>
         </div>
     </div>
 </div>

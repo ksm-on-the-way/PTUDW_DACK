@@ -598,7 +598,7 @@
             text-align: center;
         }
     </style>
-    <h1 class="transaction-detail-header">Detail Transaksi</h1>
+    <h1 class="transaction-detail-header">CHI TIẾT GIAO DỊCH</h1>
     <div class="ticket">
         <div class="ticket-header">
             <div class="ticket-info">
@@ -606,15 +606,15 @@
                     <div class="movie-info">
                         <div class="movie-title-container">
                             <h1 class="movie-title">Spiderman: No Way Home</h1>
-                            <p class="location-label">Lokasi</p>
+                            <p class="location-label">Vị trí</p>
                             <p class="location">Grand Indonesia CGV</p>
                             <div class="date-time-info">
                                 <div class="date-container">
-                                    <p class="date-label">Tanggal</p>
+                                    <p class="date-label">Ngày</p>
                                     <p class="date">16 December 2021</p>
                                 </div>
                                 <div class="time-container">
-                                    <p class="time-label">Jam</p>
+                                    <p class="time-label">Giờ</p>
                                     <p class="time">14:40</p>
                                 </div>
                             </div>
@@ -624,9 +624,9 @@
                 </div>
                 <div class="ticket-class-info">
                     <div class="ticket-class-details">
-                        <p class="ticket-class-label">Kelas</p>
+                        <p class="ticket-class-label">Hạng vé</p>
                         <p class="ticket-class">Regular 2D</p>
-                        <p class="studio-label">Studio</p>
+                        <p class="studio-label">Phòng</p>
                         <p class="studio">Studio 1</p>
                     </div>
                 </div>
@@ -637,9 +637,9 @@
                 <div class="booking-details">
                     <div class="booking-info">
                         <div class="booking-labels">
-                            <p class="booking-code-label">Kode Booking</p>
-                            <p class="password-label">Password Key</p>
-                            <p class="seat-label">Kursi</p>
+                            <p class="booking-code-label">Mã đặt chỗ</p>
+                            <p class="password-label">Mật khẩu</p>
+                            <p class="seat-label">Chỗ ngồi</p>
                         </div>
                         <div class="booking-values">
                             <p class="booking-code">037491740184392</p>
@@ -654,7 +654,7 @@
             </div>
         </div>
         <div class="purchase-details">
-            <h2 class="purchase-details__title">Rincian Pembelian</h2>
+            <h2 class="purchase-details__title">Thông tin chi tiết</h2>
 
             <div class="order-number">
                 <div class="order-number__label">NO ORDER</div>
@@ -673,7 +673,7 @@
             </div>
 
             <div class="service-fee">
-                <div class="service-fee__label">BIAYA LAYANAN</div>
+                <div class="service-fee__label">Phí dịch vụ</div>
                 <div class="service-fee__details">
                     <div class="service-fee__price">Rp. 3.000</div>
                     <div class="service-fee__quantity">X3</div>
@@ -681,20 +681,20 @@
             </div>
 
             <div class="promo">
-                <div class="promo__label">PROMO TIX ID</div>
+                <div class="promo__label">Khuyến mãi</div>
                 <div class="promo__discount">- Rp. 50.000</div>
             </div>
 
             <div class="divider-purchase-detail"></div>
 
             <div class="total-payment">
-                <div class="total-payment__label">TOTAL PEMBAYARAN</div>
+                <div class="total-payment__label">Thành tiền</div>
                 <div class="total-payment__amount">Rp. 129.000</div>
             </div>
 
             <div class="back-button">
                 <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/8defa1d0c0d2b0c48d57096c1cf569b9d3e95cf373eb8bb8255570a6043b56ed?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="back-button__icon" />
-                <div class="back-button__text">Kembali</div>
+                <div class="back-button__text" onclick="Back()">Quay lại</div>
             </div>
         </div>
     </div>
@@ -703,5 +703,9 @@
 
     <?php include_once './footer.php'; ?>
 </body>
-
+<script>
+    function Back() {
+        history.back();
+    }
+</script>
 </html>

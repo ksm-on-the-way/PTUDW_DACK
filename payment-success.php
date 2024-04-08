@@ -71,6 +71,10 @@
             padding: 16px 12px;
             font: 500 24px/133% Roboto, sans-serif;
         }
+        .tickets-button:hover{
+            cursor: pointer;
+            color: #333;
+        }
     </style>
     <?php
     include_once "./header.php";
@@ -83,12 +87,16 @@
             Chi tiết giao dịch đã được gửi đến email của bạn, bạn cũng có thể kiểm tra các chi tiết vé khác trong mục "Vé của tôi" trên trang web hoặc trên điện thoại thông minh của bạn.
         </p>
 
-        <button class="tickets-button">Xem vé</button>
+        <button class="tickets-button" onclick="redirectToTransactionDetail()">Xem vé</button>
 
     </div>
     <?php
     include_once "./footer.php";
     ?>
 </body>
-
+<script>
+    function redirectToTransactionDetail(){
+        window.location.href= "./transaction-detail.php"
+    }
+</script>
 </html>

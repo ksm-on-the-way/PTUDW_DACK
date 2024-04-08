@@ -1,50 +1,49 @@
 <?php
-    require_once '../db_module.php';
+require_once './db_module.php';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Lấy thông tin từ form và kiểm tra tính hợp lệ
-        // Sử dụng Prepared statement (Các dấu '?') để tránh bị tấn công theo kiểu SQL Injection
-        $fullname = $_POST['fullname'] ?? '';
-        $phone = $_POST['phone'] ?? '';
-        $birthdate = $_POST['birthdate'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $gender = $_POST['gender'] ?? '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Lấy thông tin từ form và kiểm tra tính hợp lệ
+    // Sử dụng Prepared statement (Các dấu '?') để tránh bị tấn công theo kiểu SQL Injection
+    $fullname = $_POST['fullname'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $birthdate = $_POST['birthdate'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $gender = $_POST['gender'] ?? '';
 
-        // Lưu thông tin vào cookie
-        setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
-        setcookie('phone', $phone, time() + 3600, '/');
-        setcookie('birthdate', $birthdate, time() + 3600, '/');
-        setcookie('email', $email, time() + 3600, '/');
-        setcookie('gender', $gender, time() + 3600, '/');
+    // Lưu thông tin vào cookie
+    setcookie('fullname', $fullname, time() + 3600, '/'); // Thời gian sống của cookie: 1 giờ
+    setcookie('phone', $phone, time() + 3600, '/');
+    setcookie('birthdate', $birthdate, time() + 3600, '/');
+    setcookie('email', $email, time() + 3600, '/');
+    setcookie('gender', $gender, time() + 3600, '/');
 
-        // Kết nối database
-        $link = NULL;
-        taoKetNoi($link);
+    // Kết nối database
+    $link = NULL;
+    taoKetNoi($link);
 
-        // Kiểm tra số điện thoại đã tồn tại chưa
-        $phoneQuery = "SELECT * FROM users WHERE phone=?";
-        $phoneStmt = mysqli_prepare($link, $phoneQuery);
-        mysqli_stmt_bind_param($phoneStmt, "s", $phone);
-        mysqli_stmt_execute($phoneStmt);
-        $phoneResult = mysqli_stmt_get_result($phoneStmt);
+    // Kiểm tra số điện thoại đã tồn tại chưa
+    $phoneQuery = "SELECT * FROM users WHERE phone=?";
+    $phoneStmt = mysqli_prepare($link, $phoneQuery);
+    mysqli_stmt_bind_param($phoneStmt, "s", $phone);
+    mysqli_stmt_execute($phoneStmt);
+    $phoneResult = mysqli_stmt_get_result($phoneStmt);
 
-        // Kiểm tra địa chỉ email đã tồn tại chưa
-        $emailQuery = "SELECT * FROM users WHERE email=?";
-        $emailStmt = mysqli_prepare($link, $emailQuery);
-        mysqli_stmt_bind_param($emailStmt, "s", $email);
-        mysqli_stmt_execute($emailStmt);
-        $emailResult = mysqli_stmt_get_result($emailStmt);
+    // Kiểm tra địa chỉ email đã tồn tại chưa
+    $emailQuery = "SELECT * FROM users WHERE email=?";
+    $emailStmt = mysqli_prepare($link, $emailQuery);
+    mysqli_stmt_bind_param($emailStmt, "s", $email);
+    mysqli_stmt_execute($emailStmt);
+    $emailResult = mysqli_stmt_get_result($emailStmt);
 
-        // Kiểm tra kết quả và hiển thị thông báo tương ứng
-        if (mysqli_num_rows($phoneResult) > 0) {
-            echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
-            echo '<script>window.location.href = "../signup/signup.php";</script>';
-        } elseif (mysqli_num_rows($emailResult) > 0) {
-            echo '<script>alert("Email đã tồn tại!");</script>';
-            echo '<script>window.location.href = "../signup/signup.php";</script>';
-        }
-        else {
+    // Kiểm tra kết quả và hiển thị thông báo tương ứng
+    if (mysqli_num_rows($phoneResult) > 0) {
+        echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
+        echo '<script>window.location.href = "../signup/signup.php";</script>';
+    } elseif (mysqli_num_rows($emailResult) > 0) {
+        echo '<script>alert("Email đã tồn tại!");</script>';
+        echo '<script>window.location.href = "../signup/signup.php";</script>';
+    } else {
 
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -64,33 +63,219 @@
             // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
             echo '<script>alert("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại sau!");</script>';
         }
-        }
-        // Đóng kết nối và giải phóng bộ nhớ
-        mysqli_stmt_close($phoneStmt);
-        mysqli_stmt_close($emailStmt);
-        mysqli_stmt_close($insertStmt);
-        giaiPhongBoNho($link, $phoneResult);
-        giaiPhongBoNho($link, $emailResult);
     }
+    // Đóng kết nối và giải phóng bộ nhớ
+    mysqli_stmt_close($phoneStmt);
+    mysqli_stmt_close($emailStmt);
+    mysqli_stmt_close($insertStmt);
+    giaiPhongBoNho($link, $phoneResult);
+    giaiPhongBoNho($link, $emailResult);
+}
 ?>
 
 
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css"> <!-- Liên kết tệp CSS -->
     <!-- Gọi hàm để gọi eye-icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
 </head>
+
 <body>
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            margin: 30px 0 0;
+            /* Đặt margin-top cho trang */
+            padding: 0;
+            /* Xóa padding mặc định của trang */
+            background-image: url("./images/pic2.jfif");
+            background-size: contain;
+            background-position: center;
+            overflow-x: hidden;
+            /* Ẩn thanh cuộn trái phải */
+            /* căn giữa page */
+            display: flex;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .login-signup-container {
+            margin-top: 10px;
+            margin-right: 100px;
+            margin-left: auto;
+            /* Đảm bảo rằng phần tử được căn bên phải */
+            width: 420px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            /* thanh cuộn */
+            height: 440px;
+            ;
+            overflow: auto;
+        }
+
+
+        .login-signup-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 0px 20px 10px;
+            text-align: left;
+        }
+
+        .login-signup-container h2 span {
+            color: #ddd;
+            cursor: pointer;
+            margin: 0 20px;
+            padding: 20px 15px 8px;
+            text-transform: uppercase;
+        }
+
+        .login-signup-container h2 span.active {
+            border-bottom: 3px solid rgba(0, 0, 0, 0.212);
+            color: black;
+        }
+
+
+        .login-signup-container h2 span.inactive a {
+            color: rgba(0, 0, 0, 0.267);
+        }
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #1A2C50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        label {
+            font-size: 14px;
+        }
+
+        /* Ẩn eye icon chỗ mật khẩu */
+        input::-ms-reveal,
+        input::-ms-clear {
+            display: none;
+        }
+
+        /* Tạo 1 eye icon mới */
+        i {
+            margin-left: -33px;
+            cursor: pointer;
+        }
+
+        .form-group label.term_register {
+            display: flex !important;
+        }
+
+        .form-group input[type="checkbox"] {
+            width: 3%;
+        }
+
+        .form-group label.term_register a {
+            font-weight: bold;
+            font-size: 14px;
+            color: red;
+        }
+
+        .error-message {
+            color: red;
+            font-style: italic;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        #password-message {
+            display: none;
+        }
+
+        #password-message p {
+            padding: 0px 10px;
+            font-size: 13.5px;
+        }
+
+        #password-message h3 {
+            font-size: 15px;
+        }
+
+        #password-message .valid {
+            color: green !important;
+        }
+
+        #password-message .valid:before {
+            position: relative;
+            content: "✔";
+        }
+
+        #password-message .invalid {
+            color: red !important;
+        }
+
+        #password-message .invalid:before {
+            position: relative;
+            content: "✖";
+        }
+
+        .forgot-password {
+            /* text-align: left; */
+            font-size: 14px;
+            color: #555;
+        }
+
+        .required {
+            color: red;
+            /* Màu chữ đỏ */
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+    </style>
     <div class="login-signup-container">
         <!-- Header chuyển đổi giữa đăng ký và đăng nhập  -->
         <h2>
-            <span id ="login-header" class="inactive">
+            <span id="login-header" class="inactive">
                 <a href="../login/login.php">Đăng nhập</a>
             </span>
-            <span id ="signup-header" class="active">Đăng ký</span>
+            <span id="signup-header" class="active">Đăng ký</span>
         </h2>
 
         <!-- Form đăng ký -->
@@ -98,46 +283,46 @@
             <!-- Dưới mỗi ô input đều có 1 chỗ dành cho error-message -->
             <!-- Họ tên -->
             <!-- Họ tên -->
-        <div class="form-group">
-            <label for="fullname">Họ và tên:<span class="required">*</span></label>
-            <input type="text" id="fullname" name="fullname" placeholder="Họ và tên" value="<?php echo isset($_COOKIE['fullname']) ? $_COOKIE['fullname'] : ''; ?>">
-            <div id="fullname-error" class="error-message"></div>
-        </div>
-
-        <!-- Số điện thoại -->
-        <div class="form-group">
-            <label for="phone">Số điện thoại:<span class="required">*</span></label>
-            <input type="text" id="phone" name="phone" placeholder="Số điện thoại" value="<?php echo isset($_COOKIE['phone']) ? $_COOKIE['phone'] : ''; ?>">
-            <div id="phone-error" class="error-message"></div>
-        </div>
-
-        <!-- Ngày sinh -->
-        <div class="form-group">
-            <label for="birthdate">Ngày sinh:<span class="required">*</span></label>
-            <input type="date" id="birthdate" name="birthdate" value="<?php echo isset($_COOKIE['birthdate']) ? $_COOKIE['birthdate'] : ''; ?>">
-            <div id="birthdate-error" class="error-message"></div>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-            <label for="email">Email:<span class="required">*</span></label>
-            <input type="email" id="email" name="email" placeholder="Email" value="<?php echo isset($_COOKIE['email']) ? $_COOKIE['email'] : ''; ?>">
-            <div id="email-error" class="error-message"></div>
-        </div>
-
-        <!-- Giới tính -->
-        <div class="form-group">
-            <label for="gender">Giới tính:<span class="required">*</span></label>
-            <div class="radio-group">
-                <label for="male">Nam</label>
-                <input type="radio" id="male" name="gender" value=1 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 1) ? 'checked' : ''; ?>>
-                <label for="female">Nữ</label>
-                <input type="radio" id="female" name="gender" value=0 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 0) ? 'checked' : ''; ?>>
+            <div class="form-group">
+                <label for="fullname">Họ và tên:<span class="required">*</span></label>
+                <input type="text" id="fullname" name="fullname" placeholder="Họ và tên" value="<?php echo isset($_COOKIE['fullname']) ? $_COOKIE['fullname'] : ''; ?>">
+                <div id="fullname-error" class="error-message"></div>
             </div>
-        </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-group">
+                <label for="phone">Số điện thoại:<span class="required">*</span></label>
+                <input type="text" id="phone" name="phone" placeholder="Số điện thoại" value="<?php echo isset($_COOKIE['phone']) ? $_COOKIE['phone'] : ''; ?>">
+                <div id="phone-error" class="error-message"></div>
+            </div>
+
+            <!-- Ngày sinh -->
+            <div class="form-group">
+                <label for="birthdate">Ngày sinh:<span class="required">*</span></label>
+                <input type="date" id="birthdate" name="birthdate" value="<?php echo isset($_COOKIE['birthdate']) ? $_COOKIE['birthdate'] : ''; ?>">
+                <div id="birthdate-error" class="error-message"></div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email:<span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Email" value="<?php echo isset($_COOKIE['email']) ? $_COOKIE['email'] : ''; ?>">
+                <div id="email-error" class="error-message"></div>
+            </div>
+
+            <!-- Giới tính -->
+            <div class="form-group">
+                <label for="gender">Giới tính:<span class="required">*</span></label>
+                <div class="radio-group">
+                    <label for="male">Nam</label>
+                    <input type="radio" id="male" name="gender" value=1 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 1) ? 'checked' : ''; ?>>
+                    <label for="female">Nữ</label>
+                    <input type="radio" id="female" name="gender" value=0 <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 0) ? 'checked' : ''; ?>>
+                </div>
+            </div>
 
             <!-- Mật khẩu -->
-            <div class="form-group">          
+            <div class="form-group">
                 <label for="password">Mật khẩu:<span class="required">*</span></label>
                 <input type="password" id="password" name="password" placeholder="Mật khẩu">
 
@@ -167,9 +352,9 @@
             <!-- Điều khoản sử dụng dịch vụ -->
             <div class="form-group">
                 <label for="term-register" class="term_register">
-                    <input type="checkbox" id="term_register" name="term_register"> 
+                    <input type="checkbox" id="term_register" name="term_register">
                     Tôi đồng ý và tuân theo các <a href="">&nbsp Điều khoản sử dụng của TIX ID</a>
-                </label> 
+                </label>
             </div>
 
 
@@ -188,19 +373,18 @@
     </div>
 
 
-    <script>  
-
+    <script>
         // Ẩn hiện con mắt ở mk và nhập lại mk
         const togglePasswords = document.querySelectorAll(".toggle-password");
         togglePasswords.forEach(togglePassword => {
-            togglePassword.addEventListener("click", function () {
+            togglePassword.addEventListener("click", function() {
                 const targetId = this.getAttribute("data-target");
                 const targetInput = document.getElementById(targetId);
 
                 // toggle the type attribute
                 const type = targetInput.getAttribute("type") === "password" ? "text" : "password";
                 targetInput.setAttribute("type", type);
-                
+
                 // toggle the icon
                 this.classList.toggle("bi-eye");
             });
@@ -215,7 +399,7 @@
             var email = document.getElementById("email").value;
             var passwordInput = document.getElementById("password").value;
             var confirmPasswordInput = document.getElementById("confirm_password").value;
-            var termCheckbox = document.getElementById("term_register");   
+            var termCheckbox = document.getElementById("term_register");
             var genderMale = document.getElementById("male").checked;
             var genderFemale = document.getElementById("female").checked;
 
@@ -246,7 +430,7 @@
             }
 
             // Người dùng submit thành công
-            return true; 
+            return true;
         }
 
         // Check các error-message còn tồn tại hay ko để có thể submit form, hàm này sẽ dc gọi trong
@@ -361,17 +545,17 @@
 
                 // Validate lowercase letters
                 var lowerCaseLetters = /[a-z]/g;
-                if (password.match(lowerCaseLetters)) {  
+                if (password.match(lowerCaseLetters)) {
                     letter.classList.remove("invalid");
                     letter.classList.add("valid");
                 } else {
                     letter.classList.remove("valid");
                     letter.classList.add("invalid");
                 }
-                
+
                 // Validate capital letters
                 var upperCaseLetters = /[A-Z]/g;
-                if (password.match(upperCaseLetters)) {  
+                if (password.match(upperCaseLetters)) {
                     capital.classList.remove("invalid");
                     capital.classList.add("valid");
                 } else {
@@ -381,14 +565,14 @@
 
                 // Validate numbers
                 var numbers = /[0-9]/g;
-                if (password.match(numbers)) {  
+                if (password.match(numbers)) {
                     number.classList.remove("invalid");
                     number.classList.add("valid");
                 } else {
                     number.classList.remove("valid");
                     number.classList.add("invalid");
                 }
-                
+
                 // Validate length
                 if (password.length >= 8) {
                     length.classList.remove("invalid");
@@ -416,23 +600,21 @@
                     // Nếu tất cả các điều kiện đã thoả mãn, ẩn hộp điều kiện
                     document.getElementById("password-message").style.display = "none";
                     return true;
-                } 
-                
-                else {
+                } else {
                     // Nếu mật khẩu trống, hiển thị thông báo lỗi
                     if (password === "") {
                         passwordError.textContent = "Password không được để trống";
                         document.getElementById("password-message").style.display = "none";
-                    } 
+                    }
                     // Nếu không, ẩn ô thông báo lỗi
                     else {
-                        passwordError.textContent = ""; 
+                        passwordError.textContent = "";
                     }
                     return false;
                 }
             }
 
-    
+
             function checkConfirmPassword() {
                 var password = passwordInput.value.trim();
                 var confirmPass = confirmPassInput.value.trim();
@@ -458,4 +640,5 @@
     </script>
 
 </body>
+
 </html>

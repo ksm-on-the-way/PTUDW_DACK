@@ -117,9 +117,9 @@ body {
     <div class="header">
         <img loading="lazy" srcset="./images/header-logo.png" class="img" />
         <div class="header-right_container">
-            <div class="header-navigation">Trang chủ</div>
-            <div class="header-navigation">Tiket Saya</div>
-            <div class="header-navigation">Tin tức</div>
+            <div class="header-navigation" onclick="redirectToHomePage()">Trang chủ</div>
+            <div class="header-navigation" onclick="redirectToMyTicket()">Vé của tôi</div>
+            <div class="header-navigation" onclick="redirectToNews()">Tin tức</div>
             <img loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/7a3ca842d4cd4de61297eebe8f08acb763755b34885f1a9221275a7018273ae5?"
                 class="header-noti" />
@@ -131,4 +131,15 @@ body {
     </div>
 </body>
 
+<script>
+    function redirectToHomePage() {
+        window.location.href = './homepage.php';
+    }
+    function redirectToNews(){
+        window.location.href ='./news.php';
+    }
+    function redirectToMyTicket(){
+        window.location.href ='./my-ticket.php';
+    }
+</script>
 </html>

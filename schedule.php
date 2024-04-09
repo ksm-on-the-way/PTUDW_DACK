@@ -71,8 +71,8 @@
         background-color: var(--White, #fff);
         display: flex;
         flex-direction: column;
-        width: 46px;
-        height: 46px;
+        width: fit-content;
+        height: 54px;
         padding: 18px;
         margin-top: 20px;
     }
@@ -97,6 +97,7 @@
     }
 
     .schedule-box .date {
+        text-align: center;
         color: var(--Shade-600, #5a637a);
         font: 500 15px Roboto, sans-serif;
     }
@@ -126,6 +127,10 @@
 
     .carousel-schedule__container .owl-carousel {
         position: relative;
+    }
+
+    .carousel-schedule__container .owl-carousel .owl-stage {
+        display: flex;
     }
 
     .carousel-schedule__container .owl-item {
@@ -158,9 +163,9 @@
         width: 100%;
     }
 
-    .schedule-left .line {}
 
     .schedule-left .line {
+        margin-top: 20px;
         background-color: var(--Shade-300, #bdc5d4);
         min-height: 1px;
         width: 100%;
@@ -172,6 +177,101 @@
         }
     }
 
+    .schedule-left .address-filter {
+        max-width: 440px;
+        margin-top: 20px;
+        position: relative;
+
+    }
+
+    .schedule-left .address-filter .address-filter__container {
+        width: fit-content;
+        position: relative;
+        cursor: pointer;
+        align-items: center;
+        display: flex;
+        z-index: 30;
+    }
+
+    .schedule-left .address-filter .address-filter__container .location {
+        text-transform: uppercase;
+    }
+
+
+    .schedule-left .address-filter img {
+        aspect-ratio: 1;
+        object-fit: auto;
+        object-position: center;
+        width: 32px;
+        margin: auto 0;
+    }
+
+    .schedule-left .address-filter .address-item__container {
+        position: absolute;
+        display: none;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 0 20px;
+        justify-content: center;
+        padding-top: 60px;
+        padding-bottom: 20px;
+        max-width: 400px;
+        background-color: #fff;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        z-index: 20;
+        top: 0;
+        transition: all 0.6s ease;
+        /* Thêm transition vào đây */
+
+    }
+
+
+
+    .schedule-left .address-item__container.show {
+        display: flex;
+        top: -10px;
+
+    }
+
+    .schedule-left .address-filter .arrow-down-icon {
+        display: block;
+    }
+
+    .schedule-left .address-filter .arrow-down-icon.show {
+        display: none;
+    }
+
+    .schedule-left .address-filter .arrow-up-icon {
+        display: none;
+    }
+
+    .schedule-left .address-filter .arrow-up-icon.show {
+        display: block;
+    }
+
+
+    .schedule-left .address-filter .address-item__container .address-item {
+
+        width: 90px;
+        padding: 10px;
+        text-align: center;
+        background-color: #fff;
+        border: 1px solid #000;
+    }
+
+    .schedule-left .address-filter .address-item__container .address-item:hover {
+        background-color: #1A2C50;
+        color: white;
+
+    }
+
+    .schedule-left .address-filter .address-item__container .address-item.active {
+        background-color: #1A2C50;
+        color: white;
+
+    }
+
+
     .schedule-right {
         width: 100%;
         height: 100%;
@@ -181,12 +281,12 @@
     .schedule-filter {
         width: 100%;
         font-weight: 400;
-        margin-top: 30px
+        margin-top: 10px
     }
 
     @media (min-width: 768px) {
         .schedule-filter {
-            margin-top: 50px;
+            margin-top: 20px;
             display: flex;
             max-width: 644px;
         }
@@ -339,6 +439,12 @@
         }
     }
 
+    .schedule-right .film-container .detail-film__container .value>div {
+        flex: 1;
+        max-height: 20px;
+        overflow: hidden;
+    }
+
     .schedule-right .film-order {
         margin-top: 50px;
         justify-content: center;
@@ -360,7 +466,7 @@
         font: 700 28px Roboto, sans-serif;
     }
 
-    .schedule-right .film-order .address {
+    .schedule-right .film-order .time {
         color: var(--Shade-600, #5a637a);
         margin-top: 29px;
         font: 18px Roboto, sans-serif;
@@ -391,6 +497,8 @@
         text-align: center;
         padding: 16px 12px;
         font: 24px/133% Roboto, sans-serif;
+        text-transform: uppercase;
+        cursor: pointer;
     }
     </style>
     <?php
@@ -417,10 +525,10 @@
             <div class="detail-film">
                 <div class="detail-film__container">
                     <div class="title">
-                        <div>Genre</div>
-                        <div>Duration</div>
-                        <div>Director</div>
-                        <div>Rate</div>
+                        <div>Thể loại</div>
+                        <div>Thời lượng</div>
+                        <div>Đạo diễn</div>
+                        <div>Độ tuổi</div>
                     </div>
                     <div class="value">
                         <div>' . $row['movie_genre_name'] . '</div>
@@ -436,6 +544,31 @@
         $film_container .= "Không có dữ liệu";
     }
 
+    // Truy vấn để lấy dữ liệu từ bảng cities
+    $queryCity = "SELECT city_id, city_name FROM cities";
+    $resultCity = chayTruyVanTraVeDL($link, $queryCity);
+
+    // Mảng để lưu trữ các tùy chọn thành phố
+    $htmlCity = "";
+
+    // Kiểm tra xem truy vấn có thành công không
+    if ($resultCity) {
+        // Duyệt qua kết quả và tạo tùy chọn cho từng thành phố
+        while ($row = mysqli_fetch_assoc($resultCity)) {
+            $city_id = $row['city_id'];
+            $city_name = $row['city_name'];
+            $htmlCity .= "<div class='address-item' data-id='$city_id'>
+            $city_name
+        </div>";
+
+        }
+
+
+    } else {
+        echo "Không thể lấy dữ liệu từ cơ sở dữ liệu.";
+    }
+
+
 
     // Giải phóng bộ nhớ sau khi sử dụng
     giaiPhongBoNho($link, $result);
@@ -445,8 +578,8 @@
     ?>
     <div class='schedule-container'>
         <div class='schedule-left'>
-            <div class="schedule-title">Schedule</div>
-            <div class="schedule-desc">Pilih jadwal bioskop yang akan kamu tonton</div>
+            <div class="schedule-title">Lịch chiếu</div>
+            <div class="schedule-desc">Chọn lịch chiếu phim bạn muốn xem</div>
 
             <div class='carousel-schedule__wrapper'>
                 <div class='carousel-schedule__container'>
@@ -483,6 +616,24 @@
                 </div>
             </div>
             <div class="line"></div>
+            <div class="address-filter">
+                <div class='address-filter__container' onclick='toggleAddressFilter()'>
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/acf2f9407bd2f78d3b82c23f23d53b213acf81bddb064781db34e9422db81152?"
+                        class="location-icon" />
+
+                    <div class="location">HỒ CHÍ MINH</div>
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/e492189f017ec2bc07a5f804b6c1aa40297b9b478d5945b992f8d885176ea783?"
+                        class="arrow-down-icon" />
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ac9b9726ebb0f6eb68e38f83ef0329e574536bc628c5ccf18a081b93b712b19a?"
+                        class="arrow-up-icon" />
+                </div>
+                <div class='address-item__container'>
+                    <?php echo $htmlCity; ?>
+                </div>
+            </div>
             <div class="schedule-filter">
                 <div class='filter-input'>
                     <input />
@@ -542,14 +693,14 @@
             </div> -->
             <?php echo $film_container; ?>
             <div class="film-order">
-                <div class="name">GRAND INDONESIA CGV</div>
-                <div class="address">Kamis, 16 Desember 2021</div>
+                <div class="name"></div>
+                <div class="time"></div>
                 <div class="type">
-                    <div class="name">REGULAR 2D</div>
-                    <div class="time">14:40</div>
+                    <div class="name"></div>
+                    <div class="time-show"></div>
                 </div>
-                <div class="term">* Pemilihan kursi dapat dilakukan setelah ini</div>
-                <div class="order">BELI SEKARANG</div>
+                <div class="term">* Bạn có thể chọn chỗ ngồi sau khi đã chọn thông tin phim</div>
+                <div class="order">Mua ngay</div>
             </div>
         </div>
     </div>
@@ -560,10 +711,9 @@
 <script>
 // Function to get date in format DD MMM (e.g., 15 Apr)
 function getFormattedDate(date) {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    return date.getDate() + " " + monthNames[date.getMonth()];
+    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+    return day + "/" + month;
 }
 
 // Function to render schedule boxes with dates greater than current date
@@ -586,7 +736,7 @@ function renderSchedule() {
         dayDiv.classList.add('day');
         // Get the day of the week (0: Sunday, 1: Monday, ..., 6: Saturday)
         const dayOfWeek = currentDate.getDay();
-        const dayNames = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+        const dayNames = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
         dayDiv.textContent = dayNames[dayOfWeek];
         scheduleBox.appendChild(dateDiv);
         scheduleBox.appendChild(dayDiv);
@@ -598,8 +748,8 @@ function renderSchedule() {
 
     }
     $('.carousel-schedule__container .owl-carousel').owlCarousel({
-        margin: 24,
 
+        margin: 20,
         navText: [
             "<i class='fas fa-chevron-left'></i>",
             "<i class='fas fa-chevron-right'></i>",
@@ -611,7 +761,7 @@ function renderSchedule() {
                 nav: false
             },
             600: {
-                items: 5
+                items: 4,
             },
 
         }
@@ -631,11 +781,13 @@ function handleClickEvent(event) {
     // Get the date from the clicked schedule box
     const currentDate = new Date(parseInt(event.currentTarget.getAttribute('data-date')));
     const formattedDate = currentDate.toLocaleDateString('pt-br').split('/').reverse().join('-');
+    localStorage.setItem('selectedSchedule', JSON.stringify(formattedDate));
 
     // Prepare data to be sent
     var formData = new FormData();
-    formData.append('action', 'getShowsByDate');
+    formData.append('action', 'getShowsByDateAndLocation');
     formData.append('date', formattedDate);
+    formData.append('city_id', 1)
 
     // AJAX request
     var xhttp = new XMLHttpRequest();
@@ -645,6 +797,8 @@ function handleClickEvent(event) {
             if (response) {
                 var scheduleContainer = document.querySelector('.schedule-picker__container');
                 scheduleContainer.innerHTML = response;
+                implementScriptSchedule();
+
             }
         }
     };
@@ -656,7 +810,140 @@ window.onload = function() {
     renderSchedule();
     // Trigger click event on the first scheduleBox element
     document.querySelector('.schedule-box').click();
+    var activeDateClass = document.querySelector('.schedule-box.active');
+    const currentDate = new Date(parseInt(activeDateClass.getAttribute('data-date')));
+    const formattedDate = currentDate.toLocaleDateString('pt-br').split('/').reverse().join('-');
+    localStorage.setItem('selectedSchedule', JSON.stringify(formattedDate));
+    implementScriptSchedule();
+
 };
+var container = document.querySelector('.address-item__container');
+var filterContainer = document.querySelector('.address-filter__container');
+var downArrow = filterContainer.querySelector('.arrow-down-icon');
+var upArrow = filterContainer.querySelector('.arrow-up-icon');
+
+document.addEventListener('click', function(event) {
+
+
+    // Kiểm tra nếu phần tử được click không thuộc address-filter hoặc container
+    if (!event.target.closest('.address-filter') && !container.contains(event.target)) {
+        container.classList.remove('show');
+        downArrow.classList.remove('show');
+        upArrow.classList.remove('show');
+    }
+});
+var addressItems = document.querySelectorAll('.address-item');
+var locationText = document.querySelector('.address-filter__container .location');
+
+addressItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+        // Loại bỏ class 'active' từ tất cả các phần tử address-item
+        addressItems.forEach(function(item) {
+            item.classList.remove('active');
+        });
+        // Thêm class 'active' cho phần tử được click
+        this.classList.add('active');
+        locationText.textContent = '';
+        locationText.textContent = this.textContent;
+        // Prepare data to be sent
+        var formData = new FormData();
+        formData.append('action', 'getShowsByDateAndLocation');
+        formData.append('date', JSON.parse(localStorage.getItem('selectedSchedule')) || null);
+        formData.append('city_id', this.getAttribute('data-id'));
+
+
+        // AJAX request
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(xhttp.responseText);
+                if (response) {
+                    var scheduleContainer = document.querySelector('.schedule-picker__container');
+                    scheduleContainer.innerHTML = response;
+                    implementScriptSchedule();
+                }
+            }
+        };
+        xhttp.open("POST", "schedule-picker.php", true);
+        xhttp.send(formData); // Send form data
+
+
+        toggleAddressFilter()
+    });
+});
+
+function toggleAddressFilter() {
+
+    container.classList.toggle('show');
+    downArrow.classList.toggle('show');
+    upArrow.classList.toggle('show');
+}
+
+function implementScriptSchedule() {
+    var timeItems = document.querySelectorAll('.time-item');
+    var orderNameCinema = document.querySelector('.film-order .name');
+    var orderTime = document.querySelector('.film-order .time');
+    var orderTypeNameCinema = document.querySelector('.film-order .type .name');
+    var orderTimeShow = document.querySelector('.film-order .type .time-show');
+    timeItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+
+            // Bỏ active của những time-item khác
+            timeItems.forEach(function(otherItem) {
+                otherItem.classList.remove('active');
+            });
+
+            // Thêm class active cho time-item được click
+            item.classList.add('active');
+
+
+            orderTimeShow.textContent = item.textContent;
+            // Lấy textContent của các thẻ name và cinema-name__container tương ứng
+            var cinemaType = this.getAttribute('cinema-type-name')
+            var cinemaName = this.getAttribute('cinema-name')
+            orderTypeNameCinema.textContent = cinemaType;
+            orderNameCinema.textContent = cinemaName;
+
+
+            // Chuỗi ngày có định dạng yyyy-MM-dd
+            var dateString = JSON.parse(localStorage.getItem('selectedSchedule')) || null;
+
+            // Chuyển đổi chuỗi thành đối tượng Date
+            var dateObj = new Date(dateString);
+
+            // Mảng chứa các tên của các ngày trong tuần
+            var dayNames = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+
+            // Lấy thứ trong tuần từ đối tượng Date (0 là Chủ Nhật, 1 là Thứ Hai, ..., 6 là Thứ Bảy)
+            var dayOfWeek = dateObj.getDay();
+
+            // Chuyển đổi định dạng ngày thành "DD/MM/YYYY"
+            var formattedDate = ('0' + dateObj.getDate()).slice(-2) + '/' + ('0' + (dateObj.getMonth() +
+                1)).slice(-2) + '/' + dateObj.getFullYear();
+
+            // Tạo chuỗi kết quả
+            var result = dayNames[dayOfWeek] + ', ' + formattedDate;
+
+            // In ra kết quả
+            orderTime.textContent = result;
+
+            var showObject = {
+                order_date: JSON.parse(localStorage.getItem('selectedSchedule')),
+                show_time: item.textContent,
+                theater_name: cinemaName,
+                type_room_name: cinemaType
+            }
+            localStorage.setItem('selectedShow', JSON.stringify(showObject));
+
+
+        });
+    });
+    if (document.querySelector('.time-item') != null) {
+        document.querySelector('.time-item').click();
+    }
+
+
+}
 </script>
 
 </html>

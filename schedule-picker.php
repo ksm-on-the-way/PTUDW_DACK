@@ -9,11 +9,12 @@ taoKetNoi($link);
 $html = '';
 $previousRoomTypeName = '';
 $previousTheater = '';
-if (isset($_POST['action']) && $_POST['action'] === 'getShowsByDate') {
+if (isset($_POST['action']) && $_POST['action'] === 'getShowsByDateAndLocation') {
 
 
     // Lấy dữ liệu từ POST request
     $date = $_POST['date'];
+    $city_id = $_POST['city_id'];
 
 
 
@@ -23,7 +24,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'getShowsByDate') {
         LEFT JOIN rooms ON shows.room_id = rooms.room_id
         LEFT JOIN theaters ON rooms.theater_id = theaters.theater_id
         LEFT JOIN room_types ON rooms.room_type_id = room_types.room_type_id
-        WHERE shows.date = '$date' AND shows.movie_id = 25
+        WHERE shows.date = '$date' AND theaters.city_id = $city_id  AND shows.movie_id = 25
         ORDER BY theaters.theater_name, room_types.room_type_name;
         ";
     $result = chayTruyVanTraVeDL($link, $query);
@@ -59,12 +60,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'getShowsByDate') {
 
                 $html .= '<div class="cinema-type">';
                 $html .= '<div class="name">' . $row["room_type_name"] . '</div>';
-                $html .= '<div class="price">' . $row["room_price"] . '</div>';
+                $html .= '<div class="price">' . number_format($row["room_price"], 0, ',', '.') . ' VNĐ</div>';
                 $html .= '</div>';
                 $html .= '<div class="time-container">';
             }
             // Xuất start_time
-            $html .= '<div class="time-item">' . $row["start_time"] . '</div>';
+            $html .= '<div class="time-item" cinema-type-name="' . $row["room_type_name"] . '" cinema-name="' . $row["theater_name"] . '">' . substr($row["start_time"], 0, 5) . '</div>';
             $previousTheater = $row["theater_name"];
             // Cập nhật room_type_name trước đó với room_type_name hiện tại
             $previousRoomTypeName = $row["room_type_name"];
@@ -146,7 +147,7 @@ body {
     margin-top: 10px;
 }
 
-@med ia (max-width: 991px) {
+@media (max-width: 991px) {
     .schedule-picker__container .title-container {
         max-width: 100%;
         flex-wrap: wrap;
@@ -185,7 +186,7 @@ body {
 }
 
 @media (max-width: 991px) {
-    .sch edule-picker__container .title-container .cinema {
+    .schedule-picker__container .title-container .cinema {
         white-space: initial;
     }
 }
@@ -197,7 +198,7 @@ body {
     font: 400 16px/150% Roboto, sans-serif;
 }
 
-@med ia (max-width: 991px) {
+@media (max-width: 991px) {
     .sch edule-picker__container .cinema-address {
         max-width: 100%;
     }
@@ -213,7 +214,7 @@ body {
 
 }
 
-@med ia (max-width: 991px) {
+@media (max-width: 991px) {
     .schedule-picker__container .cinema-type {
         max-width: 100%;
         flex-wrap: wrap;
@@ -254,9 +255,25 @@ body {
     font-family: Roboto, sans-serif;
     justify-content: center;
     border-radius: 4px;
-    background-color: var(--Shade-200, #dadfe8);
+    /* background-color: var(--Shade-200, #dadfe8); */
+    background-color: #fff;
+    color: black;
+    font-weight: 500;
+    border: 1px solid #9DA8BE;
+    cursor: pointer;
     padding: 12px 20px;
 }
+
+.schedule-picker__container .time-item:hover {
+    background-color: #1A2C50;
+    color: white;
+}
+
+.schedule-picker__container .time-item.active {
+    background-color: #1A2C50;
+    color: white;
+}
+
 
 @media (max-width: 991px) {
     .schedule-picker__container .time-item {

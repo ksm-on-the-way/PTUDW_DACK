@@ -16,15 +16,17 @@
 </head>
 <style>
 .carousel-banner__container {
-    width: 100%; margin: 0 auto;
+    width: 100%;
+    margin: 0 auto;
     position: relative;
+    margin-top: 30px;
     /* padding: 0 20px */
     /* Thêm thuộc tính position */
 }
 
 @media (min-width: 768px) {
     .carousel-banner__container {
-        width: 1300px;
+        max-width: 1300px;
         padding: unset;
     }
 }
@@ -94,12 +96,12 @@ $('.carousel-banner__container .owl-carousel').owlCarousel({
         "<i class='fas fa-chevron-left'></i>",
         "<i class='fas fa-chevron-right'></i>",
     ],
-    nav: true,
+    nav: false,
     items: 1,
     responsive: {
-        0: {
+        600: {
             items: 1,
-            nav: false
+            nav: true
         }
     }
 })

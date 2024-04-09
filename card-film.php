@@ -12,11 +12,11 @@
     <div class="card-film">
         <img loading="lazy" srcset="./images/image-1.png" class="img" />
         <div class="title">Spider-Man: No Way Home</div>
-        <div class="cinema-container">
+        <!-- <div class="cinema-container">
             <div class="cinema-name">XXI</div>
             <div class="cinema-name">CGV</div>
             <div class="cinema-name">CINÉPOLIS</div>
-        </div>
+        </div> -->
     </div>
     <style>
     .card-film {

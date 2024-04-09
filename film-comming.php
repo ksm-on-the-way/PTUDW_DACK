@@ -3,7 +3,7 @@
         <div>
             <div class="heading-title">Phim sắp đến</div>
             <div class="heading-description">
-            Chờ đón sự xuất hiện của bộ phim yêu thích của bạn tại TIX ID!
+                Chờ đón sự xuất hiện của bộ phim yêu thích của bạn tại TIX ID!
             </div>
         </div>
         <div class="show-all">Xem tất cả</div>
@@ -28,11 +28,13 @@
     flex-direction: column;
     width: 100%;
     margin: 0 auto;
+    margin-top: 50px;
 }
 
 @media (min-width: 768px) {
     .film-comming__container {
-        width: 1300px;
+        max-width: 1300px;
+        margin-top: 100px;
     }
 }
 
@@ -43,12 +45,7 @@
     padding: unset;
 }
 
-@media (min-width: 768px) {
-    .film-comming__container .heading {
 
-        padding: 0 20px;
-    }
-}
 
 @media (max-width: 991px) {
     .film-comming__container .heading {
@@ -58,6 +55,7 @@
 }
 
 .film-comming__container .heading .heading-title {
+    text-transform: uppercase;
     color: var(--Shade-900, #333);
     font: 500 24px/133% Roboto, sans-serif;
 }
@@ -86,22 +84,16 @@
 }
 
 .comming-items__container {
-    margin-top: 52px;
+    margin-top: 42px;
     width: 100%;
     padding: unset;
 }
 
-@media (min-width: 768px) {
-    .comming-items__container {
-
-        padding: 0 20px;
-    }
-}
 
 @media (max-width: 991px) {
     .comming-items__container {
         max-width: 100%;
-        margin-top: 40px;
+        margin-top: 30px;
     }
 }
 

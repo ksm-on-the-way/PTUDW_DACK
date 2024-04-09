@@ -19,11 +19,13 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
+    margin-top: 20px;
 }
 
 @media (min-width: 768px) {
     .carousel-film__container {
-        width: 1300px;
+        max-width: 1300px;
+        margin-top: 70px;
 
     }
 }
@@ -39,13 +41,13 @@
 
 .carousel-film__container .owl-carousel .owl-nav .owl-prev {
     position: absolute;
-    left: -25px;
+    left: 25px;
     top: 50%;
 }
 
 .carousel-film__container .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    right: -25px;
+    right: 25px;
     top: 50%;
 }
 

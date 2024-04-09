@@ -109,6 +109,7 @@ $startRow = ($currentPage - 1) * $rowsPerPage;
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
 $query = "SELECT combo_id, combo_name, description, price, img_url
 FROM combo_food
+WHERE is_deleted = '0'
 LIMIT $startRow, $rowsPerPage";
 
 $queryCount = "SELECT COUNT(*) AS total FROM combo_food";

@@ -28,7 +28,7 @@
             <!-- Danh sách thể loại tin tức -->
             <div class="category_list">
                 <ul>
-                    <li><a href='tixID_news.php' <?php if (!$current_category_id)
+                    <li><a href='news.php' <?php if (!$current_category_id)
                                                         echo 'class="selected"' ?>>Mới
                             nhất</a></li>
                     <?php
@@ -41,7 +41,7 @@
                             $category_id = $row_category["news_category_id"];
                             $category_name = $row_category["news_category_name"];
                     ?>
-                            <li><a href='tixID_news.php?news_category_id=<?php echo $category_id ?>' <?php if ($current_category_id == $category_id)
+                            <li><a href='news.php?news_category_id=<?php echo $category_id ?>' <?php if ($current_category_id == $category_id)
                                                                                                             echo 'class="selected"' ?>><?php echo $category_name ?></a></li>
                     <?php
                         }
@@ -294,7 +294,7 @@
                     };
 
                     // Gửi yêu cầu AJAX với tham số offset và limit
-                    xhr.open('GET', 'get_more_collection_items.php?offset=' + collectionOffset + '&limit=' + limit, true);
+                    xhr.open('GET', './get_more_collection_items.php?offset=' + collectionOffset + '&limit=' + limit, true);
                     xhr.send();
                 });
             });

@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_stmt_execute($insertStmt)) {
             // Nếu thêm dữ liệu thành công, hiển thị thông báo và chuyển hướng người dùng đến trang đăng nhập
             echo '<script>alert("Đăng ký thành công!");</script>';
-            echo '<script>window.location.href = "../login/login.php";</script>';
+            echo '<script>window.location.href = "./login.php";</script>';
         } else {
             // Nếu có lỗi xảy ra trong quá trình thêm dữ liệu, hiển thị thông báo lỗi
             echo '<script>alert("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại sau!");</script>';

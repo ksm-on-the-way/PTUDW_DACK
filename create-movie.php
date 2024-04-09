@@ -37,10 +37,12 @@
         background-color: #1A2C50;
         color: white;
     }
+
     .btn-add:hover {
         cursor: pointer;
     }
-    .btn-cancel:hover{
+
+    .btn-cancel:hover {
         cursor: pointer;
     }
 </style>

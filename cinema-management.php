@@ -23,6 +23,7 @@
     outline: none;
     border-radius: 8px;
     border: none;
+    cursor: pointer;
 }
 
 .cinema-admin__container .table-container {
@@ -55,6 +56,12 @@ td:not(:last-child) {
 
 .cinema-admin__container tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+.cinema-admin__container .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cinema-admin__container table .edit-btn,
@@ -133,7 +140,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['theater_address'] . "</td>";
         $table_body .= "<td>" . $row['city_name'] . "</td>";
         $table_body .= "<td>" . $row['room_count'] . "</td>";
-        $table_body .= "<td>
+        $table_body .= "<td class='button-container'>
                         <button class='edit-btn' onclick='redirectToEditCinema(" . $row['theater_id'] . ")'>Sửa</button>
                         <form method='post' action='' id='form-delete-theater'>
                         <input type='hidden' name='theater_id' value='" . $row['theater_id'] . "'>

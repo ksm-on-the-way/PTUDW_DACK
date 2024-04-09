@@ -1,9 +1,19 @@
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .edit-cinema__container {
     width: 100%;
     max-width: 1075px;
     margin: 0 auto;
     margin-top: 30px;
+}
+
+.edit-cinema__container .edit-cinema__form {
+    margin-top: 20px;
 }
 
 .edit-cinema__container .edit-cinema__form form {
@@ -17,6 +27,18 @@
     flex-direction: column;
     width: 100%;
     gap: 5px;
+}
+
+.edit-cinema__container .edit-cinema__form .form-input input {
+    padding: 8px;
+    border: 1px solid #A7A7A7;
+    border-radius: 4px;
+}
+
+.edit-cinema__container .edit-cinema__form .form-input select {
+    padding: 8px;
+    border: 1px solid #A7A7A7;
+    border-radius: 4px;
 }
 
 .form-btn {
@@ -34,7 +56,7 @@
     cursor: pointer
 }
 
-.form-btn .btn-add {
+.form-btn #btn-add {
     background-color: #1A2C50;
     color: white;
 }
@@ -87,6 +109,49 @@ td:not(:last-child) {
     left: 0;
     width: 100%;
     padding: 8px;
+}
+
+.btn-add-room {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 10px 0;
+    background: none;
+    border: none;
+}
+
+.btn-add-room img {
+    width: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-container .save-button {
+    border: none;
+    background: none;
+    background-color: #1A2C50;
+    color: white;
+    border: solid 1px #1A2C50;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container .cancel-button {
+    border: none;
+    background: none;
+    background-color: white;
+    color: #1A2C50;
+    border: solid 1px black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 </style>
 <?php
@@ -154,7 +219,7 @@ if (mysqli_num_rows($resultRoom) > 0) {
         $dataRoom .= "<td>" . $row["room_id"] . "</td>";
         $dataRoom .= "<td>" . $row["room_name"] . "</td>";
         $dataRoom .= "<td>" . $row["room_type_name"] . "</td>";
-        $dataRoom .= "<td><button onclick='editRoom(this)'>Sửa</button><button onclick='deleteRoom(this)'>Xóa</button></td>";
+        $dataRoom .= "<td class='button-container'><button class='save-button' onclick='editRoom(this)'>Sửa</button><button class='cancel-button' onclick='deleteRoom(this)'>Xóa</button></td>";
         $dataRoom .= "</tr>";
 
     }
@@ -285,7 +350,7 @@ giaiPhongBoNho($link, $result);
         <table id='table'>
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>ID phòng</th>
                     <th>Tên phòng</th>
                     <th>Loại phòng</th>
                     <th>Thao tác</th>
@@ -298,12 +363,11 @@ giaiPhongBoNho($link, $result);
 
     </div>
     <div>
-        <button onclick='addRoom()'>Thêm phòng</button>
-        <button id='saveRoomButton' style='display:none;' onclick='saveRoom()'>Lưu phòng</button>
-        <button id='cancelRoomButton' style='display:none;' onclick='cancelRoom()'>Hủy</button>
+        <button onclick='addRoom()' class='btn-add-room'>
+            <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/992/992651.png" class="img" />
+            <div class="">Thêm phòng</div>
+        </button>
 
-        <button id='saveRoomChange' style='display:none;'>Lưu phòng</button>
-        <button id='cancelRoomChange' style='display:none;'>Hủy</button>
     </div>
     <div class='form-btn'>
         <button type="button" id='btn-cancel'>Hủy</button>
@@ -324,6 +388,8 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1)').innerHTML = '<input type="text" value="' + stt + '">';
     row.querySelector('td:nth-child(2)').innerHTML = '<input type="text" value="' + tenPhong + '">';
     row.querySelector('td:nth-child(3)').innerHTML = '<input type="text" value="' + loaiPhong + '">';
+    row.querySelector('td:nth-child(4)').innerHTML = `<div class='button-container'><button class='save-button' type='button' id='saveRoomChange' >Lưu</button>
+        <button type='button' class='cancel-button' id='cancelRoomChange' >Hủy</button></div>`
     // Disable nút Thêm phòng
 
     document.querySelector('button[onclick="addRoom()"]').disabled = true;
@@ -334,11 +400,12 @@ function editRoom(button) {
     //disable nut xoa va nut sua luon
     var table = getTableBody();
     var buttons = table.querySelectorAll('button');
-    buttons.forEach(button => button.disabled = true);
-    // Hiển thị nút Lưu thay đổi
-    document.getElementById('saveRoomChange').style.display = 'block';
-    // Hiển thị nút Hủy thay đổi
-    document.getElementById('cancelRoomChange').style.display = 'block';
+    buttons.forEach(button => {
+        if (button.id !== 'saveRoomChange' && button.id !== 'cancelRoomChange') {
+            button.disabled = true;
+        }
+    });
+
 
     // Đặt sự kiện cho nút Lưu thay đổi để lưu giá trị mới
     document.getElementById('saveRoomChange').onclick = function() {
@@ -354,8 +421,7 @@ function updateRowValues(row, stt, tenPhong, loaiPhong) {
     row.querySelector('td:nth-child(1)').innerText = stt;
     row.querySelector('td:nth-child(2)').innerText = tenPhong;
     row.querySelector('td:nth-child(3)').innerText = loaiPhong;
-    document.getElementById('cancelRoomChange').style.display = 'none';
-    document.getElementById('saveRoomChange').style.display = 'none';
+
 
     // enable nút Thêm phòng
     document.querySelector('button[onclick="addRoom()"]').disabled = false;
@@ -367,6 +433,31 @@ function updateRowValues(row, stt, tenPhong, loaiPhong) {
     buttons.forEach(button => button.disabled = false);
 }
 
+function addEditAndCancelButton(row) {
+    var cell = row.querySelector('td:nth-child(4)');
+    // Xóa nội dung hiện tại của ô
+    cell.innerHTML = '';
+
+    // Thêm nút "Sửa"
+    var editButton = document.createElement('button');
+    editButton.classList.add('save-button')
+    editButton.textContent = 'Sửa';
+    editButton.onclick = function() {
+        editRoom(cell);
+    };
+    cell.appendChild(editButton);
+
+    // Thêm nút "Xóa"
+    var deleteButton = document.createElement('button');
+    deleteButton.classList.add('cancel-button')
+
+    deleteButton.textContent = 'Xóa';
+    deleteButton.onclick = function() {
+        deleteRoom(cell);
+    };
+    cell.appendChild(deleteButton);
+}
+
 function cancelRoomChanges(row) {
     // Lấy các giá trị mới từ input
     var stt = row.querySelector('td:nth-child(1) input').value;
@@ -374,6 +465,7 @@ function cancelRoomChanges(row) {
     var loaiPhong = row.querySelector('td:nth-child(3) input').value;
 
     updateRowValues(row, stt, tenPhong, loaiPhong);
+    addEditAndCancelButton(row)
 }
 
 function saveRoomChanges(row) {
@@ -383,6 +475,7 @@ function saveRoomChanges(row) {
     var loaiPhong = row.querySelector('td:nth-child(3) input').value;
 
     updateRowValues(row, stt, tenPhong, loaiPhong);
+
 
     // Prepare data to be sent
     var formData = new FormData();
@@ -399,6 +492,7 @@ function saveRoomChanges(row) {
     };
     xhttp.open("POST", window.location.href, true);
     xhttp.send(formData); // Send form data
+    addEditAndCancelButton(row)
 }
 
 function deleteRoom(button) {
@@ -431,18 +525,23 @@ function getTableBody() {
 
 function updateButtonState(disableAdd, hideSaveCancel) {
     document.querySelector('button[onclick="addRoom()"]').disabled = disableAdd;
-    document.getElementById('saveRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
-    document.getElementById('cancelRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
+
 }
 
 function addRoom() {
     var table = getTableBody();
     var newRow = table.insertRow(table.rows.length);
-    var cols = 3; // Số cột trong bảng
+    var cols = 4; // Số cột trong bảng
 
     for (var i = 0; i < cols; i++) {
         var cell = newRow.insertCell(i);
-        cell.innerHTML = `<input type='text' />`;
+        if (i == 0) {
+            cell.innerHTML = `<input type='text' disabled />`;
+
+        } else {
+            cell.innerHTML = `<input type='text' />`;
+        }
+
         var options = <?php echo json_encode($roomTypeOptions); ?>;
         if (i == 2) {
             cell.innerHTML = `
@@ -451,9 +550,22 @@ function addRoom() {
             </select>
             `
         }
+        if (i == 3) {
+            cell.innerHTML = `<div class='button-container'>
+            <button type='button' class='save-button' id='saveRoomButton'  onclick='saveRoom()'>Lưu</button>
+        <button type='button' class='cancel-button' id='cancelRoomButton'  onclick='cancelRoom()'>Hủy</button>
+            </div>`
+        }
 
     }
     updateButtonState(true, false);
+    //disable nut xoa va nut sua luon
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => {
+        if (button.id !== 'saveRoomButton' && button.id !== 'cancelRoomButton') {
+            button.disabled = true;
+        }
+    });
 
 }
 
@@ -461,6 +573,13 @@ function cancelRoom() {
     var table = getTableBody();
     table.deleteRow(table.rows.length - 1);
     updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
+
+
+    //enable nut xoa va nut sua luon
+
+
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = false);
 }
 
 function saveRoom() {

@@ -6,6 +6,10 @@
     margin-top: 30px;
 }
 
+.create-cinema__container .create-cinema__form {
+    margin-top: 20px;
+}
+
 .create-cinema__container .create-cinema__form form {
     display: flex;
     flex-direction: column;
@@ -18,6 +22,19 @@
     width: 100%;
     gap: 5px;
 }
+
+.create-cinema__container .create-cinema__form .form-input input {
+    padding: 8px;
+    border: 1px solid #A7A7A7;
+    border-radius: 4px;
+}
+
+.create-cinema__container .create-cinema__form .form-input select {
+    padding: 8px;
+    border: 1px solid #A7A7A7;
+    border-radius: 4px;
+}
+
 
 .create-cinema__container .create-cinema__form .form-btn {
     display: flex;
@@ -73,24 +90,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $link = null;
     taoKetNoi($link);
     // Kiểm tra xem tên rạp và địa chỉ có được gửi không
-    if (isset($_POST['name']) && isset($_POST['address']) && $_POST['city']) {
+    if (!empty($_POST['name']) && !empty($_POST['address']) && !empty($_POST['city'])) {
         $name = $_POST['name'];
         $address = $_POST['address'];
         $city = $_POST['city'];
 
-        // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
-        $query = "INSERT INTO theaters (theater_name, theater_address, city_id) VALUES ('$name', '$address', '$city')";
-        $result = chayTruyVanKhongTraVeDL($link, $query);
+        // Kiểm tra xem tên rạp và địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
+        $check_query = "SELECT * FROM theaters WHERE theater_name='$name' OR theater_address='$address'";
+        $check_result = chayTruyVanTraVeDL($link, $check_query);
 
-        if ($result) {
-            $_SESSION['success_message'] = "Thêm rạp thành công.";
-            echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
-
+        if (mysqli_num_rows($check_result) > 0) {
+            echo "<script>alert('Rạp đã tồn tại trong cơ sở dữ liệu.');</script>";
         } else {
-            echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+            // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
+            $insert_query = "INSERT INTO theaters (theater_name, theater_address, city_id) VALUES ('$name', '$address', '$city')";
+            $insert_result = chayTruyVanKhongTraVeDL($link, $insert_query);
 
+            if ($insert_result) {
+                $_SESSION['success_message'] = "Thêm rạp thành công.";
+                echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
+            } else {
+                echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+            }
         }
-        giaiPhongBoNho($link, $result);
+
+        giaiPhongBoNho($link, $check_result);
+    } else {
+        echo "<script>alert('Vui lòng điền đầy đủ thông tin.');</script>";
     }
 
 }
@@ -104,11 +130,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST" action="admin.php?handle=create-cinema">
             <div class='form-input'>
                 <label>Tên rạp</label>
-                <input type="text" name="name" placeholder='Nhập tên rạp'>
+                <input required type="text" name="name" placeholder='Nhập tên rạp'>
             </div>
             <div class='form-input'>
                 <label>Địa chỉ</label>
-                <input type="text" name='address' placeholder='Nhập địa chỉ'>
+                <input required type="text" name='address' placeholder='Nhập địa chỉ'>
             </div>
             <div class='form-input'>
                 <label>Thành phố</label>

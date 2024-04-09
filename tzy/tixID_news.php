@@ -10,157 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const loadMoreButton = document.querySelector('.center button');
-        const searchButton = document.getElementById('searchButton');
-        const searchInput = document.getElementById('searchInput');
-        let offset = 3;
-        const limit = 3;
-
-        loadMoreButton.addEventListener('click', function () {
-            // Code load more items here...
-        });
-
-        searchButton.addEventListener('click', function () {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery !== '') {
-                const xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            document.querySelector('.collection_items').innerHTML = xhr.responseText;
-                        } else {
-                            console.error('Failed to fetch search results.');
-                        }
-                    }
-                };
-                xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
-                xhr.send();
-            }
-        });
-    });
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const loadMoreButton = document.querySelector('.center button');
-        let offset = 3;
-        const limit = 3;
-        loadMoreButton.addEventListener('click', function () {
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
-                        offset += limit;
-                    } else {
-                        console.error('Failed to fetch news items.');
-                    }
-                }
-            };
-            xhr.open('GET', 'get_more_collection_items.php?offset=' + offset + '&limit=' + limit, true);
-            xhr.send();
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const loadMoreButton = document.querySelector('.center button');
-        const searchButton = document.getElementById('searchButton');
-        const searchInput = document.getElementById('searchInput');
-        let offset = 3;
-        const limit = 3;
-
-        loadMoreButton.addEventListener('click', function () {
-            // Code load more items here...
-        });
-
-        searchButton.addEventListener('click', function () {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery !== '') {
-                const xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            document.querySelector('.collection_items').innerHTML = xhr.responseText;
-                        } else {
-                            console.error('Failed to fetch search results.');
-                        }
-                    }
-                };
-                xhr.open('GET', 'search_result.php?search_query=' + searchQuery, true);
-                xhr.send();
-            }
-        });
-    });
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const loadMoreButton = document.querySelector('.center button');
-        const searchButton = document.getElementById('searchButton');
-        const searchInput = document.getElementById('searchInput');
-        let offset = 3;
-        const limit = 3;
-        const collectionItems = document.querySelector('.collection_items');
-
-        loadMoreButton.addEventListener('click', function () {
-            // Code load more items here...
-        });
-
-        searchButton.addEventListener('click', function () {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery !== '') {
-                const xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // Ẩn các phần khác
-                            document.querySelector('.spotlight_items').style.display = 'none';
-                            document.querySelector('.review_items').style.display = 'none';
-
-                            // Hiển thị kết quả tìm kiếm
-                            collectionItems.innerHTML = xhr.responseText;
-                            collectionItems.style.display = 'block';
-                        } else {
-                            console.error('Failed to fetch search results.');
-                        }
-                    }
-                };
-                xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
-                xhr.send();
-            }
-        });
-    });
-
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchButton = document.getElementById('searchButton');
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchButton = document.getElementById('clearSearch');
-        const collectionItems = document.querySelector('.collection_items');
-        let excluded_ids = [];
-
-        searchButton.addEventListener('click', function () {
-            // Xử lý tìm kiếm ở đây
-        });
-
-        clearSearchButton.addEventListener('click', function () {
-            // Xóa giá trị của ô nhập liệu
-            searchInput.value = '';
-            // Reload lại trang web
-            location.reload();
-        });
-    });
-</script>
-
 
 <body>
     <?php
@@ -176,19 +25,28 @@
             gia.
             Giải mã những nội dung phim gây tò mò và hấp dẫn.</p>
         <div class="filter">
+            <?php
+            $current_category_id = isset($_GET['news_category_id']) ? $_GET['news_category_id'] : null;
+            ?>
             <!-- Danh sách thể loại tin tức -->
             <div class="category_list">
                 <ul>
-                    <li><a href='tixID_news.php'>Mới nhất</a></li>
-                    <?php
+                    <li><a href='tixID_news.php' <?php if (!$current_category_id)
+                        echo 'class="selected"' ?>>Mới
+                                nhất</a></li>
+                        <?php
                     // Truy vấn để lấy danh sách thể loại tin tức
                     $sql_categories = "SELECT * FROM news_categories";
                     $result_categories = $link->query($sql_categories);
 
                     if ($result_categories->num_rows > 0) {
-                        // Hiển thị dữ liệu từ cơ sở dữ liệu
                         while ($row_category = $result_categories->fetch_assoc()) {
-                            echo "<li><a href='tixID_news.php?news_category_id=" . $row_category["news_category_id"] . "'>" . $row_category["news_category_name"] . "</a></li>";
+                            $category_id = $row_category["news_category_id"];
+                            $category_name = $row_category["news_category_name"];
+                            ?>
+                            <li><a href='tixID_news.php?news_category_id=<?php echo $category_id ?>' <?php if ($current_category_id == $category_id)
+                                   echo 'class="selected"' ?>><?php echo $category_name ?></a></li>
+                            <?php
                         }
                     } else {
                         echo "0 results";
@@ -232,7 +90,7 @@
                         echo "<div class='wrapper'>";
                         echo "<p class='category'>" . $row_news["news_category_name"] . "</p>";
                         echo "<h2 class='mt-2'>" . $row_news["news_title"] . "</h2>";
-                        echo "<p class='body_shade600 line_clamp'>" . $row_news["news_content"] . "</p>";
+                        echo "<span class='body_shade600 line_clamp'>" . $row_news["news_content"] . "</span>";
                         echo "</div>";
                         echo "</article>";
                     }
@@ -269,7 +127,7 @@
                         echo "<div class='spotlight_text" . $order . "'>";
                         echo "<p class='category'>" . $row_spotlight["news_category_name"] . "</p>";
                         echo "<h1 class='mt-2'>" . $row_spotlight["news_title"] . "</h1>";
-                        echo "<p class='body_shade600 line_clamp mt-2'>" . $row_spotlight["news_content"] . "</p>";
+                        echo "<span class='body_shade600 line_clamp mt-2'>" . $row_spotlight["news_content"] . "</span>";
                         echo "<h3 class='mt-1'>" . date("d/m/Y", strtotime($row_spotlight["news_date"])) . "</h3>";
                         echo "</div>";
 
@@ -287,11 +145,11 @@
                 <?php
                 // Truy vấn để lấy tin tức phổ biến
                 $sql_review = "SELECT news.*, news_categories.news_category_name 
-     FROM news 
-     INNER JOIN news_categories ON news.news_category_id = news_categories.news_category_id 
-     WHERE news.news_category_id = 2 
-     ORDER BY news_date DESC
-     LIMIT 3";
+                                FROM news 
+                                INNER JOIN news_categories ON news.news_category_id = news_categories.news_category_id 
+                                WHERE news.news_category_id = 2 
+                                ORDER BY news_date DESC
+                                LIMIT 3";
                 $result_review = $link->query($sql_review);
 
                 if ($result_review->num_rows > 0) {
@@ -330,7 +188,7 @@
                         echo "<div class='wrapper'>";
                         echo "<p class='category'>" . $row_collection["news_category_name"] . "</p>";
                         echo "<h2 class='mt-2'>" . $row_collection["news_title"] . "</h2>";
-                        echo "<p class='body_shade600 line_clamp'>" . $row_collection["news_content"] . "</p>";
+                        echo "<span class='body_shade600 line_clamp'>" . $row_collection["news_content"] . "</span>";
                         echo "</div>";
                         echo "</article>";
                     }
@@ -343,10 +201,229 @@
         }
         ?>
 
-        <div class="center"><button>Xem thêm</button></div>
+        <div class="center">
+            <?php if (!$news_category_id) { ?>
+                <button id="loadMoreNews" style="display: none;">Xem thêm</button>
+            <?php } else { ?>
+                <button id="loadMoreNews">Xem thêm</button>
+            <?php } ?>
+
+            <?php if ($news_category_id) { ?>
+                <button id="loadMoreCollection" style="display: none;">Xem thêm</button>
+            <?php } else { ?>
+                <button id="loadMoreCollection">Xem thêm</button>
+            <?php } ?>
+
+        </div>
+
+
+
+        <!-- Nút xem thêm vs ô tìm kiếm -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreButton = document.querySelector('.center button');
+                const searchButton = document.getElementById('searchButton');
+                const searchInput = document.getElementById('searchInput');
+                let offset = 3;
+                const limit = 3;
+
+                loadMoreButton.addEventListener('click', function () {
+                    // Code load more items here...
+                });
+
+                searchButton.addEventListener('click', function () {
+                    const searchQuery = searchInput.value.trim();
+                    if (searchQuery !== '') {
+                        const xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    document.querySelector('.collection_items').innerHTML = xhr.responseText;
+                                } else {
+                                    console.error('Failed to fetch search results.');
+                                }
+                            }
+                        };
+                        xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
+                        xhr.send();
+                    }
+                });
+            });
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreNewsButton = document.getElementById('loadMoreNews');
+                const loadMoreCollectionButton = document.getElementById('loadMoreCollection');
+                let newsOffset = 3;
+                let collectionOffset = 3;
+                const limit = 3;
+
+                loadMoreNewsButton.addEventListener('click', function () {
+                    const newsCategoryId = <?php echo json_encode($news_category_id); ?>;
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                // Chèn HTML trả về vào cuối phần hiển thị tin tức
+                                document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
+                                // Tăng offset lên để lấy tin tức tiếp theo
+                                newsOffset += limit;
+                            } else {
+                                console.error('Failed to fetch news items.');
+                            }
+                        }
+                    };
+
+                    // Gửi yêu cầu AJAX với tham số offset và limit
+                    xhr.open('GET', 'get_more_news.php?offset=' + newsOffset + '&limit=' + limit + '&news_category_id=' + newsCategoryId, true);
+                    xhr.send();
+                });
+
+                loadMoreCollectionButton.addEventListener('click', function () {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                // Chèn HTML trả về vào cuối phần hiển thị bộ sưu tập
+                                document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
+                                // Tăng offset lên để lấy bộ sưu tập tiếp theo
+                                collectionOffset += limit;
+                            } else {
+                                console.error('Failed to fetch collection items.');
+                            }
+                        }
+                    };
+
+                    // Gửi yêu cầu AJAX với tham số offset và limit
+                    xhr.open('GET', 'get_more_collection_items.php?offset=' + collectionOffset + '&limit=' + limit, true);
+                    xhr.send();
+                });
+            });
+
+
+        </script>
+
+        <!-- <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreButton = document.querySelector('.center button');
+                let offset = 3;
+                const limit = 3;
+                loadMoreButton.addEventListener('click', function () {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
+                                offset += limit;
+                            } else {
+                                console.error('Failed to fetch news items.');
+                            }
+                        }
+                    };
+                    xhr.open('GET', 'get_more_collection_items.php?offset=' + offset + '&limit=' + limit, true);
+                    xhr.send();
+                });
+            });
+        </script> -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreButton = document.querySelector('.center button');
+                const searchButton = document.getElementById('searchButton');
+                const searchInput = document.getElementById('searchInput');
+                let offset = 3;
+                const limit = 3;
+
+                loadMoreButton.addEventListener('click', function () {
+                    // Code load more items here...
+                });
+
+                searchButton.addEventListener('click', function () {
+                    const searchQuery = searchInput.value.trim();
+                    if (searchQuery !== '') {
+                        const xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    document.querySelector('.collection_items').innerHTML = xhr.responseText;
+                                } else {
+                                    console.error('Failed to fetch search results.');
+                                }
+                            }
+                        };
+                        xhr.open('GET', 'search_result.php?search_query=' + searchQuery, true);
+                        xhr.send();
+                    }
+                });
+            });
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreButton = document.querySelector('.center button');
+                const searchButton = document.getElementById('searchButton');
+                const searchInput = document.getElementById('searchInput');
+                let offset = 3;
+                const limit = 3;
+                const collectionItems = document.querySelector('.collection_items');
+
+                loadMoreButton.addEventListener('click', function () {
+                    // Code load more items here...
+                });
+
+                searchButton.addEventListener('click', function () {
+                    const searchQuery = searchInput.value.trim();
+                    if (searchQuery !== '') {
+                        const xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    // Ẩn các phần khác
+                                    document.querySelector('.spotlight_items').style.display = 'none';
+                                    document.querySelector('.review_items').style.display = 'none';
+
+                                    // Hiển thị kết quả tìm kiếm
+                                    collectionItems.innerHTML = xhr.responseText;
+                                    collectionItems.style.display = 'block';
+                                } else {
+                                    console.error('Failed to fetch search results.');
+                                }
+                            }
+                        };
+                        xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
+                        xhr.send();
+                    }
+                });
+            });
+
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const searchButton = document.getElementById('searchButton');
+                const searchInput = document.getElementById('searchInput');
+                const clearSearchButton = document.getElementById('clearSearch');
+                const collectionItems = document.querySelector('.collection_items');
+                let excluded_ids = [];
+
+                searchButton.addEventListener('click', function () {
+                    // Xử lý tìm kiếm ở đây
+                });
+
+                clearSearchButton.addEventListener('click', function () {
+                    // Xóa giá trị của ô nhập liệu
+                    searchInput.value = '';
+                    // Reload lại trang web
+                    location.reload();
+                });
+            });
+        </script>
     </main>
-
-
 
     <?php
     giaiPhongBoNho($link, $result);
@@ -433,6 +510,20 @@
             margin-block-end: 0.75em;
             margin-inline-start: 0.5em;
         }
+
+        .selected {
+            color: #FF6B6B;
+            transition: color 0.3s ease;
+        }
+
+        .selected:hover {
+            transform: scale(1.1);
+        }
+
+        .selected:active {
+            opacity: 0.8;
+        }
+
 
         li {
             padding: 1.5rem;
@@ -546,7 +637,9 @@
 
 
         .line_clamp {
+            text-overflow: ellipsis;
             overflow: hidden;
+            white-space: pre-wrap;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
@@ -589,8 +682,7 @@
         }
 
         .review_items article {
-            border: 1px solid #ddd;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(90, 99, 122, 0.2);
         }
 
         .review_items {
@@ -794,7 +886,8 @@
                 gap: 2rem;
                 padding-bottom: 50px;
             }
-            .mt-2{
+
+            .mt-2 {
                 font-size: 1rem;
             }
         }

@@ -1,12 +1,12 @@
 <div class="news-container">
     <div class="heading">
         <div>
-            <div class="heading-title">TIX ID News</div>
+            <div class="heading-title">TIN TỨC</div>
             <div class="heading-description">
-                Berita tentang dunia perfilman terbaru untuk anda!
+                Những tin tức mới nhất về thế giới điện ảnh dành cho bạn!
             </div>
         </div>
-        <div class="show-all">Lihat Semua</div>
+        <div class="show-all">Xem tất cả</div>
     </div>
     <div class="news-items__container">
         <div class="news-items__row">

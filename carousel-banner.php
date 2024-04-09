@@ -16,7 +16,7 @@
 </head>
 <style>
 .carousel-banner__container {
-    width: 100% margin: 0 auto;
+    width: 100%; margin: 0 auto;
     position: relative;
     /* padding: 0 20px */
     /* Thêm thuộc tính position */

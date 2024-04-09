@@ -1,12 +1,12 @@
 <div class="film-comming__container">
     <div class="heading">
         <div>
-            <div class="heading-title">TIX ID News</div>
+            <div class="heading-title">Phim sắp đến</div>
             <div class="heading-description">
-                Berita tentang dunia perfilman terbaru untuk anda!
+            Chờ đón sự xuất hiện của bộ phim yêu thích của bạn tại TIX ID!
             </div>
         </div>
-        <div class="show-all">Lihat Semua</div>
+        <div class="show-all">Xem tất cả</div>
     </div>
     <div class="comming-items__container">
         <div class="comming-items__row">

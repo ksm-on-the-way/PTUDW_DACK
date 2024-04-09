@@ -15,6 +15,12 @@ function chayTruyVanTraVeDL($link, $q)
     return $result;
 }
 
+function chayTruyVanKhongTraVeDL($link, $q)
+{
+    $result = mysqli_query($link, $q);
+    return $result;
+}
+
 function giaiPhongBoNho($link, $result)
 {
     try {
@@ -25,3 +31,4 @@ function giaiPhongBoNho($link, $result)
 }
 
 ?>
+

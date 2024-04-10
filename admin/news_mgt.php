@@ -5,16 +5,19 @@
     max-width: 1075px;
     margin: 0 auto;
     margin-top: 30px;
+    font-family: Roboto, sans-serif;
 }
 
 .cinema-admin__container .cinema-admin__heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 100px;
 }
 
 .cinema-admin__container .cinema-admin__heading .title {
     color: #4F4F4F;
+    font-size: 40px;
 }
 
 .cinema-admin__container .cinema-admin__heading .button button {
@@ -82,6 +85,12 @@ td:not(:last-child) {
 </style>
 
 <?php
+if (isset($_SESSION['success_message'])) {
+    // Hiển thị thông báo và xóa nó khỏi session
+    echo "<script>alert('" . $_SESSION['success_message'] . "');</script>";
+    unset($_SESSION['success_message']);
+}
+
 require_once '../db_module.php';
 
 // Kết nối đến cơ sở dữ liệu
@@ -122,7 +131,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
         $table_body .= '<td>
                         <button class="edit-btn" onclick="redirectToEditNews('.$row['newsid'].')">Sửa</button>
-                        <button class="delete-btn">Xóa</button>
+                        <button class="delete-btn" onclick="confirmDelete('.$row['newsid'].')>Xóa</button>
                        </td>';
         $table_body .= "</tr>";
     }
@@ -178,4 +187,11 @@ function redirectToEditNews(id) {
 
     window.location.href = 'admin.php?handle=edit-news&id=id'+id;
 }
+function confirmDelete(newsId) {
+        if (confirm("Bạn có chắc muốn xóa tin này chứ?")) {
+           
+        } else {
+            // User clicked Cancel, do nothing
+        }
+    }
 </script>

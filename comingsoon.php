@@ -29,7 +29,13 @@ echo '<html>
   <div class="comingsoon_items">';
 $link = NULL;
 taoKetNoi($link);
-$result=chayTruyVanTraVeDL($link,"SELECT * FROM movie WHERE release_date > CURDATE() ORDER BY release_date ASC");
+$sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movie m 
+LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
+LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
+LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
+WHERE release_date > CURDATE() AND m.is_deleted = '0'
+ORDER BY release_date ASC";
+$result=chayTruyVanTraVeDL($link, $sql);
 while($rows=mysqli_fetch_assoc($result)){
 echo '
     <div class="column">
@@ -42,7 +48,7 @@ echo '
         <div class="comingsoon_film_title">'.$rows['movie_name'].'</div>
         <div class = "comingsoon_info_container">
         <div class="comingsoon_film_info">
-            <span class = "bold_info">Thể loại: </span><span class = "info">'.$rows['movie_genre'].'</span>
+            <span class = "bold_info">Thể loại: </span><span class = "info">'.$rows['movie_genre_name'].'</span>
         </div>
         <div class="comingsoon_film_info">
             <span class = "bold_info">Thời lượng: </span><span class = "info">'.$rows['movie_duration'].'</span>

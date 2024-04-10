@@ -1,5 +1,5 @@
 <?php
-require "../db_module.php";
+require_once "../db_module.php";
 $link = NULL;
 taoKetNoi($link);
 $q = "SELECT * FROM news_categories";
@@ -18,88 +18,27 @@ while ($cate = mysqli_fetch_assoc($catelist)) {
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
     </head>
     <body>
-    <div class="admin-management">
-        <div class="sidebar">
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9143cf1fb8d6fc12272f9775cc3aeff77b9839d32e73495b6a9cf83d7d9c3b7?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Logo" class="logo" />
-            <h2 class="welcome-text">Welcome</h2>
-            <div class="menu-container">
-                <div class="menu-item menu-item-active">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý rạp icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Quản lý rạp</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý phim icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Quản lý phim</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Lên lịch chiếu icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Lên lịch chiếu</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý bài viết icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Quản lý bài viết</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Xem báo cáo icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Xem báo cáo</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5554df1a377d30b44bcb9845c044dec02c6b2e4ad78606478e85ba3c42b9003b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý người dùng icon" class="menu-item-icon" />
-                        <span class="menu-item-text menu-item-text-multiline">Quản lý<br>người dùng</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d1f56a0d8d14a70950ba5a4e02499174d6ad1f18e94daca56d2614da3104b471?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-                <div class="menu-item menu-item-default">
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0dc8fa5f91f7673ed8b55eafd9703ee88d057f3b87ba663edaedff37d2eb4483?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Đổi mật khẩu icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Đổi mật khẩu</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                </div>
-            </div>
-        </div>
-        <div class="header-content">
-            <div class="header">
-                <div class="user-info">
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/88a804c5520def4dcdc79f06fa68269a7051516cb28777adf3b68509506917d3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="User avatar" class="user-avatar" />
-                    <button class="logout-button">Đăng xuất</button>
-                </div>
-            </div>
             <div class = "content">
                 <div class ="title">Tạo bài viết</div>
-                <form form id="myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                <form form id="myForm" action="" method="POST" enctype="multipart/form-data">
                     <label>Tiêu đề bài viết</label>
                     <input type="text" name="title" placeholder="Title" required>
                     <label>Ngày đăng bài</label>
-                    <input type="date" name="date" placeholder="Title" required>
+                    <input type="date" name="date" placeholder="" required>
                     <label>Phân loại</label>
                     <select name="category" required>
                     <option value="" disabled selected hidden>Chọn phân loại</option>
                     <?php echo $options; ?>
                     </select>
                     <label>Banner</label>
-                    <input type="text" name="banner" placeholder="Link banner" required>
+                    <input type="file" name="banner" placeholder="Tải tệp lên">
                     <label>Nội dung</label>
                     <div id="toolbar">
                         <button class="ql-bold">Bold</button>
                         <button class="ql-italic">Italic</button>
                         <button class="ql-underline">Underline</button>
+                        <button class="ql-indent" value="-1" ngbPopover="Indent -1" triggers="mouseenter:mouseleave"></button>
+                        <button class="ql-indent" value="+1" ngbPopover="Indent +1" triggers="mouseenter:mouseleave"></button>
                     </div>
                     <div id="editor" font-family = 'Roboto' width ="100%"></div>
                     <input type="hidden" id="content" name="content"> <!-- Hidden input cho div id "editor" -->
@@ -125,44 +64,57 @@ while ($cate = mysqli_fetch_assoc($catelist)) {
                     };
                 </script>
             </div>
-        </div>
-    </div>
     </body>
 </html>
 <?php
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require "../db_module.php";
-    // Retrieve form data
+    //lay file
+    function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
+    {
+        $filetemp = $_FILES["$uploadfile"]['tmp_name'];
+        $oldfilename = $_FILES["$uploadfile"]['name'];
+        return move_uploaded_file($filetemp, $uploaddir . $oldfilename);
+    }
+
+    $folderSaveFileUpload = "./uploadFile/";
+    $fileNameBanner = '';
+    $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
+    //fetch data
     $title = $_POST["title"];
     $content = $_POST["content"];
-    $news_banner_src = $_POST["banner"];
+    $news_banner_src = $folderSaveFileUpload . $fileNameBanner;
     $news_category = $_POST["category"];
     $news_date = $_POST["date"];
-    $link = NULL;
-    taoKetNoi($link);
-    $sql = "INSERT INTO news (news_title, news_content, news_banner_src, news_category, news_date ) VALUES (?, ?, ?, ?, ?)";
-    // // Prepare SQL statement to insert data into database
-    // $sql = "INSERT INTO news VALUES ($title, $content, $news_banner_src, $news_category, $news_date )";
-    // chayTruyVanKhongTraVeDL($link,$sql);
+    //sql statement tranh sql injection
+    $sql = "INSERT INTO news (news_title, news_content, news_banner_src, news_category_id, news_date ) VALUES (?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
 
     // Bind parameters to the prepared statement
     mysqli_stmt_bind_param($stmt, "sssss", $title, $content, $news_banner_src, $news_category, $news_date);
 
     // Execute the statement
-    mysqli_stmt_execute($stmt);
-
+    $insert_result= mysqli_stmt_execute($stmt);
+    if ($insert_result) {
+        $_SESSION['success_message'] = "Thêm bài viết thành công.";
+        echo "<script> window.location.href='admin.php?handle=news-management';</script>";
+    } else {
+        echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+    }
     // Close the statement
     mysqli_stmt_close($stmt);
     // $result = chayTruyVanKhongTraVeDL($link,$sql);
-    // giaiPhongBoNho($link,$result);
+    giaiPhongBoNho($link,$result);
+
 
 } else {
     // Redirect to the form page if form is not submitted
 }
 ?>
 <style>
+ * {
+    box-sizing: border-box;
+ }   
     body {
     margin: 0px;
 }

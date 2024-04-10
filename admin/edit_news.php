@@ -7,7 +7,7 @@
         $sql = " SELECT n.newsid, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
         FROM news n
         LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
-        WHERE newsid = $news_id
+        WHERE newsid = $news_id AND is_deleted = '0';
         ";
         
         $result = chayTruyVanTraVeDL($link,$sql);
@@ -37,75 +37,15 @@
                 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet">
                 <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
                 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>';
-                echo '<script>var getcontent = '.json_encode($getcontent).';</script>';//encode bien thanh json object
+                echo '<script>var getcontent = '.json_encode($getcontent).'; //encode bien thanh json object
+                var getbanner = '.json_encode($getbanner).';
+                </script>';
+                
             echo '</head>
             <body>
-            <div class="admin-management">
-                <div class="sidebar">
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9143cf1fb8d6fc12272f9775cc3aeff77b9839d32e73495b6a9cf83d7d9c3b7?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Logo" class="logo" />
-                    <h2 class="welcome-text">Welcome</h2>
-                    <div class="menu-container">
-                        <div class="menu-item menu-item-active">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý rạp icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Quản lý rạp</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý phim icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Quản lý phim</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Lên lịch chiếu icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Lên lịch chiếu</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý bài viết icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Quản lý bài viết</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Xem báo cáo icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Xem báo cáo</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5554df1a377d30b44bcb9845c044dec02c6b2e4ad78606478e85ba3c42b9003b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý người dùng icon" class="menu-item-icon" />
-                                <span class="menu-item-text menu-item-text-multiline">Quản lý<br>người dùng</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d1f56a0d8d14a70950ba5a4e02499174d6ad1f18e94daca56d2614da3104b471?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                        <div class="menu-item menu-item-default">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0dc8fa5f91f7673ed8b55eafd9703ee88d057f3b87ba663edaedff37d2eb4483?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Đổi mật khẩu icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Đổi mật khẩu</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
-                        </div>
-                    </div>
-                </div>
-                <div class="header-content">
-                    <div class="header">
-                        <div class="user-info">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/88a804c5520def4dcdc79f06fa68269a7051516cb28777adf3b68509506917d3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="User avatar" class="user-avatar" />
-                            <button class="logout-button">Đăng xuất</button>
-                        </div>
-                    </div>
                     <div class = "content">
                         <div class ="title">Chỉnh sửa bài viết</div>
-                        <form form id="myForm" action= '.htmlspecialchars($_SERVER["PHP_SELF"]).' method="POST">
+                        <form form id="myForm" action= "" method="POST" enctype="multipart/form-data">
                             <label>Tiêu đề bài viết</label>
                             <input type="text" name="title" maxlength="100" required value = "'.htmlspecialchars($gettitle).'">
                             <label>Ngày đăng bài</label>
@@ -113,14 +53,17 @@
                             <label>Phân loại</label>
                             <select name="category" required>';
                             echo $options;                
-                         echo '</select>
+                            echo '</select>
                             <label>Banner</label>
-                            <input type="text" name="banner" value = '.$getbanner.' required>
+                            <img src='.$getbanner.'>
+                            <input type="file" name="banner" id="bannerInput"> <span id = "filename">'.$getbanner.'</span>
                             <label>Nội dung</label>
                             <div id="toolbar">
                                 <button class="ql-bold">Bold</button>
                                 <button class="ql-italic">Italic</button>
                                 <button class="ql-underline">Underline</button>
+                                <button class="ql-indent" value="-1" ngbPopover="Indent -1" triggers="mouseenter:mouseleave"></button>
+                                <button class="ql-indent" value="+1" ngbPopover="Indent +1" triggers="mouseenter:mouseleave"></button>
                             </div>
                             <div id="editor" font-family = "Roboto" width ="100%"></div>
                             <input type="hidden" id="content" name="content"> <!-- Hidden input cho div id "editor" -->
@@ -129,9 +72,11 @@
                                 <button type="button" onclick="Cancel()">Hủy</button>
                                 <button type="submit" style="background-color: var(--Royal-Blue, #1a2c50); color: var(--Shade-100, #fff);">Lưu bài viết</button>
                             </div>
+                            
+                            </div>
                         </form>
                         
-                        <script>
+                        <script>          
                             const quill = new Quill("#editor", {
                             modules: {
                                 toolbar: "#toolbar"
@@ -148,53 +93,74 @@
 
                                 window.location.href = "admin.php?handle=dashboard"; //ve dashboard
                             }
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const bannerInput = document.getElementById("bannerInput");
+                                const filenameSpan = document.getElementById("filename");
+                        
+                                bannerInput.addEventListener("change", function(event) {
+                                    const files = event.target.files;
+                                    if (files.length > 0) {
+                                        filenameSpan.textContent = files[0].name;
+                                    } else {
+                                        filenameSpan.textContent = "getcontent"; // Revert to original content if no file selected
+                                    }
+                                });
+                            });
+                        
                         </script>
                     </div>
-                </div>
-            </div>
             </body>
         </html>
         ';
         }
-        else echo "ERROR: cannot find that news";
+        else echo "ERROR: Không tìm thấy tin";
     }
     else echo "hehe";
 ?>
 <?php
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require "../module.php";
+    function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
+    {
+        $filetemp = $_FILES["$uploadfile"]['tmp_name'];
+        $oldfilename = $_FILES["$uploadfile"]['name'];
+        return move_uploaded_file($filetemp, $uploaddir . $oldfilename);
+    }
+    $folderSaveFileUpload = "./uploadFile/";
+    $fileNameBanner = '';
+    $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
     // Retrieve form data
     $newsid = $_POST["newsid"];
     $title = $_POST["title"];
     $content = $_POST["content"];
-    $news_banner_src = $_POST["banner"];
+    //check co update banner hay khong
+    if ($result_upload_banner) {
+        $news_banner_src = $folderSaveFileUpload.$fileNameBanner;
+     } else $news_banner_src = $getbanner;
     $news_category = $_POST["category"];
     $news_date = $_POST["date"];
     $link = NULL;
     taoKetNoi($link);
-    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category = ?, news_date = ? WHERE newsid = ?";
+    
+    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category_id = ?, news_date = ? WHERE newsid = ?";
     // // Prepare SQL statement to insert data into database
-    // $sql = "INSERT INTO news VALUES ($title, $content, $news_banner_src, $news_category, $news_date )";
-    // chayTruyVanKhongTraVeDL($link,$sql);
     $stmt = mysqli_prepare($link, $sql);
 
     // Bind parameters to the prepared statement
     mysqli_stmt_bind_param($stmt, "sssssi", $title, $content, $news_banner_src, $news_category, $news_date, $newsid);
 
     // Execute the statement
-    mysqli_stmt_execute($stmt);
-    if (mysqli_stmt_execute($stmt)) {
-        $_SESSION['success_message'] = "thành công r m oi";
+    $insert_result= mysqli_stmt_execute($stmt);
+    if ($insert_result) {
+        $_SESSION['success_message'] = "Sửa bài viết thành công.";
         echo "<script> 
-        window.alert('thanh cong r')
-        window.location.href='edit_news.php?id=$newsid';</script>";
+        window.location.href='admin.php?handle=news-management';</script>";
     } else {
-        echo "Error: " . mysqli_error($link);
+        echo "<script>alert('Đã có lỗi xảy ra.');</script>";
     }
+
     // Close the statement
     mysqli_stmt_close($stmt);
-    // $result = chayTruyVanKhongTraVeDL($link,$sql);
     giaiPhongBoNho($link,$result);
 
 
@@ -207,148 +173,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     margin: 0px;
 }
 
-.admin-management {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    width: 100%;
-}
-
-.sidebar {
-    background-color: #1a2c50;
-    display: flex;
-    max-width: 241px;
-    flex-direction: column;
-    align-items: center;
-    font-size: 16px;
-    color: #fff;
-    font-weight: 400;
-    line-height: 150%;
-    padding: 25px 25px 80px;
-}
-
-.logo {
-aspect-ratio: 1.96;
-object-fit: auto;
-object-position: center;
-width: 119px;
-max-width: 100%;
-}
-
-.welcome-text {
-font-family: Roboto, sans-serif;
-border-radius: 8px;
-margin-top: 32px;
-white-space: nowrap;
-justify-content: center;
-}
-
-.menu-container {
-align-self: stretch;
-display: flex;
-margin-top: 67px;
-flex-direction: column;
-}
-
-.menu-item {
-    justify-content: center;
-    border-radius: 4px;
-    display: flex;
-    gap: 20px;
-    padding: 8px 16px;
-}
-
-.menu-item-active {
-    background-color: #ffbe00;
-}
-
-.menu-item-default {
-    background-color: #118eea;
-    margin-top: 16px;
-}
-
-.menu-item-content {
-display: flex;
-gap: 16px;
-}
-
-.menu-item-icon {
-    aspect-ratio: 1;
-    object-fit: auto;
-    object-position: center;
-    width: 16px;
-    margin: auto 0;
-}
-
-        .menu-item-text {
-            font-family: Roboto, sans-serif;
-        }
-
-        .menu-item-arrow {
-            aspect-ratio: 0.6;
-            object-fit: auto;
-            object-position: center;
-            width: 6px;
-            stroke-width: 2px;
-            stroke: #fff;
-            border-color: rgba(255, 255, 255, 1);
-            border-style: solid;
-            border-width: 2px;
-            margin: auto 0;
-        }
-
-        .menu-item-text-multiline {
-            line-height: 24px;
-        }
-
-        .header {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 8px 60px;
-            background-color: #fff;
-            border-bottom: 1px solid rgba(0, 0, 0, 1);
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--Pastel-Yellow, #f2c46f);
-            text-align: center;
-        }
-
-        @media (max-width: 991px) {
-            .header {
-                padding: 0 20px;
-            }
-        }
-
-        .user-info {
-            display: flex;
-            justify-content: flex-end;
-            gap: 20px;
-        }
-
-        @media (max-width: 991px) {
-            .user-info {
-                margin-right: 10px;
-            }
-        }
-
-        .user-avatar {
-            width: 32px;
-            aspect-ratio: 1;
-            object-fit: cover;
-            object-position: center;
-            margin: auto 0;
-        }
-
-        .logout-button {
-            padding: 12px 8px;
-            font-family: Roboto, sans-serif;
-            background-color: var(--Royal-Blue, #1a2c50);
-            border-radius: 5.067px;
-            color: inherit;
-            cursor: pointer;
-        }
 /* Nội dung */
+* {
+    box-sizing: border-box;
+}
 .content {
     margin: 25px 55px;
     font-family: Roboto, sans-serif;
@@ -426,5 +254,17 @@ select {
     color: black;
   }
   
+form img {
+    width: 50%;
+    margin: 15px 0px;
+    display: block;
+}
+#bannerInput {
+    width:100px;
+    
+}
 
+#filename {
+    font-size: 14px;
+}
 </style>

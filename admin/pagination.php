@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    font-family: Roboto, sans-serif;
 }
 
 .pagination-button {

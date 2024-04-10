@@ -131,7 +131,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
         $table_body .= '<td>
                         <button class="edit-btn" onclick="redirectToEditNews('.$row['newsid'].')">Sửa</button>
-                        <button class="delete-btn" onclick="confirmDelete('.$row['newsid'].')>Xóa</button>
+                        <button class="delete-btn" >Xóa</button>
                        </td>';
         $table_body .= "</tr>";
     }
@@ -148,11 +148,11 @@ giaiPhongBoNho($link, $result);
 <div class='cinema-admin__container'>
     <div class='cinema-admin__heading'>
         <div class='title'>
-            Danh sách rạp
+            Danh sách bài viết
         </div>
         <div class='button'>
             <button onclick='redirectToCreateCinema()'>
-                Tạo rạp mới
+                Tạo bài viết mới
             </button>
         </div>
     </div>
@@ -187,11 +187,5 @@ function redirectToEditNews(id) {
 
     window.location.href = 'admin.php?handle=edit-news&id=id'+id;
 }
-function confirmDelete(newsId) {
-        if (confirm("Bạn có chắc muốn xóa tin này chứ?")) {
-           
-        } else {
-            // User clicked Cancel, do nothing
-        }
-    }
+
 </script>

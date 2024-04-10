@@ -200,6 +200,13 @@
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
+                <div onclick="redirectTo('banner-management')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'banner-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý banner icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Quản lý banner</span>
+                    </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
                 <div onclick="redirectTo('user-management')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'user-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5554df1a377d30b44bcb9845c044dec02c6b2e4ad78606478e85ba3c42b9003b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý người dùng icon" class="menu-item-icon" />
@@ -255,10 +262,12 @@
                         case 'change-password':
                             include 'change-password.php';
                             break;
-                        case 'film-management':
-                            include 'film-management.php';
+                        case 'show-management':
+                            include 'show-management.php';
                             break;
-
+                        case 'show-management':
+                            include 'show-management.php';
+                            break;
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

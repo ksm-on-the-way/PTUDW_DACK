@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <?php echo $_SESSION['userid']; ?>
     <?php
     include "header.php";
     ?>

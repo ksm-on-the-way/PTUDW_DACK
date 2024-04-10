@@ -39,10 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Kiểm tra kết quả và hiển thị thông báo tương ứng
     if (mysqli_num_rows($phoneResult) > 0) {
         echo '<script>alert("Số điện thoại đã tồn tại!");</script>';
-        echo '<script>window.location.href = "../signup/signup.php";</script>';
+        echo '<script>window.location.href = "./signup.php";</script>';
     } elseif (mysqli_num_rows($emailResult) > 0) {
         echo '<script>alert("Email đã tồn tại!");</script>';
-        echo '<script>window.location.href = "../signup/signup.php";</script>';
+        echo '<script>window.location.href = "./signup.php";</script>';
     } else {
 
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu

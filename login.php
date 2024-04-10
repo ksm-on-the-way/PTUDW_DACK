@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['fullname'] = $userInfo['fullname'];
             $_SESSION['birth_date'] = $userInfo['birth_date'];
             $_SESSION['gender'] = $userInfo['gender'];
-
+            $_SESSION['userid'] = $userInfo['user_id'];
             // Lấy role của người dùng để xem là admin hay user
             $user_role_id = getUserRole($username);
 
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             } else {
                 // Người dùng không có quyền admin, có thể chuyển hướng đến một trang thông báo hoặc trang khác
-                header("Location: ./seat.php");
+                header("Location: ./homepage.php");
                 exit;
             }
         } else {

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -133,13 +134,13 @@ body {
 
 <script>
     function redirectToHomePage() {
-        window.location.href = './homepage.php';
+        window.location = './homepage.php';
     }
     function redirectToNews(){
-        window.location.href ='./news.php';
+        window.location ='./news.php';
     }
     function redirectToMyTicket(){
-        window.location.href ='./my-ticket.php';
+        window.location ='./my-ticket.php';
     }
 </script>
 </html>

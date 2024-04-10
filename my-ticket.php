@@ -349,6 +349,7 @@
         </div>
 
         <?php
+        $userid = $_SESSION['userid'];
         require_once './db_module.php';
         $link = null;
         taoKetNoi($link);

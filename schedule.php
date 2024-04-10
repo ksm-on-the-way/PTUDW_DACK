@@ -1,3 +1,7 @@
+<?php if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <html>
 
 <head>
@@ -499,6 +503,7 @@
         font: 24px/133% Roboto, sans-serif;
         text-transform: uppercase;
         cursor: pointer;
+
     }
     </style>
     <?php
@@ -700,7 +705,7 @@
                     <div class="time-show"></div>
                 </div>
                 <div class="term">* Bạn có thể chọn chỗ ngồi sau khi đã chọn thông tin phim</div>
-                <div class="order">Mua ngay</div>
+                <div class="order" onclick='redirecToPickSeats()'>Mua ngay</div>
             </div>
         </div>
     </div>
@@ -943,6 +948,11 @@ function implementScriptSchedule() {
     }
 
 
+}
+
+function redirecToPickSeats() {
+    // Chuyển hướng đến URL chứa tham số "handle=create-movie"
+    window.location.href = 'seat.php';
 }
 </script>
 

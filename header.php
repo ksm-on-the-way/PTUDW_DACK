@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -133,14 +136,17 @@ body {
 </body>
 
 <script>
-    function redirectToHomePage() {
-        window.location = './homepage.php';
-    }
-    function redirectToNews(){
-        window.location ='./news.php';
-    }
-    function redirectToMyTicket(){
-        window.location ='./my-ticket.php';
-    }
+function redirectToHomePage() {
+    window.location = './homepage.php';
+}
+
+function redirectToNews() {
+    window.location = './news.php';
+}
+
+function redirectToMyTicket() {
+    window.location = './my-ticket.php';
+}
 </script>
+
 </html>

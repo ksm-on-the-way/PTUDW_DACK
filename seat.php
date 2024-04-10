@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 ?>
 <!DOCTYPE html>
@@ -334,11 +336,13 @@ session_start();
     .seat-footer__container .confirm-container .confirm-button.back {
         background-color: var(--White, #fff);
         color: var(--Shade-600, #5a637a);
+        cursor: pointer
     }
 
     .seat-footer__container .confirm-container .confirm-button.confirm {
         background-color: var(--Royal-Blue, #1a2c50);
         color: var(--Sunshine-Yellow, #ffbe00);
+        cursor: pointer
     }
     </style>
     <?php
@@ -470,10 +474,8 @@ session_start();
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/ef01070ca0e7b2d03dc7322aea01d47a05565d973e84bd7efb7922c5818f9ff1?"
                         class="img" />
 
-                    <div class="time">14:40</div>
-                    <img loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ac9b9726ebb0f6eb68e38f83ef0329e574536bc628c5ccf18a081b93b712b19a?"
-                        class="img-2" />
+                    <div class="time"></div>
+
 
                 </div>
                 <div class='seat-status'>
@@ -598,7 +600,7 @@ session_start();
                     <div class="seat-number"></div>
                 </div>
                 <div class="confirm-container">
-                    <div class="confirm-button back">Quay lại</div>
+                    <div class="confirm-button back" onclick='redirectBackSchedule()'>Quay lại</div>
                     <div class="confirm-button confirm">Xác nhận</div>
                 </div>
             </div>
@@ -614,6 +616,11 @@ session_start();
     conn.onopen = function(e) {
         console.log("Connection established!");
     };
+    const selectedShowObject = localStorage.getItem('selectedShow') ? JSON.parse(localStorage.getItem(
+        'selectedShow')) : undefined;
+    const time = document.querySelector('.time-picker .time');
+    time.textContent = selectedShowObject.show_time;
+
 
     conn.onmessage = function(e) {
         var data = JSON.parse(e.data)
@@ -794,6 +801,11 @@ session_start();
                 countdownDiv.textContent = '';
             }
         }, 1000); // Hẹn giờ mỗi 1 giây
+    }
+
+    function redirectBackSchedule() {
+        // Chuyển hướng đến URL chứa tham số "handle=create-movie"
+        window.location.href = 'schedule.php';
     }
     </script>
 </body>

@@ -8,7 +8,8 @@
         align-items: center;
         margin-top: 10px;
     }
-    .ticket-validity:hover{
+
+    .ticket-validity:hover {
         cursor: pointer;
     }
 
@@ -38,9 +39,11 @@
         padding: 0 20px;
         align-items: center;
     }
-    .transaction-list:hover{
+
+    .transaction-list:hover {
         cursor: pointer;
     }
+
     .list-text {
         font-family: Roboto, sans-serif;
         font-size: 18px;
@@ -100,6 +103,7 @@
         justify-content: space-between;
         align-self: stretch;
         max-width: 768px;
+        margin: 30px 0px;
     }
 
     .ticket-content {
@@ -292,24 +296,30 @@
             padding: 0 20px;
         }
     }
-    body{
+
+    body {
         margin: 0;
     }
-    .my-ticket-container{
+
+    .my-ticket-container {
         display: grid;
         grid-template-columns: 313px 1fr;
         column-gap: 88px;
     }
-    .my-ticket-sidebar{
+
+    .my-ticket-sidebar {
         background-color: #f5f5f5;
     }
-    .my-ticket-content-header{
+
+    .my-ticket-content-header {
         padding: 0;
     }
-    .menu-item-active{
+
+    .menu-item-active {
         color: #118eea;
     }
-    .menu-item-default{
+
+    .menu-item-default {
         color: #333;
     }
 </style>
@@ -323,7 +333,7 @@
             <div class="separator"></div>
             <div class="transaction-list" onclick="redirectTo('transaction-list')">
                 <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ce9c06e26de6424759bdd0fb88770a28c1cde34e26ad6c76667a9aed0aaccbd9?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="icon" />
-                <p class="list-text <?php echo isset($_GET['handle']) && ($_GET['handle'] == 'transaction-list') || !isset($_GET['handle']) ? 'menu-item-active' : 'menu-item-default'; ?>">DANH SÁCH GIAO DỊCH</p>
+                <p class="list-text <?php echo isset($_GET['handle']) && ($_GET['handle'] == 'transaction-list') ? 'menu-item-active' : 'menu-item-default'; ?>">DANH SÁCH GIAO DỊCH</p>
             </div>
             <div class="separator"></div>
         </div>
@@ -337,162 +347,124 @@
                 <button class="promo-option">Mã khuyến mãi</button>
             </div>
         </div>
+
+        <?php
+        require_once './db_module.php';
+        $link = null;
+        taoKetNoi($link);
+
+        // Số lượng dòng trên mỗi trang
+        $rowsPerPage = 4;
+
+        // Lấy trang hiện tại từ biến currentPage
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $startRow = ($currentPage - 1) * $rowsPerPage;
+        if(isset($_GET['handle']) && $_GET['handle'] =='transaction-list'){
+            $query = "SELECT m.movie_id, m.movie_name, s.date, s.start_time, t.theater_name, rt.room_type_name
+            FROM reservations rsv
+            LEFT JOIN shows s ON rsv.show_id = s.show_id
+            LEFT JOIN movies m ON s.movie_id = m.movie_id
+            LEFT JOIN rooms rm ON rm.room_id = s.room_id
+            LEFT JOIN room_types rt ON rm.room_type_id = rt.room_type_id
+            LEFT JOIN theaters t ON rm.theater_id = t.theater_id
+            WHERE rsv.user_id = $userid
+            ORDER BY rsv.reservation_id DESC
+            LIMIT $startRow, $rowsPerPage";
+        } else {
+            $query = "SELECT m.movie_id, m.movie_name, s.date, s.start_time, t.theater_name, rt.room_type_name
+            FROM reservations rsv
+            LEFT JOIN shows s ON rsv.show_id = s.show_id
+            LEFT JOIN movies m ON s.movie_id = m.movie_id
+            LEFT JOIN rooms rm ON rm.room_id = s.room_id
+            LEFT JOIN room_types rt ON rm.room_type_id = rt.room_type_id
+            LEFT JOIN theaters t ON rm.theater_id = t.theater_id
+            WHERE rsv.user_id = $userid AND s.date > NOW() AND s.start_time > NOW()
+            ORDER BY rsv.reservation_id DESC
+            LIMIT $startRow, $rowsPerPage";
+        }
+        
+
+        $queryCount = "SELECT COUNT(*) AS total FROM (SELECT m.movie_name, s.date, s.start_time, t.theater_name, rt.room_type_name
+            FROM reservations rsv
+            LEFT JOIN shows s ON rsv.show_id = s.show_id
+            LEFT JOIN movies m ON s.movie_id = m.movie_id
+            LEFT JOIN rooms rm ON rm.room_id = s.room_id
+            LEFT JOIN room_types rt ON rm.room_type_id = rt.room_type_id
+            LEFT JOIN theaters t ON rm.theater_id = t.theater_id
+            WHERE rsv.user_id = $userid
+            ORDER BY rsv.reservation_id DESC) as subtable";
+        $resultCount = chayTruyVanTraVeDL($link, $queryCount);
+        $rowCount = mysqli_fetch_assoc($resultCount);
+        $totalPages = ceil($rowCount['total'] / $rowsPerPage);
+
+        $result = chayTruyVanTraVeDL($link, $query);
+
+        $content_body = "";
+
+        ?>
+
+
         <div class="my-ticket-content-body">
-            <div class="ticket-container">
-                <div class="ticket-content">
-                    <div class="ticket-details">
-                        <div class="ticket-info">
-                            <div class="ticket-layout">
-                                <div class="movie-poster">
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0466b93f6217568d2a35102ade32464ae06631300a24923c3959aa57ead634f1?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Godzilla x Kong: Đế Chế Mới movie poster" class="poster-image" />
-                                </div>
-                                <div class="movie-info">
-                                    <div class="movie-details">
-                                        <div class="movie-header">
-                                            <h2 class="movie-title">Godzilla x Kong: Đế Chế Mới</h2>
-                                            <p class="movie-datetime">Thứ ba, 16/03/2024, 14:40</p>
-                                        </div>
-                                        <div class="movie-location">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="location-icon" />
-                                            <p class="cinema-name">TIX ID Vincom Thủ Đức</p>
-                                            <p class="cinema-type">( 2D phụ đề Việt)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ticket-status">
-                        <div class="status-label">Thành công</div>
-                    </div>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <div class="ticket-container">
-                <div class="ticket-content">
-                    <div class="ticket-details">
-                        <div class="ticket-info">
-                            <div class="ticket-layout">
-                                <div class="movie-poster">
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0466b93f6217568d2a35102ade32464ae06631300a24923c3959aa57ead634f1?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Godzilla x Kong: Đế Chế Mới movie poster" class="poster-image" />
-                                </div>
-                                <div class="movie-info">
-                                    <div class="movie-details">
-                                        <div class="movie-header">
-                                            <h2 class="movie-title">Godzilla x Kong: Đế Chế Mới</h2>
-                                            <p class="movie-datetime">Thứ ba, 16/03/2024, 14:40</p>
-                                        </div>
-                                        <div class="movie-location">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="location-icon" />
-                                            <p class="cinema-name">TIX ID Vincom Thủ Đức</p>
-                                            <p class="cinema-type">( 2D phụ đề Việt)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ticket-status">
-                        <div class="status-label">Thành công</div>
-                    </div>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <div class="ticket-container">
-                <div class="ticket-content">
-                    <div class="ticket-details">
-                        <div class="ticket-info">
-                            <div class="ticket-layout">
-                                <div class="movie-poster">
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0466b93f6217568d2a35102ade32464ae06631300a24923c3959aa57ead634f1?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Godzilla x Kong: Đế Chế Mới movie poster" class="poster-image" />
-                                </div>
-                                <div class="movie-info">
-                                    <div class="movie-details">
-                                        <div class="movie-header">
-                                            <h2 class="movie-title">Godzilla x Kong: Đế Chế Mới</h2>
-                                            <p class="movie-datetime">Thứ ba, 16/03/2024, 14:40</p>
-                                        </div>
-                                        <div class="movie-location">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="location-icon" />
-                                            <p class="cinema-name">TIX ID Vincom Thủ Đức</p>
-                                            <p class="cinema-type">( 2D phụ đề Việt)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ticket-status">
-                        <div class="status-label">Thành công</div>
-                    </div>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <div class="ticket-container">
-                <div class="ticket-content">
-                    <div class="ticket-details">
-                        <div class="ticket-info">
-                            <div class="ticket-layout">
-                                <div class="movie-poster">
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0466b93f6217568d2a35102ade32464ae06631300a24923c3959aa57ead634f1?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Godzilla x Kong: Đế Chế Mới movie poster" class="poster-image" />
-                                </div>
-                                <div class="movie-info">
-                                    <div class="movie-details">
-                                        <div class="movie-header">
-                                            <h2 class="movie-title">Godzilla x Kong: Đế Chế Mới</h2>
-                                            <p class="movie-datetime">Thứ ba, 16/03/2024, 14:40</p>
-                                        </div>
-                                        <div class="movie-location">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="location-icon" />
-                                            <p class="cinema-name">TIX ID Vincom Thủ Đức</p>
-                                            <p class="cinema-type">( 2D phụ đề Việt)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ticket-status">
-                        <div class="status-label">Thành công</div>
-                    </div>
-                </div>
-            </div>
-            <div class="separator"></div>
-            <div class="ticket-container">
-                <div class="ticket-content">
-                    <div class="ticket-details">
-                        <div class="ticket-info">
-                            <div class="ticket-layout">
-                                <div class="movie-poster">
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0466b93f6217568d2a35102ade32464ae06631300a24923c3959aa57ead634f1?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Godzilla x Kong: Đế Chế Mới movie poster" class="poster-image" />
-                                </div>
-                                <div class="movie-info">
-                                    <div class="movie-details">
-                                        <div class="movie-header">
-                                            <h2 class="movie-title">Godzilla x Kong: Đế Chế Mới</h2>
-                                            <p class="movie-datetime">Thứ ba, 16/03/2024, 14:40</p>
-                                        </div>
-                                        <div class="movie-location">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="location-icon" />
-                                            <p class="cinema-name">TIX ID Vincom Thủ Đức</p>
-                                            <p class="cinema-type">( 2D phụ đề Việt)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ticket-status">
-                        <div class="status-label">Thành công</div>
-                    </div>
-                </div>
+            <?php
+            if (mysqli_num_rows($result) > 0) {
+                // Bắt đầu vòng lặp để xây dựng chuỗi HTML
+                while ($row = mysqli_fetch_assoc($result)) {
+
+                    $queryBanner = "SELECT image_url from movie_banner_images WHERE movie_id =" . $row['movie_id'];
+                    $resultBanner = chayTruyVanTraVeDL($link, $queryBanner);
+                    $imageurl = "";
+                    while ($rowBanner = mysqli_fetch_assoc($resultBanner)) {
+                        $imageurl = $rowBanner['image_url'];
+                    }
+                    $content_body .= "<div class='ticket-container'>";
+                    $content_body .= "<div class='ticket-content'>";
+                    $content_body .= "<div class='ticket-details'>";
+                    $content_body .= "<div class='ticket-info'>";
+                    $content_body .= "<div class='ticket-layout'>";
+                    $content_body .= "<div class='movie-poster'>";
+                    $content_body .= "<img src='" . "$imageurl" . "' alt='banner' class='poster-image' />";
+                    $content_body .= "</div>";
+                    $content_body .= "<div class='movie-info'>";
+                    $content_body .= "<div class='movie-details'>";
+                    $content_body .= "<div class='movie-header'>";
+                    $content_body .= "<h2 class='movie-title'>" . $row['movie_name'] . "</h2>";
+                    $content_body .= "<p class='movie-datetime'>" . $row['date'] . ", " . $row['start_time'] . "</p>";
+                    $content_body .= "</div>";
+                    $content_body .= "<div class='movie-location'>";
+                    $content_body .= "<img src='https://cdn.builder.io/api/v1/image/assets/TEMP/b6c6ae098c0909f905d3ee7419ca93a45a3590b9236f0f372575964103f3460e?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&' alt='' class='location-icon' />";
+                    $content_body .= "<p class='cinema-name'>" . $row['theater_name'] . "</p>";
+                    $content_body .= "<p class='cinema-type'>(" . $row['room_type_name'] . ")</p>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "<div class='ticket-status'>";
+                    if(isset($_GET['handle']) && $_GET['handle'] =='transaction-list'){
+                        $content_body .= "<div class='status-label'>Thành công</div>";
+                    }           
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "</div>";
+                    $content_body .= "<div class='separator'></div>";
+                }
+                echo $content_body;
+            } else {
+                // Nếu không có dữ liệu, hiển thị dòng thông báo
+                $content_body .= "<tr><td colspan='5'>Không có dữ liệu</td></tr>";
+            }
+            ?>
+            <div>
+                <?php include_once './pagination.php'; ?>
             </div>
         </div>
     </div>
 
 </div>
+<?php include './footer.php'; ?>
 <script>
-    function redirectTo(handle){
-        window.location.href = 'my-ticket.php?handle='+ handle;
+    function redirectTo(handle) {
+        window.location.href = 'my-ticket.php?handle=' + handle;
     }
 </script>

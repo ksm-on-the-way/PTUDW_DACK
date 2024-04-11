@@ -200,10 +200,10 @@
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
-                <div onclick="redirectTo('banner-management')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'banner-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                <div onclick="redirectTo('food-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'food-management'||$_GET['handle'] == 'create-food')||$_GET['handle'] == 'edit-food' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý banner icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Quản lý banner</span>
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý đồ ăn icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Quản lý đồ ăn</span>
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
@@ -265,9 +265,19 @@
                         case 'show-management':
                             include 'show-management.php';
                             break;
-                        case 'show-management':
-                            include 'show-management.php';
+
+
+                        case 'food-management':
+                            include 'food-management.php';
                             break;
+                        case 'create-food':
+                            include 'create-food.php';
+                            break;
+                        case 'edit-food':
+                            include 'edit-food.php';
+                            break;  
+                            
+                            
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

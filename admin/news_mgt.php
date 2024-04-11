@@ -105,7 +105,7 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $startRow = ($currentPage - 1) * $rowsPerPage;
 
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
-$query = "SELECT n.newsid, n.news_title, n.news_date, c.news_category_name
+$query = "SELECT n.news_id, n.news_title, n.news_date, c.news_category_name
 FROM news n
 LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
 ORDER BY n.news_date DESC
@@ -130,7 +130,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_date'] . "</td>";
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
         $table_body .= '<td>
-                        <button class="edit-btn" onclick="redirectToEditNews('.$row['newsid'].')">Sửa</button>
+                        <button class="edit-btn" onclick="redirectToEditNews('.$row['news_id'].')">Sửa</button>
                         <button class="delete-btn" >Xóa</button>
                        </td>';
         $table_body .= "</tr>";

@@ -113,9 +113,9 @@
         </html>
         ';
         }
-        else echo "ERROR: Không tìm thấy tin";
+        else echo "ERROR: Không tìm thấy bài viết";
     }
-    else echo "hehe";
+    else echo "ERROR: Không thể tìm thấy bài viết";
 ?>
 <?php
 // Check if form is submitted

@@ -20,7 +20,7 @@ if (isset($_GET['search_query'])) {
             echo "<div class='wrapper'>";
             echo "<p class='category'>" . $row_search["news_category_name"] . "</p>";
             echo "<h2 class='mt-2'>" . $row_search["news_title"] . "</h2>";
-            echo "<p class='body_shade600 line_clamp'>" . $row_search["news_content"] . "</p>";
+            echo "<span class='body_shade600 line_clamp'>" . $row_search["news_content"] . "</span>";
             echo "</div>";
             echo "</article>";
         }

@@ -1,8 +1,10 @@
 <?php
-// Include database connection
-require_once("db_module.php");
+require_once ("db_module.php");
+$link = NULL;
+$result = null;
+taoKetNoi($link);
 
-// Function to fetch more news items
+// Function to fetch more Collection items
 function fetchMoreNews($offset, $limit, $link)
 {
     $sql = "SELECT news.*, news_categories.news_category_name 
@@ -12,24 +14,20 @@ function fetchMoreNews($offset, $limit, $link)
             LIMIT $offset, $limit";
     $result = $link->query($sql);
 
-    $output = '';
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $output .= "<article>";
-            $output .= "<img src='" . $row["news_banner_src"] . "'>";
-            $output .= "<div class='wrapper'>";
-            $output .= "<p class='category'>" . $row["news_category_name"] . "</p>";
-            $output .= "<h2 class='mt-2'>" . $row["news_title"] . "</h2>";
-            $output .= "<p class='body_shade600 line_clamp'>" . $row["news_content"] . "</p>";
-            $output .= "</div>";
-            $output .= "</article>";
+            echo "<article>";
+            echo "<img src='" . $row["news_banner_src"] . "'>";
+            echo "<div class='wrapper'>";
+            echo "<p class='category'>" . $row["news_category_name"] . "</p>";
+            echo "<h2 class='mt-2'>" . $row["news_title"] . "</h2>";
+            echo "<p class='body_shade600 line_clamp'>" . $row["news_content"] . "</p>";
+            echo "</div>";
+            echo "</article>";
         }
     } else {
-        $output .= "<p>No more news available.</p>";
+        echo "";
     }
-
-    return $output;
 }
 
 // Check if offset and limit are set

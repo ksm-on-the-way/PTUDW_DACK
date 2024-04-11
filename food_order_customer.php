@@ -151,7 +151,7 @@ ol {
     </div>
     <form method="post" action="" id="next">
         <input type="hidden" id="selected_quantities" name="selected_quantities" value="">
-        <button type="submit" class="next-button" name="next">Next</button>
+        <button type="submit" class="next-button" name="next">Tiếp theo</button>
     </form>
 </div>
 

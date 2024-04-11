@@ -151,10 +151,10 @@ if (mysqli_num_rows($result) > 0) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $movie_id = $_POST['movie_id'];
-    $query = "DELETE FROM theaters WHERE movie_id = '$movie_id'";
+    $query = "DELETE FROM movies WHERE movie_id = '$movie_id'";
     if (chayTruyVanKhongTraVeDL($link, $query)) {
         // Redirect hoặc cập nhật trang tại đây nếu cần thiết
-        echo "<script> window.location.href='admin.php?handle=movie-management';</script>";
+        echo "<script> window.location.href='admin.php?handle=film-management';</script>";
     } else {
         echo "Xóa dữ liệu thất bại: ";
     }

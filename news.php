@@ -420,7 +420,7 @@
     giaiPhongBoNho($link, $result);
     ?>
 
-    <style>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -497,9 +497,7 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-wrap: wrap;
-            margin-block-end: 0.75em;
-            margin-inline-start: 0.5em;
+            margin-block-end: 0.5em;
         }
 
         .selected {
@@ -583,6 +581,11 @@
             height: 15px;
         }
 
+        .search-box button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 100px;
+        }
+
         .spotlight_items {
             padding-top: 2rem;
             margin-bottom: 4rem;
@@ -612,7 +615,6 @@
 
         .spotlight_text1 {
             order: 2;
-            padding: 0 10%;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -620,7 +622,6 @@
 
         .spotlight_text2 {
             order: 3;
-            padding: 0 10%;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -751,21 +752,24 @@
         .spotlight_items img:hover,
         .review_items article:hover,
         .collection_items article img:hover {
-            transform: translateY(-10px);
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .spotlight_text1 h1:hover,
+        .spotlight_text2 h1:hover,
+        .collection_items h2:hover {
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         button {
-            --tw-border-opacity: 1;
-            --tw-bg-opacity: 1;
-            --tw-text-opacity: 1;
-            background-color: rgb(41 41 41 / var(--tw-bg-opacity));
-            border-color: rgb(41 41 41 / var(--tw-border-opacity));
-            border-width: 1px;
-            color: rgb(255 255 255 / var(--tw-text-opacity));
+            background-color: rgb(26 44 80);
+            color: rgb(255 255 255);
+            border-style: none;
 
             align-items: center;
-            border-radius: 32px;
+            border-radius: 8px;
             display: inline-flex;
             justify-content: center;
 
@@ -774,7 +778,7 @@
             margin: 1.25rem 0;
 
             text-transform: uppercase;
-            transition-duration: 0.3s;
+            transition-duration: 0.3;
             vertical-align: middle;
             font-weight: 600;
             text-align: center;
@@ -786,13 +790,37 @@
         }
 
         button:hover {
-            background-color: rgb(41 41 41 / calc(var(--tw-bg-opacity) - 0.9));
-            transform: scale(1.05);
+            background-color: rgb(40 39 100);
+        }
+
+        button:active {
+            background-color: rgb(56 55 130);
+        }
+
+        button:disabled {
+            background-color: #dadfe8;
+            color: #9DA8BE;
+
         }
 
         @media (max-width: 768px) {
             h1 {
                 font-size: 36px;
+            }
+
+            .category_list ul {
+                overflow-x: auto;
+                overflow-y: hidden;
+                white-space: nowrap;
+                scroll-snap-type: x mandatory;
+                scroll-padding-left: 30px;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+                margin-block-end: 0;
+            }
+
+            .category_list ul li {
+                display: inline-block;
             }
 
             .mt-1 {
@@ -865,10 +893,6 @@
                 display: flex;
                 flex-direction: column-reverse;
             }
-
-            .category_list {
-                margin-bottom: 1rem;
-            }
         }
 
         @media screen and (max-width: 1600) and (min-width: 600px) {
@@ -883,6 +907,8 @@
             }
         }
     </style>
+
+
 </body>
 
 </html>

@@ -99,11 +99,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             /* căn giữa page */
             display: flex;
             align-items: center;
+            flex-direction: column;
+            /* Sắp xếp các phần tử theo chiều dọc */
+            width: 100vw;
         }
 
         a {
             text-decoration: none;
         }
+
+        @media screen and (max-width: 768px) {
+            .login-signup-container {
+                position: fixed !important;
+                /* hoặc position: absolute; tùy thuộc vào yêu cầu cụ thể */
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80% !important;
+                /* Thay đổi chiều rộng của form */
+            }
+
+            .login-signup-container h2 {
+                font-size: 16px !important;
+                white-space: nowrap !important;
+
+            }
+        }
+
 
         .login-signup-container {
             margin-top: 10px;
@@ -127,7 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
             font-size: 20px;
             font-weight: 600;
-            padding: 0px 20px 10px;
             text-align: left;
         }
 
@@ -159,13 +180,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 5px;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
 
         .form-group button {
             width: 100%;
@@ -267,6 +288,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             gap: 10px;
             margin-top: 20px;
             margin-left: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .radio-group #male,
+        .radio-group #female {
+            width: 100px;
         }
     </style>
     <div class="login-signup-container">

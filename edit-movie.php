@@ -1,39 +1,39 @@
 <style>
-    .create-movie__container {
+    .edit-movie__container {
         width: 100%;
         max-width: 1075px;
         margin: 0 auto;
         margin-top: 30px;
     }
 
-    .create-movie__container .create-movie__form form {
+    .edit-movie__container .edit-movie__form form {
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
 
-    .create-movie__container .create-movie__form .form-input {
+    .edit-movie__container .edit-movie__form .form-input {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 5px;
     }
 
-    .create-movie__container .create-movie__form .form-btn {
+    .edit-movie__container .edit-movie__form .form-btn {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 20px;
     }
 
-    .create-movie__container .create-movie__form .form-btn button {
+    .edit-movie__container .edit-movie__form .form-btn button {
         width: 150px;
         border-radius: 8px;
         padding: 10px 0px;
         border: 1px solid #1A2C50;
     }
 
-    .create-movie__container .create-movie__form .form-btn .btn-add {
+    .edit-movie__container .edit-movie__form .form-btn .btn-add {
         background-color: #1A2C50;
         color: white;
     }
@@ -52,6 +52,42 @@ $link = null;
 taoKetNoi($link);
 $movieId = isset($_GET['movieId']) ? $_GET['movieId'] : null;
 
+$moviename = "";
+$actorname = "";
+$description= "";
+$duration = "";
+$releaseDate = "";
+$endDate = "";
+$trailer = "";
+$director = "";
+$genre = "";
+$rate = "";
+$optionsGenre = "";
+$optionsRate = "";
+$optionsDirector = "";
+
+if ($movieId) {
+    $query = "SELECT * FROM movies WHERE movie_id = '$movieId' ";
+    $result = chayTruyVanTraVeDL($link, $query);
+
+    // Kiểm tra xem có dữ liệu trả về không
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $moviename = $row['movie_name'];
+        $actorname = $row['actor'];
+        $description= $row['movie_description'];
+        $duration = $row['movie_duration'];
+        $releaseDate = $row['release_date'];
+        $endDate = $row['end_date'];
+        $trailer = $row['trailer_url'];
+        $director = $row['movie_director_id'];
+        $genre = $row['movie_genre_id'];
+        $rate = $row['movie_rate_id'];
+
+    }
+}
+
+
 
 // Truy vấn để lấy dữ liệu từ bảng cities
 $queryGenre = "SELECT movie_genre_id, movie_genre_name FROM movie_genres";
@@ -62,9 +98,7 @@ $resultRate = chayTruyVanTraVeDL($link, $queryRate);
 $resultDirector = chayTruyVanTraVeDL($link, $queryDirector);
 
 // Mảng để lưu trữ các tùy chọn thành phố
-$optionsGenre = "";
-$optionsRate = "";
-$optionsDirector = "";
+
 
 // Kiểm tra xem truy vấn có thành công không
 if ($resultGenre) {
@@ -99,14 +133,10 @@ if ($resultDirector) {
 }
 
 
-// Giải phóng bộ nhớ sau khi sử dụng
-giaiPhongBoNho($link, $resultRate);
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $link = null;
     taoKetNoi($link);
-
     function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
     {
         $filetemp = $_FILES["$uploadfile"]['tmp_name'];
@@ -119,11 +149,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileNameTrailer = '';
     $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
     $result_upload_trailer = uploadFileTo("trailer", $folderSaveFileUpload, $fileNameTrailer);
-    // Kiểm tra xem các thông số có được gửi không
-    if (
-        isset($_POST['movie-name']) && isset($_POST['actor-name']) && $result_upload_banner && $result_upload_trailer && isset($_POST['genre']) && isset($_POST['description'])
-        && isset($_POST['duration']) && isset($_POST['rate']) && isset($_POST['director']) && isset($_POST['release-date']) && isset($_POST['end-date'])
-    ) {
+    // Kiểm tra xem tên rạp và địa chỉ có được gửi không
+    if (isset($_POST['movie_name']) && isset($_POST['actor-name']) && isset($_POST['genre'])&& isset($_POST['description'])&& isset($_POST['duration'])&& isset($_POST['rate'])&& isset($_POST['director'])&& isset($_POST['release-date'])&& isset($_POST['end-date'])) {
         $moviename = $_POST['movie-name'];
         $actorname = $_POST['actor-name'];
         $banner = $folderSaveFileUpload . $fileNameBanner;
@@ -135,52 +162,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $director = $_POST['director'];
         $releaseDate = $_POST['release-date'];
         $endDate = $_POST['end-date'];
+
         // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
-        $query = "INSERT INTO movies (movie_name, actor, movie_description, movie_duration, release_date, end_date, trailer_url, movie_director_id, movie_genre_id, movie_rate_id) VALUES ('$moviename', '$actorname', '$description','$duration','$releaseDate', '$endDate', '$trailer','$director','$genre', '$rate' )";
-        $result = chayTruyVanKhongTraVeDL($link, $query);
+        $querySaveMovie = "UPDATE movies SET movie_name='$moviename', actor='$actorname', movie_description='$description', movie_duration = '$duration', release_date = '$releaseDate', end_date = '$endDate', trailer_url = '$trailer', movie_director_id = '$director', movie_genre_id = '$genre', movie_rate_id = '$rate' WHERE theater_id = $theaterId";
+        $resultSaveMovie = chayTruyVanKhongTraVeDL($link, $querySaveMovie);
+
+
         $query_movieid = "SELECT movie_id FROM movies WHERE movie_name = '$moviename'";
         $result_movieid = chayTruyVanTraVeDL($link, $query_movieid);
         $queryBanner = '';
         while ($row = mysqli_fetch_assoc($result_movieid)) {
             $movieid = $row['movie_id'];
-            $queryBanner = "INSERT INTO movie_banner_images(movie_id,image_url) VALUES ('$movieid','$banner')";
+            $queryBanner = "UPDATE movie_banner_images SET image_url = $banner WHERE movie_id = '$movieid'";
         }
         $resultQueryBanner = chayTruyVanKhongTraVeDL($link, $queryBanner);
-
-
-        if ($result && $resultQueryBanner) {
-            $_SESSION['success_message'] = "Thêm phim thành công.";
+        if ($querySaveMovie && $resultQueryBanner) {
+            $_SESSION['success_message'] = "Sửa thông tin rạp thành công.";
             echo "<script> window.location.href='admin.php?handle=film-management';</script>";
         } else {
             echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+
         }
-        giaiPhongBoNho($link, $result);
+        giaiPhongBoNho($link, $resultQueryBanner);
     }
+
 }
 
 ?>
-<div class='create-movie__container'>
+<div class='edit-movie__container'>
     <div>
         <h3>Tạo phim mới</h3>
     </div>
-    <div class='create-movie__form'>
-        <form method="POST" action="admin.php?handle=create-movie" enctype="multipart/form-data">
+    <div class='edit-movie__form'>
+        <form method="POST" action="admin.php?handle=edit-movie" enctype="multipart/form-data">
             <div class='form-input'>
                 <label>Tên phim</label>
-                <input type="text" name="movie-name" placeholder='Nhập tên phim'>
+                <input type="text" name="movie-name" placeholder='Nhập tên phim' value="<?php echo $moviename?>">
             </div>
             <div class='form-input'>
                 <label>Diễn viên</label>
-                <input type="text" name="actor-name" placeholder='Nhập tên diễn viên'>
+                <input type="text" name="actor-name" placeholder='Nhập tên diễn viên' value="<?php echo $actorname?>">
             </div>
             <div class="upload-file">
                 <div class="form-input">
                     <label>Banner</label>
-                    <input type="file" name="banner" placeholder="Tải tệp lên">
+                    <input type="file" name="banner" placeholder="Tải tệp lên"> 
                 </div>
                 <div class="form-input">
                     <label>Trailer</label>
-                    <input type="file" name="trailer" placeholder="Tải tệp lên">
+                    <input type="file" name="trailer" placeholder="Tải tệp lên"> 
                 </div>
             </div>
             <div class='form-input'>
@@ -191,11 +221,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class='form-input'>
                 <label>mô tả</label>
-                <textarea name="description" placeholder="Mô tả phim" cols="30" rows="10"></textarea>
+                <textarea name="description" placeholder="Mô tả phim" cols="30" rows="10" value="<?php echo $description?>"></textarea>
             </div>
             <div class='form-input'>
                 <label>Độ dài phim</label>
-                <input type="text" name="duration" placeholder="Nhập độ dài phim">
+                <input type="text" name="duration" placeholder="Nhập độ dài phim" value="<?php echo $duration?>">
             </div>
             <div class='form-input'>
                 <label>Nhãn phim</label>
@@ -205,7 +235,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class='form-input'>
                 <label>Đạo diễn</label>
-                <select name='director'>
+                <select name='director' value="<?php echo $director?>">
                     <?php echo $optionsDirector; ?>
                 </select>
             </div>
@@ -222,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class='form-btn'>
                 <button type="button" onclick="redirectToFilmManagement()" class='btn-cancel'>Hủy</button>
-                <button type="submit" class='btn-add'>Tạo phim</button>
+                <button type="submit" class='btn-add'>Sửa phim</button>
             </div>
         </form>
     </div>

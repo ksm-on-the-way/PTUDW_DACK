@@ -36,7 +36,7 @@ body {
     }
 }
 
-.img {
+.img-header {
     aspect-ratio: 1;
     object-fit: auto;
     object-position: center;
@@ -119,7 +119,7 @@ body {
 
 <body>
     <div class="header">
-        <img loading="lazy" srcset="./images/header-logo.png" class="img" />
+        <img loading="lazy" srcset="./images/header-logo.png" class="img-header" />
         <div class="header-right_container">
             <div class="header-navigation" onclick="redirectToHomePage()">Trang chủ</div>
             <div class="header-navigation" onclick="redirectToMyTicket()">Vé của tôi</div>

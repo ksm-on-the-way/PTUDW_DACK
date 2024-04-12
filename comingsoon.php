@@ -8,17 +8,8 @@ require_once("db_module.php");
 <?php
 echo '<html>
 <head>
-    <link rel="stylesheet" href="comingsoon.css">
     <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <script src="comingsoon.js">
-    // function showButtons() {
-    //     document.querySelector(".overlay").style.display = "flex";
-    // }
-    
-    // function hideButtons() {
-    //     document.querySelector(".overlay").style.display = "none";
-    // }
-    </script>
+
 </head>
 <body>
 <div class= "head">
@@ -29,11 +20,11 @@ echo '<html>
   <div class="comingsoon_items">';
 $link = NULL;
 taoKetNoi($link);
-$sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movie m 
+$sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
 LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
 LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
 LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
-WHERE release_date > CURDATE() AND m.is_deleted = '0'
+WHERE release_date > CURDATE()
 ORDER BY release_date ASC";
 $result=chayTruyVanTraVeDL($link, $sql);
 while($rows=mysqli_fetch_assoc($result)){
@@ -41,7 +32,7 @@ echo '
     <div class="column">
         <img
           loading="lazy"
-          srcset="'.$rows['movie_banner_src'].'"
+          srcset="'.$rows['image_url'].'"
           class="img"
         />
         <div class="content">
@@ -123,6 +114,7 @@ giaiPhongBoNho($link, $result);
       margin: auto; */
       display: grid;
       grid-template-columns: 45% 45%;
+      margin: auto;
     }
   }
   .column {
@@ -138,7 +130,7 @@ giaiPhongBoNho($link, $result);
     }
   }
   .img {
-    /* aspect-ratio: 0.71; */
+    aspect-ratio: 0.67;
     object-fit: auto;
     object-position: center;
     width: 100%;
@@ -165,7 +157,8 @@ giaiPhongBoNho($link, $result);
     font-weight: 600;
   }
   .comingsoon_info_container {
-    margin-bottom: 20px;
+    bottom: 20px;
+    position: absolute; 
   }
   .column:hover {
     transform: scale(1.05);
@@ -173,32 +166,10 @@ giaiPhongBoNho($link, $result);
   }
   .content {
     padding-left: 20px;
+    height: 190px;
+    position: relative;
+    
   }
-/* .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: auto;
-    height: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.overlay a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    background-color: #333;
-    margin: 0 10px;
-    border-radius: 5px;
-}
-
-.img_container:hover .overlay {
-    display: flex;
-} 
-*/
 
 </style>
 

@@ -280,7 +280,9 @@
                         case 'edit-news':
                             include 'edit-news.php';
                             break;     
-
+                        case 'report':
+                            include 'report.php';
+                            break;  
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

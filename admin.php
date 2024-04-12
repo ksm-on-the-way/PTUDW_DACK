@@ -161,61 +161,42 @@
 
     <div class="admin-management">
         <div class="sidebar">
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9143cf1fb8d6fc12272f9775cc3aeff77b9839d32e73495b6a9cf83d7d9c3b7?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                alt="Logo" class="logo" />
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9143cf1fb8d6fc12272f9775cc3aeff77b9839d32e73495b6a9cf83d7d9c3b7?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Logo" class="logo" />
             <h2 class="welcome-text">Welcome</h2>
             <div class="menu-container">
-                <div onclick="redirectTo('cinema-management')"
-                    class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'cinema-management' || $_GET['handle'] == 'create-cinema' || $_GET['handle'] == 'edit-cinema') || !isset($_GET['handle']) ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                <div onclick="redirectTo('cinema-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'cinema-management' || $_GET['handle'] == 'create-cinema' || $_GET['handle'] == 'edit-cinema') || !isset($_GET['handle']) ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                            alt="Quản lý rạp icon" class="menu-item-icon" />
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý rạp icon" class="menu-item-icon" />
                         <span class="menu-item-text">Quản lý rạp</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                        alt="" class="menu-item-arrow" />
-                </div>
-                <div onclick="redirectTo('film-management')"
-                    class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'film-management' || $_GET['handle'] == 'create-movie' || $_GET['handle'] == 'edit-movie') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-
-                    <div class="menu-item-content">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                            alt="Quản lý phim icon" class="menu-item-icon" />
-                        <span class="menu-item-text">Quản lý phim</span>
-                    </div>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                        alt="" class="menu-item-arrow" />
-                </div>
-<div onclick="redirectTo('schedule-show')"
-                    class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'schedule-show' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-
-                    <div onclick="redirectTo('show-management')"
-                        class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'show-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-
-                        <div class="menu-item-content">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="Lên lịch chiếu icon" class="menu-item-icon" />
-                            <span class="menu-item-text">Lên lịch chiếu</span>
-                        </div>
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                            alt="" class="menu-item-arrow" />
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
-                <div onclick="redirectTo('news-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management'||$_GET['handle'] == 'edit-news'||$_GET['handle'] == 'create-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                <div onclick="redirectTo('film-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'film-management' || $_GET['handle'] == 'create-movie' || $_GET['handle'] == 'edit-movie')  ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý phim icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Quản lý phim</span>
+                    </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('show-management')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'show-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Lên lịch chiếu icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Lên lịch chiếu</span>
+                    </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('news-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management'&&$_GET['handle'] == 'create-news'||$_GET['handle'] == 'edit-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý bài viết icon" class="menu-item-icon" />
                         <span class="menu-item-text">Quản lý bài viết</span>
                     </div>
-                    <div onclick="redirectTo('report')"
-                        class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'report' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                        <div class="menu-item-content">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="Xem báo cáo icon" class="menu-item-icon" />
-                            <span class="menu-item-text">Xem báo cáo</span>
-                        </div>
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                            alt="" class="menu-item-arrow" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('report')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'report' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Xem báo cáo icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Xem báo cáo</span>
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
@@ -238,8 +219,7 @@
         <div class="header-content">
             <div class="header">
                 <div class="user-info">
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/88a804c5520def4dcdc79f06fa68269a7051516cb28777adf3b68509506917d3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                        alt="User avatar" class="user-avatar" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/88a804c5520def4dcdc79f06fa68269a7051516cb28777adf3b68509506917d3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="User avatar" class="user-avatar" />
                     <button class="logout-button">Đăng xuất</button>
                 </div>
             </div>
@@ -278,9 +258,6 @@
                         case 'show-management':
                             include 'show-management.php';
                             break;
-                        case 'report':
-                            include 'report.php';
-                            break;
 
 
                         case 'food-management':
@@ -292,17 +269,17 @@
                         case 'edit-food':
                             include 'edit-food.php';
                             break;
-
-
+                            
+                            
                         case 'news-management':
                             include 'news-management.php';
-                            break;
+                            break;      
                         case 'create-news':
                             include 'create-news.php';
-                            break;
+                            break; 
                         case 'edit-news':
                             include 'edit-news.php';
-                            break;
+                            break;     
 
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ

@@ -41,7 +41,7 @@ echo '
     <div class="column">
         <img
           loading="lazy"
-          srcset="'.$rows['movie_banner_src'].'"
+          srcset="'.$rows['b.image_url'].'"
           class="img"
         />
         <div class="content">

@@ -10,153 +10,153 @@
 
 <body>
     <style>
-    * {
-        margin: 0px;
-    }
+        * {
+            margin: 0px;
+        }
 
-    .admin-management {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        width: 100%;
-        height: 100vh;
-    }
+        .admin-management {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            width: 100%;
+            height: 100vh;
+        }
 
-    .sidebar {
-        background-color: #1a2c50;
-        display: flex;
-        max-width: 241px;
-        flex-direction: column;
-        align-items: center;
-        font-size: 16px;
-        color: #fff;
-        font-weight: 400;
-        line-height: 150%;
-        padding: 25px 25px 80px;
-    }
+        .sidebar {
+            background-color: #1a2c50;
+            display: flex;
+            max-width: 241px;
+            flex-direction: column;
+            align-items: center;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 400;
+            line-height: 150%;
+            padding: 25px 25px 80px;
+        }
 
-    .logo {
-        aspect-ratio: 1.96;
-        object-fit: auto;
-        object-position: center;
-        width: 119px;
-        max-width: 100%;
-    }
+        .logo {
+            aspect-ratio: 1.96;
+            object-fit: auto;
+            object-position: center;
+            width: 119px;
+            max-width: 100%;
+        }
 
-    .welcome-text {
-        font-family: Roboto, sans-serif;
-        border-radius: 8px;
-        margin-top: 32px;
-        white-space: nowrap;
-        justify-content: center;
-    }
+        .welcome-text {
+            font-family: Roboto, sans-serif;
+            border-radius: 8px;
+            margin-top: 32px;
+            white-space: nowrap;
+            justify-content: center;
+        }
 
-    .menu-container {
-        align-self: stretch;
-        display: flex;
-        margin-top: 67px;
-        flex-direction: column;
-        row-gap: 16px;
-    }
+        .menu-container {
+            align-self: stretch;
+            display: flex;
+            margin-top: 67px;
+            flex-direction: column;
+            row-gap: 16px;
+        }
 
-    .menu-item {
-        justify-content: space-between;
-        border-radius: 4px;
-        display: flex;
-        gap: 20px;
-        cursor: pointer;
-        padding: 8px 16px;
-    }
+        .menu-item {
+            justify-content: space-between;
+            border-radius: 4px;
+            display: flex;
+            gap: 20px;
+            cursor: pointer;
+            padding: 8px 16px;
+        }
 
-    .menu-item-active {
-        background-color: #ffbe00;
-    }
+        .menu-item-active {
+            background-color: #ffbe00;
+        }
 
-    .menu-item-default {
-        background-color: #118eea;
-    }
+        .menu-item-default {
+            background-color: #118eea;
+        }
 
-    .menu-item-content {
-        display: flex;
-        gap: 16px;
-    }
+        .menu-item-content {
+            display: flex;
+            gap: 16px;
+        }
 
-    .menu-item-icon {
-        aspect-ratio: 1;
-        object-fit: auto;
-        object-position: center;
-        width: 16px;
-        margin: auto 0;
-    }
+        .menu-item-icon {
+            aspect-ratio: 1;
+            object-fit: auto;
+            object-position: center;
+            width: 16px;
+            margin: auto 0;
+        }
 
-    .menu-item-text {
-        font-family: Roboto, sans-serif;
-    }
+        .menu-item-text {
+            font-family: Roboto, sans-serif;
+        }
 
-    .menu-item-arrow {
-        aspect-ratio: 0.6;
-        object-fit: auto;
-        object-position: center;
-        width: 6px;
-        stroke-width: 2px;
-        stroke: #fff;
-        border-color: rgba(255, 255, 255, 1);
-        border-style: solid;
-        border-width: 2px;
-        margin: auto 0;
-    }
+        .menu-item-arrow {
+            aspect-ratio: 0.6;
+            object-fit: auto;
+            object-position: center;
+            width: 6px;
+            stroke-width: 2px;
+            stroke: #fff;
+            border-color: rgba(255, 255, 255, 1);
+            border-style: solid;
+            border-width: 2px;
+            margin: auto 0;
+        }
 
-    .menu-item-text-multiline {
-        line-height: 24px;
-    }
+        .menu-item-text-multiline {
+            line-height: 24px;
+        }
 
-    .header {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
-        padding: 8px 60px;
-        background-color: #fff;
-        border-bottom: 1px solid rgba(0, 0, 0, 1);
-        font-size: 18px;
-        font-weight: 500;
-        color: var(--Pastel-Yellow, #f2c46f);
-        text-align: center;
-    }
-
-    @media (max-width: 991px) {
         .header {
-            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 8px 60px;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 1);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--Pastel-Yellow, #f2c46f);
+            text-align: center;
         }
-    }
 
-    .user-info {
-        display: flex;
-        justify-content: flex-end;
-        gap: 20px;
-    }
+        @media (max-width: 991px) {
+            .header {
+                padding: 0 20px;
+            }
+        }
 
-    @media (max-width: 991px) {
         .user-info {
-            margin-right: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
         }
-    }
 
-    .user-avatar {
-        width: 32px;
-        aspect-ratio: 1;
-        object-fit: cover;
-        object-position: center;
-        margin: auto 0;
-    }
+        @media (max-width: 991px) {
+            .user-info {
+                margin-right: 10px;
+            }
+        }
 
-    .logout-button {
-        padding: 12px 8px;
-        font-family: Roboto, sans-serif;
-        background-color: var(--Royal-Blue, #1a2c50);
-        border-radius: 5.067px;
-        color: inherit;
-        cursor: pointer;
-    }
+        .user-avatar {
+            width: 32px;
+            aspect-ratio: 1;
+            object-fit: cover;
+            object-position: center;
+            margin: auto 0;
+        }
+
+        .logout-button {
+            padding: 12px 8px;
+            font-family: Roboto, sans-serif;
+            background-color: var(--Royal-Blue, #1a2c50);
+            border-radius: 5.067px;
+            color: inherit;
+            cursor: pointer;
+        }
     </style>
 
     <div class="admin-management">
@@ -207,9 +207,8 @@
  o                  /api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-
                 <div onclick="redirectTo('news-management')"
-                    class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management' && $_GET['handle'] == 'create-news' || $_GET['handle'] == 'edit-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management' || $_GET['handle'] == 'create-news' || $_GET['handle'] == 'edit-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
 
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
@@ -322,7 +321,6 @@
                         case 'report':
                             include 'report.php';
                             break;
-
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;
@@ -341,14 +339,14 @@
 
 </body>
 <script>
-function redirectTo(handle) {
-    window.location.href = 'admin.php?handle=' + handle;
-}
-const arr = [1, 2, 3, 4];
-arr.forEach((number) => {
-    return number * 2;
-})
-console.log(arr);
+    function redirectTo(handle) {
+        window.location.href = 'admin.php?handle=' + handle;
+    }
+    const arr = [1, 2, 3, 4];
+    arr.forEach((number) => {
+        return number * 2;
+    })
+    console.log(arr);
 </script>
 
 

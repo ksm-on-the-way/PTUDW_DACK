@@ -1,9 +1,19 @@
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .edit-cinema__container {
     width: 100%;
     max-width: 1075px;
     margin: 0 auto;
     margin-top: 30px;
+}
+
+.edit-cinema__container .edit-cinema__form {
+    margin-top: 20px;
 }
 
 .edit-cinema__container .edit-cinema__form form {
@@ -19,7 +29,6 @@
     gap: 5px;
 }
 
-
 .edit-cinema__container .edit-cinema__form .form-btn {
     display: flex;
     justify-content: center;
@@ -27,14 +36,13 @@
     gap: 20px;
 }
 
-
 .edit-cinema__container .edit-cinema__form .form-btn button {
     width: 150px;
     border-radius: 8px;
     padding: 10px 0px;
     border: 1px solid #1A2C50;
-    cursor: pointer
 }
+
 .edit-cinema__container .edit-cinema__form .form-btn .btn-add {
     background-color: #1A2C50;
     color: white;
@@ -89,6 +97,49 @@ td:not(:last-child) {
     width: 100%;
     padding: 8px;
 }
+
+.btn-add-room {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 10px 0;
+    background: none;
+    border: none;
+}
+
+.btn-add-room img {
+    width: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-container .save-button {
+    border: none;
+    background: none;
+    background-color: #1A2C50;
+    color: white;
+    border: solid 1px #1A2C50;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container .cancel-button {
+    border: none;
+    background: none;
+    background-color: white;
+    color: #1A2C50;
+    border: solid 1px black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 </style>
 <?php
 require_once './db_module.php';
@@ -141,9 +192,9 @@ if ($resultCity) {
 }
 
 $queryRoom = "SELECT r.room_id, r.room_name, rt.room_type_name 
-        FROM rooms r
-        INNER JOIN room_types rt ON r.room_type_id = rt.room_type_id
-        WHERE r.theater_id = $theaterId";
+FROM rooms r
+INNER JOIN room_types rt ON r.room_type_id = rt.room_type_id
+WHERE r.theater_id = $theaterId";
 $resultRoom = chayTruyVanTraVeDL($link, $queryRoom);
 $dataRoom = "";
 if (mysqli_num_rows($resultRoom) > 0) {
@@ -155,7 +206,7 @@ if (mysqli_num_rows($resultRoom) > 0) {
         $dataRoom .= "<td>" . $row["room_id"] . "</td>";
         $dataRoom .= "<td>" . $row["room_name"] . "</td>";
         $dataRoom .= "<td>" . $row["room_type_name"] . "</td>";
-        $dataRoom .= "<td><button onclick='editRoom(this)'>Sửa</button><button onclick='deleteRoom(this)'>Xóa</button></td>";
+        $dataRoom .= "<td class='button-container'><button class='save-button' onclick='editRoom(this)'>Sửa</button><button class='cancel-button' onclick='deleteRoom(this)'>Xóa</button></td>";
         $dataRoom .= "</tr>";
 
     }
@@ -211,7 +262,44 @@ if (isset($_POST['action']) && $_POST['action'] == 'saveRoomToTheater') {
     $resultRoomToTheater = chayTruyVanKhongTraVeDL($link, $queryRoomToTheater);
     if ($resultRoomToTheater) {
         echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
+    } else {
+        echo "Failed to update data";
+    }
+}
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $link = null;
+    taoKetNoi($link);
+    // Kiểm tra xem tên rạp và địa chỉ có được gửi không
+    if (isset($_POST['theater_name']) && isset($_POST['theater_address']) && $_POST['city_id']) {
+        $name = $_POST['theater_name'];
+        $address = $_POST['theater_address'];
+        $city = $_POST['city_id'];
+
+        // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
+        $querySaveTheater = "UPDATE theaters SET theater_name='$name', theater_address='$address', city_id='$city' WHERE theater_id = $theaterId";
+        $resultSaveTheater = chayTruyVanKhongTraVeDL($link, $querySaveTheater);
+
+        if ($resultSaveTheater) {
+            $_SESSION['success_message'] = "Sửa thông tin rạp thành công.";
+            echo "<script> window.location.href='admin.php?handle=cinema-management';</script>";
+        } else {
+            echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+
+        }
+    }
+
+}
+if (isset($_POST['action']) && $_POST['action'] == 'deleteRoom') {
+    // Lấy dữ liệu từ POST request
+    $room_id = $_POST['roomId'];
+
+    // Prepare and execute the SQL query
+    $queryDeleteRoom = "DELETE FROM rooms WHERE room_id = $room_id";
+    $resultDeleteRoom = chayTruyVanKhongTraVeDL($link, $queryDeleteRoom);
+    if ($resultDeleteRoom) {
+        echo "<script> window.location.href='admin.php?handle=edit-cinema&theaterId=$theaterId';</script>";
     } else {
         echo "Failed to update data";
     }
@@ -266,30 +354,29 @@ giaiPhongBoNho($link, $result);
         <h3>Thông tin rạp</h3>
     </div>
     <div class='edit-cinema__form'>
-
-        <form method="POST" action="admin.php?handle=edit-cinema&theaterId=<?php echo $theaterId; ?>"
-            id='form-edit-cinema'>
+        <form>
             <div class='form-input'>
                 <label>Tên rạp</label>
-                <input placeholder='Nhập tên rạp' name='theater_name' value='<?php echo $theaterName; ?>'>
+                <input placeholder='Nhập tên rạp' value='<?php echo $theaterName; ?>'>
             </div>
             <div class='form-input'>
                 <label>Địa chỉ</label>
-                <input placeholder='Nhập địa chỉ' name='theater_address' value='<?php echo $theaterAddress; ?>'>
+                <input placeholder='Nhập địa chỉ' value='<?php echo $theaterAddress; ?>'>
             </div>
             <div class='form-input'>
                 <label>Thành phố</label>
-                <select name='city_id'>
+                <select>
                     <?php echo $options; ?>
                 </select>
             </div>
+
         </form>
     </div>
     <div class='table-container'>
         <table id='table'>
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>ID phòng</th>
                     <th>Tên phòng</th>
                     <th>Loại phòng</th>
                     <th>Thao tác</th>
@@ -302,12 +389,15 @@ giaiPhongBoNho($link, $result);
 
     </div>
     <div>
-        <button onclick='addRoom()'>Thêm phòng</button>
-        <button id='saveRoomButton' style='display:none;' onclick='saveRoom()'>Lưu phòng</button>
-        <button id='cancelRoomButton' style='display:none;' onclick='cancelRoom()'>Hủy</button>
+        <button onclick='addRoom()' class='btn-add-room'>
+            <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/992/992651.png" class="img" />
+            <div class="">Thêm phòng</div>
+        </button>
 
-        <button id='saveRoomChange' style='display:none;'>Lưu phòng</button>
-        <button id='cancelRoomChange' style='display:none;'>Hủy</button>
+    </div>
+    <div class='form-btn'>
+        <button type="button" id='btn-cancel'>Hủy</button>
+        <button type="submit" id='btn-add'>Lưu thông tin</button>
     </div>
 
     <div class='form-btn'>
@@ -330,6 +420,8 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1)').innerHTML = '<input type="text" value="' + stt + '">';
     row.querySelector('td:nth-child(2)').innerHTML = '<input type="text" value="' + tenPhong + '">';
     row.querySelector('td:nth-child(3)').innerHTML = '<input type="text" value="' + loaiPhong + '">';
+    row.querySelector('td:nth-child(4)').innerHTML = `<div class='button-container'><button class='save-button' type='button' id='saveRoomChange' >Lưu</button>
+        <button type='button' class='cancel-button' id='cancelRoomChange' >Hủy</button></div>`
     // Disable nút Thêm phòng
 
     document.querySelector('button[onclick="addRoom()"]').disabled = true;
@@ -338,14 +430,8 @@ function editRoom(button) {
     row.querySelector('td:nth-child(1) input').disabled = true;
 
     //disable nut xoa va nut sua luon
-
-    var table = getTableBody();
-    var buttons = table.querySelectorAll('button');
-    buttons.forEach(button => button.disabled = true);
-
     row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = true;
     row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = true;
-
     // Hiển thị nút Lưu thay đổi
     document.getElementById('saveRoomChange').style.display = 'block';
     // Hiển thị nút Hủy thay đổi
@@ -365,22 +451,14 @@ function updateRowValues(row, stt, tenPhong, loaiPhong) {
     row.querySelector('td:nth-child(1)').innerText = stt;
     row.querySelector('td:nth-child(2)').innerText = tenPhong;
     row.querySelector('td:nth-child(3)').innerText = loaiPhong;
-    document.getElementById('cancelRoomChange').style.display = 'none';
-    document.getElementById('saveRoomChange').style.display = 'none';
+
 
     // enable nút Thêm phòng
     document.querySelector('button[onclick="addRoom()"]').disabled = false;
 
     //enable nut xoa va nut sua luon
-
-
-    var table = getTableBody();
-    var buttons = table.querySelectorAll('button');
-    buttons.forEach(button => button.disabled = false);
-
     row.querySelector('td:nth-child(4) button:nth-child(2)').disabled = false;
     row.querySelector('td:nth-child(4) button:nth-child(1)').disabled = false;
-
 }
 
 function cancelRoomChanges(row) {
@@ -390,6 +468,7 @@ function cancelRoomChanges(row) {
     var loaiPhong = row.querySelector('td:nth-child(3) input').value;
 
     updateRowValues(row, stt, tenPhong, loaiPhong);
+    addEditAndCancelButton(row)
 }
 
 function saveRoomChanges(row) {
@@ -399,6 +478,7 @@ function saveRoomChanges(row) {
     var loaiPhong = row.querySelector('td:nth-child(3) input').value;
 
     updateRowValues(row, stt, tenPhong, loaiPhong);
+
 
     // Prepare data to be sent
     var formData = new FormData();
@@ -415,32 +495,14 @@ function saveRoomChanges(row) {
     };
     xhttp.open("POST", window.location.href, true);
     xhttp.send(formData); // Send form data
+    addEditAndCancelButton(row)
 }
 
 function deleteRoom(button) {
     // Tìm phần tử tr (dòng) chứa nút Xóa được click
     var row = button.closest('tr');
-
-    var room_id = row.querySelector('td:nth-child(1)').innerText;
-    if (confirm("Bạn có chắc chắn muốn xóa phòng này không?")) {
-        var formData = new FormData();
-        formData.append('action', 'deleteRoom');
-        formData.append('roomId', room_id);
-
-        // AJAX request
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
-            }
-        };
-        xhttp.open("POST", window.location.href, true);
-        xhttp.send(formData); // Send form data
-
-        // Xóa dòng đó
-        row.remove();
-    }
-
+    // Xóa dòng đó
+    row.remove();
 }
 
 function getTableBody() {
@@ -449,18 +511,23 @@ function getTableBody() {
 
 function updateButtonState(disableAdd, hideSaveCancel) {
     document.querySelector('button[onclick="addRoom()"]').disabled = disableAdd;
-    document.getElementById('saveRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
-    document.getElementById('cancelRoomButton').style.display = hideSaveCancel ? 'none' : 'inline-block';
+
 }
 
 function addRoom() {
     var table = getTableBody();
     var newRow = table.insertRow(table.rows.length);
-    var cols = 3; // Số cột trong bảng
+    var cols = 4; // Số cột trong bảng
 
     for (var i = 0; i < cols; i++) {
         var cell = newRow.insertCell(i);
-        cell.innerHTML = `<input type='text' />`;
+        if (i == 0) {
+            cell.innerHTML = `<input type='text' disabled />`;
+
+        } else {
+            cell.innerHTML = `<input type='text' />`;
+        }
+
         var options = <?php echo json_encode($roomTypeOptions); ?>;
         if (i == 2) {
             cell.innerHTML = `
@@ -469,9 +536,22 @@ function addRoom() {
             </select>
             `
         }
+        if (i == 3) {
+            cell.innerHTML = `<div class='button-container'>
+            <button type='button' class='save-button' id='saveRoomButton'  onclick='saveRoom()'>Lưu</button>
+        <button type='button' class='cancel-button' id='cancelRoomButton'  onclick='cancelRoom()'>Hủy</button>
+            </div>`
+        }
 
     }
     updateButtonState(true, false);
+    //disable nut xoa va nut sua luon
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => {
+        if (button.id !== 'saveRoomButton' && button.id !== 'cancelRoomButton') {
+            button.disabled = true;
+        }
+    });
 
 }
 
@@ -479,6 +559,13 @@ function cancelRoom() {
     var table = getTableBody();
     table.deleteRow(table.rows.length - 1);
     updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
+
+
+    //enable nut xoa va nut sua luon
+
+
+    var buttons = table.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = false);
 }
 
 function saveRoom() {
@@ -533,13 +620,4 @@ function saveRoom() {
 
     updateButtonState(false, true); // enable addRoom button, hide save/cancel buttons
 }
-
-document.getElementById('btn-add').addEventListener('click', function() {
-    var form = document.getElementById('form-edit-cinema');
-    form.submit();
-});
-document.getElementById('btn-cancel').addEventListener('click', function() {
-    window.location.href = 'admin.php?handle=cinema-management';
-
-});
 </script>

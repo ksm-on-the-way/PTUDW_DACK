@@ -1,83 +1,90 @@
 <style>
-.cinema-admin__container {
-    width: 100%;
-    max-width: 1075px;
-    margin: 0 auto;
-    margin-top: 30px;
-}
+    .cinema-admin__container {
+        width: 100%;
+        max-width: 1075px;
+        margin: 0 auto;
+        margin-top: 30px;
+    }
 
-.cinema-admin__container .cinema-admin__heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+    .cinema-admin__container .cinema-admin__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-.cinema-admin__container .cinema-admin__heading .title {
-    color: #4F4F4F;
-}
+    .cinema-admin__container .cinema-admin__heading .title {
+        color: #4F4F4F;
+    }
 
-.cinema-admin__container .cinema-admin__heading .button button {
-    padding: 12px 14px;
-    background-color: #FFBE00;
-    color: white;
-    outline: none;
-    border-radius: 8px;
-    border: none;
-}
+    .cinema-admin__container .cinema-admin__heading .button button {
+        padding: 12px 14px;
+        background-color: #FFBE00;
+        color: white;
+        outline: none;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+    }
 
-.cinema-admin__container .table-container {
-    margin-top: 20px;
-}
+    .cinema-admin__container .table-container {
+        margin-top: 20px;
+    }
 
-.cinema-admin__container table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .cinema-admin__container table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-.cinema-admin__container th,
-td {
-    padding: 8px;
-    text-align: center;
+    .cinema-admin__container th,
+    td {
+        padding: 8px;
+        text-align: center;
 
-}
+    }
 
-.cinema-admin__container th:not(:last-child),
-td:not(:last-child) {
+    .cinema-admin__container th:not(:last-child),
+    td:not(:last-child) {
 
 
-    border-right: 1px solid #ddd;
-}
+        border-right: 1px solid #ddd;
+    }
 
-.cinema-admin__container th {
-    background-color: #1A2C50;
-    color: white;
-}
+    .cinema-admin__container th {
+        background-color: #1A2C50;
+        color: white;
+    }
 
-.cinema-admin__container tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    .cinema-admin__container tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-.cinema-admin__container table .edit-btn,
-.cinema-admin__container table .delete-btn {
-    padding: 6px 10px;
-    margin-right: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-    color: white;
-}
+    .cinema-admin__container .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-.cinema-admin__container table .edit-btn {
-    background-color: #1A2C50;
-    color: white;
-    border: solid 1px #1A2C50;
-}
+    .cinema-admin__container table .edit-btn,
+    .cinema-admin__container table #delete-btn {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+        color: white;
+    }
 
-.cinema-admin__container table .delete-btn {
-    background-color: white;
-    color: #1A2C50;
-    border: solid 1px black;
-}
+    .cinema-admin__container table .edit-btn {
+        background-color: #1A2C50;
+        color: white;
+        border: solid 1px #1A2C50;
+    }
+
+    .cinema-admin__container table #delete-btn {
+        background-color: white;
+        color: #1A2C50;
+        border: solid 1px black;
+    }
 </style>
 <?php
 
@@ -114,7 +121,7 @@ GROUP BY t.theater_id
 ORDER BY t.theater_id DESC
 LIMIT $startRow, $rowsPerPage";
 
-$queryCount = "SELECT COUNT(*) AS total FROM theaters";
+$queryCount = "SELECT COUNT(*) AS total FROM theaters WHERE is_deleted = '0'";
 $resultCount = chayTruyVanTraVeDL($link, $queryCount);
 $rowCount = mysqli_fetch_assoc($resultCount);
 $totalPages = ceil($rowCount['total'] / $rowsPerPage);
@@ -133,11 +140,11 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['theater_address'] . "</td>";
         $table_body .= "<td>" . $row['city_name'] . "</td>";
         $table_body .= "<td>" . $row['room_count'] . "</td>";
-        $table_body .= "<td>
+        $table_body .= "<td class='button-container'>
                         <button class='edit-btn' onclick='redirectToEditCinema(" . $row['theater_id'] . ")'>Sửa</button>
-                        <form method='post' action=''>
+                        <form method='post' action='' id='form-delete-theater'>
                         <input type='hidden' name='theater_id' value='" . $row['theater_id'] . "'>
-                        <button type='submit' class='delete-btn' >Xóa</button>
+                        <button type='button' onclick='handleClick()' id='delete-btn' >Xóa</button>
                     </form>
                        </td>";
         $table_body .= "</tr>";
@@ -196,13 +203,20 @@ giaiPhongBoNho($link, $result);
     </div>
 </div>
 <script>
-function redirectToCreateCinema() {
-    // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
-    window.location.href = 'admin.php?handle=create-cinema';
-}
+    function redirectToCreateCinema() {
+        // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
+        window.location.href = 'admin.php?handle=create-cinema';
+    }
 
-function redirectToEditCinema(theaterId) {
+    function redirectToEditCinema(theaterId) {
 
-    window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
-}
+        window.location.href = `admin.php?handle=edit-cinema&theaterId=${theaterId}`;
+    }
+
+    function handleClick() {
+        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+            // Nếu người dùng xác nhận muốn xóa
+            document.getElementById("form-delete-theater").submit(); // Gửi form
+        }
+    }
 </script>

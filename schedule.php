@@ -183,7 +183,7 @@
 
     .schedule-left .address-filter {
         max-width: 440px;
-        margin-top: 20px;
+
         position: relative;
 
     }
@@ -291,8 +291,10 @@
     @media (min-width: 768px) {
         .schedule-filter {
             margin-top: 20px;
+
             display: flex;
-            max-width: 644px;
+            align-items: center;
+            justify-content: space-around;
         }
 
     }
@@ -333,6 +335,7 @@
         top: 50%;
         transform: translateY(-50%);
         right: 10px;
+        cursor: pointer;
     }
 
     .schedule-filter .filter {
@@ -621,33 +624,34 @@
                 </div>
             </div>
             <div class="line"></div>
-            <div class="address-filter">
-                <div class='address-filter__container' onclick='toggleAddressFilter()'>
-                    <img loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/acf2f9407bd2f78d3b82c23f23d53b213acf81bddb064781db34e9422db81152?"
-                        class="location-icon" />
 
-                    <div class="location">HỒ CHÍ MINH</div>
-                    <img loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/e492189f017ec2bc07a5f804b6c1aa40297b9b478d5945b992f8d885176ea783?"
-                        class="arrow-down-icon" />
-                    <img loading="lazy"
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ac9b9726ebb0f6eb68e38f83ef0329e574536bc628c5ccf18a081b93b712b19a?"
-                        class="arrow-up-icon" />
-                </div>
-                <div class='address-item__container'>
-                    <?php echo $htmlCity; ?>
-                </div>
-            </div>
             <div class="schedule-filter">
+                <div class="address-filter">
+                    <div class='address-filter__container' onclick='toggleAddressFilter()'>
+                        <img loading="lazy"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/acf2f9407bd2f78d3b82c23f23d53b213acf81bddb064781db34e9422db81152?"
+                            class="location-icon" />
+
+                        <div class="location">HỒ CHÍ MINH</div>
+                        <img loading="lazy"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e492189f017ec2bc07a5f804b6c1aa40297b9b478d5945b992f8d885176ea783?"
+                            class="arrow-down-icon" />
+                        <img loading="lazy"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/ac9b9726ebb0f6eb68e38f83ef0329e574536bc628c5ccf18a081b93b712b19a?"
+                            class="arrow-up-icon" />
+                    </div>
+                    <div class='address-item__container'>
+                        <?php echo $htmlCity; ?>
+                    </div>
+                </div>
                 <div class='filter-input'>
-                    <input />
+                    <input id="inputValue" />
                     <img loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/9871662a97dcd33b7140a451d52b8a0b810d4e52b35d6f4e1d62332833a82584?"
-                        class="img-search" />
+                        class="img-search" id='searchImg' />
 
                 </div>
-                <div class="filter">
+                <!-- <div class="filter">
                     <div class="filter-item">
                         <div class="title">Studio</div>
                         <img loading="lazy"
@@ -666,7 +670,7 @@
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5b8b88bcb1a0dda55b3497dff662b635a5e53102cf9d7eaa1e22ad65242b4eb?"
                             class="icon" />
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <?php
@@ -953,6 +957,46 @@ function implementScriptSchedule() {
 function redirecToPickSeats() {
     // Chuyển hướng đến URL chứa tham số "handle=create-movie"
     window.location.href = 'seat.php';
+}
+// Lắng nghe sự kiện khi nhấn Enter trong input
+document.getElementById('inputValue').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        var inputValue = this.value;
+        sendData(inputValue);
+
+    }
+});
+
+// Lắng nghe sự kiện khi nhấp vào hình ảnh
+document.getElementById('searchImg').addEventListener('click', function() {
+    var inputValue = document.getElementById('inputValue').value;
+
+    sendData(inputValue);
+});
+
+
+function sendData(data) {
+    var formData = new FormData();
+    formData.append('action', 'getShowsByDateAndLocation');
+    formData.append('input_value', data);
+    formData.append('date', JSON.parse(localStorage.getItem('selectedSchedule')) || null);
+    var cityActive = document.querySelector('.address-item.active')
+    formData.append('city_id', cityActive != null ? cityActive.getAttribute('data-id') : 1);
+
+    // AJAX request
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(xhttp.responseText);
+            if (response) {
+                var scheduleContainer = document.querySelector('.schedule-picker__container');
+                scheduleContainer.innerHTML = response;
+                implementScriptSchedule();
+            }
+        }
+    };
+    xhttp.open("POST", "schedule-picker.php", true);
+    xhttp.send(formData); // Send form data
 }
 </script>
 

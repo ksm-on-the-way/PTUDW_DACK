@@ -15,18 +15,31 @@ if (isset($_POST['action']) && $_POST['action'] === 'getShowsByDateAndLocation')
     // Lấy dữ liệu từ POST request
     $date = $_POST['date'];
     $city_id = $_POST['city_id'];
-
+    $input_value = isset($_POST['input_value']) ? $_POST['input_value'] : '';
 
 
     // Prepare and execute the SQL query
-    $query = "SELECT theaters.theater_name, theaters.theater_address, room_types.room_type_name, room_types.room_price, shows.start_time
+    $query = '';
+    if ($input_value !== '') {
+        $query = "SELECT theaters.theater_name, theaters.theater_address, room_types.room_type_name, room_types.room_price, shows.start_time
         FROM shows
         LEFT JOIN rooms ON shows.room_id = rooms.room_id
         LEFT JOIN theaters ON rooms.theater_id = theaters.theater_id
-        LEFT JOIN room_types ON rooms.room_type_id = room_types.room_type_id
+        LEFT JOIN room_types ON rooms.room_type_id = room_types.room_type_id 
+        WHERE shows.date = '$date' AND theaters.city_id = $city_id  AND shows.movie_id = 25  AND theaters.theater_name LIKE '%$input_value%'
+        ORDER BY theaters.theater_name, room_types.room_type_name;
+        ";
+    } else {
+        $query = "SELECT theaters.theater_name, theaters.theater_address, room_types.room_type_name, room_types.room_price, shows.start_time
+        FROM shows
+        LEFT JOIN rooms ON shows.room_id = rooms.room_id
+        LEFT JOIN theaters ON rooms.theater_id = theaters.theater_id
+        LEFT JOIN room_types ON rooms.room_type_id = room_types.room_type_id 
         WHERE shows.date = '$date' AND theaters.city_id = $city_id  AND shows.movie_id = 25
         ORDER BY theaters.theater_name, room_types.room_type_name;
         ";
+    }
+
     $result = chayTruyVanTraVeDL($link, $query);
 
     if ($result->num_rows > 0) {

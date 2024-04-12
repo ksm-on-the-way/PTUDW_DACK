@@ -10,7 +10,7 @@
 
 <body>
     <div class="card-film">
-        <img loading="lazy" srcset="./images/image-1.png" class="img" />
+        <img loading="lazy" srcset="./images/image-1.png" class="img" onclick="redirecToFilmDetail(movieid)"/>
         <div class="title">Spider-Man: No Way Home</div>
         <!-- <div class="cinema-container">
             <div class="cinema-name">XXI</div>
@@ -18,6 +18,12 @@
             <div class="cinema-name">CINÉPOLIS</div>
         </div> -->
     </div>
+
+    <script>
+        function redirectToFilmDetail(movieid){
+            window.location.href = "./film-details.php?movieid="+id;
+        }
+    </script>
     <style>
     .card-film {
         display: flex;
@@ -26,7 +32,7 @@
         font-weight: 700;
         text-align: center;
     }
-
+    
     @media (min-width: 768px) {
         .card-film {
             padding: 0 20px;
@@ -40,7 +46,9 @@
         width: 100%;
         border-radius: 16px;
     }
-
+    .card-film .img:hover{
+        cursor: pointer;
+    }
     @media (max-width: 991px) {
         .card-film .img {
             max-width: 100%;

@@ -283,24 +283,6 @@ giaiPhongBoNho($link, $result);
                     <?php echo $options; ?>
                 </select>
             </div>
-
-        <form>
-            <div class='form-input'>
-                <label>Tên rạp</label>
-                <input placeholder='Nhập tên rạp' value='<?php echo $theaterName; ?>'>
-            </div>
-            <div class='form-input'>
-                <label>Địa chỉ</label>
-                <input placeholder='Nhập địa chỉ' value='<?php echo $theaterAddress; ?>'>
-            </div>
-            <div class='form-input'>
-                <label>Thành phố</label>
-                <select>
-                    <?php echo $options; ?>
-                </select>
-            </div>
-
-
         </form>
     </div>
     <div class='table-container'>

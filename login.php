@@ -181,8 +181,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             overflow-x: hidden;
             /* Ẩn thanh cuộn trái phải */
             display: flex;
+            flex-direction: column;
+            /* Sắp xếp các phần tử theo chiều dọc */
             align-items: center;
+            width: 100vw;
         }
+
+        @media screen and (max-width: 768px) {
+            .login-signup-container {
+                position: fixed !important;
+                /* hoặc position: absolute; tùy thuộc vào yêu cầu cụ thể */
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80% !important;
+                /* Thay đổi chiều rộng của form */
+            }
+
+            .login-signup-container h2 {
+                font-size: 16px !important;
+                white-space: nowrap !important;
+
+            }
+        }
+
 
         a {
             text-decoration: none;
@@ -207,8 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
             font-size: 20px;
             font-weight: 600;
-            padding: 0px 20px 10px;
-            text-align: left;
+            text-align: center;
         }
 
         .login-signup-container h2 span {

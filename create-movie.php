@@ -195,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class='form-input'>
                 <label>Độ dài phim</label>
-                <input type="text" name="duration" placeholder="Nhập độ dài phim">
+                <input type="number" name="duration" placeholder="Nhập độ dài phim">
             </div>
             <div class='form-input'>
                 <label>Nhãn phim</label>

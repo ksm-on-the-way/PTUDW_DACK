@@ -109,7 +109,7 @@ $query = "SELECT t.theater_id, t.theater_name, t.theater_address, c.city_name, C
 FROM theaters t
 LEFT JOIN cities c ON t.city_id = c.city_id
 LEFT JOIN rooms r ON t.theater_id = r.theater_id
-WHERE is_deleted = 0
+WHERE t.is_deleted = '0'
 GROUP BY t.theater_id
 ORDER BY t.theater_id DESC
 LIMIT $startRow, $rowsPerPage";
@@ -148,7 +148,7 @@ if (mysqli_num_rows($result) > 0) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $theater_id = $_POST['theater_id'];
-    $query = "UPDATE theaters SET is_deleted = 1 WHERE theater_id = '$theater_id'";
+    $query = "UPDATE theaters SET is_deleted = '1' WHERE theater_id = '$theater_id'";
     if (chayTruyVanKhongTraVeDL($link, $query)) {
         // Redirect hoặc cập nhật trang tại đây nếu cần thiết
         $_SESSION["success_message"] = "Xóa dữ liệu thành công";

@@ -9,19 +9,27 @@
 </head>
 
 <body>
-    <div class="card-film">
-        <img loading="lazy" srcset="./images/image-1.png" class="img" onclick="redirecToFilmDetail(movieid)"/>
-        <div class="title">Spider-Man: No Way Home</div>
-        <!-- <div class="cinema-container">
-            <div class="cinema-name">XXI</div>
-            <div class="cinema-name">CGV</div>
-            <div class="cinema-name">CINÉPOLIS</div>
-        </div> -->
-    </div>
+    <?php 
+    require_once './db_module.php';
+    $link = NULL;
+    taoKetNoi($link);
+    $queryfilm = "SELECT * FROM movies m
+                  LEFT JOIN movie_banner_images mb ON mb.movie_id = m.movie_id
+    ";
+    $resultfilm = chayTruyVanTraVeDL($link,$queryfilm);
+    while ($row = mysqli_fetch_assoc($resultfilm)){
+        echo "<div>";
+        echo "<div class='card-film'>";
+        echo "<img loading='lazy' srcset='".$row['image_url']."' class='img' onclick='redirectToFilmDetail(". $row['movie_id'] .")'/>";
+        echo "<div class='title'>".$row['movie_name']."</div>";
+        echo "</div>";
+        echo "</div>";
+    }
+    ?>
 
     <script>
         function redirectToFilmDetail(movieid){
-            window.location.href = "./film-details.php?movieid="+id;
+            window.location.href = "./film-details.php?movieid="+movieid;
         }
     </script>
     <style>

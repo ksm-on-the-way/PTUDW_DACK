@@ -67,31 +67,12 @@
 <body>
     <div class='carousel-film__container'>
         <div class="owl-carousel">
-            <div>
+
                 <?php
                 include "card-film.php";
                 ?>
-            </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
-            <div>
-                <?php
-                include "card-film.php";
-                ?>
-            </div>
+
+
 
         </div>
     </div>

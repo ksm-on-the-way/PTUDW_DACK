@@ -114,7 +114,7 @@ $startRow = ($currentPage - 1) * $rowsPerPage;
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
 $query = "SELECT m.movie_id, m.movie_name, m.release_date, m.end_date
 FROM movies m
-WHERE m.is_deleted = 0
+WHERE m.is_deleted = '0'
 ORDER BY m.movie_id DESC
 LIMIT $startRow, $rowsPerPage";
 
@@ -152,7 +152,7 @@ if (mysqli_num_rows($result) > 0) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $movie_id = $_POST['movie_id'];
-    $query = "UPDATE movies SET is_deleted = 1 WHERE movie_id = '$movie_id'";
+    $query = "UPDATE movies SET is_deleted = '1' WHERE movie_id = '$movie_id'";
     if (chayTruyVanKhongTraVeDL($link, $query)) {
         // Redirect hoặc cập nhật trang tại đây nếu cần thiết
         $_SESSION['success_message'] = "Xóa dữ liệu thành công!";

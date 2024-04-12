@@ -13,12 +13,6 @@
             <?php
             include "card-film.php";
             ?>
-            <?php
-            include "card-film.php";
-            ?>
-            <?php
-            include "card-film.php";
-            ?>
         </div>
     </div>
 </div>

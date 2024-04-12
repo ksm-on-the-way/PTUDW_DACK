@@ -186,12 +186,12 @@
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                         alt="" class="menu-item-arrow" />
                 </div>
-                <<<<<<< HEAD <div onclick="redirectTo('schedule-show')"
+<div onclick="redirectTo('schedule-show')"
                     class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'schedule-show' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                    =======
+
                     <div onclick="redirectTo('show-management')"
                         class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'show-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                        >>>>>>> 5955ae91d45ad0ea18a98fab1467e3b054f487c9
+
                         <div class="menu-item-content">
                             <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/1645334a3bbbbf67bb257cdcb36aa05979f059c53a4ab1b308f97b9a5bf22a2f?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                                 alt="Lên lịch chiếu icon" class="menu-item-icon" />
@@ -200,15 +200,12 @@
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="" class="menu-item-arrow" />
                     </div>
-                    <div onclick="redirectTo('news-management')"
-                        class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'news-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                        <div class="menu-item-content">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="Quản lý bài viết icon" class="menu-item-icon" />
-                            <span class="menu-item-text">Quản lý bài viết</span>
-                        </div>
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                            alt="" class="menu-item-arrow" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('news-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management'||$_GET['handle'] == 'edit-news'||$_GET['handle'] == 'create-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý bài viết icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Quản lý bài viết</span>
                     </div>
                     <div onclick="redirectTo('report')"
                         class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'report' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
@@ -220,40 +217,22 @@
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
                             alt="" class="menu-item-arrow" />
                     </div>
-                    <<<<<<< HEAD <div onclick="redirectTo('user-management')"
-                        class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'user-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                        =======
-                        <div onclick="redirectTo('food-management')"
-                            class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'food-management' || $_GET['handle'] == 'create-food' || $_GET['handle'] == 'edit-food') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                    alt="Quản lý đồ ăn icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Quản lý đồ ăn</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="" class="menu-item-arrow" />
-                        </div>
-                        <div onclick="redirectTo('user-management')"
-                            class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'user-management' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                            >>>>>>> 5955ae91d45ad0ea18a98fab1467e3b054f487c9
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5554df1a377d30b44bcb9845c044dec02c6b2e4ad78606478e85ba3c42b9003b?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                    alt="Quản lý người dùng icon" class="menu-item-icon" />
-                                <span class="menu-item-text menu-item-text-multiline">Quản lý<br>người dùng</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d1f56a0d8d14a70950ba5a4e02499174d6ad1f18e94daca56d2614da3104b471?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="" class="menu-item-arrow" />
-                        </div>
-                        <div onclick="redirectTo('change-password')"
-                            class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'change-password' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
-                            <div class="menu-item-content">
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0dc8fa5f91f7673ed8b55eafd9703ee88d057f3b87ba663edaedff37d2eb4483?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                    alt="Đổi mật khẩu icon" class="menu-item-icon" />
-                                <span class="menu-item-text">Đổi mật khẩu</span>
-                            </div>
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
-                                alt="" class="menu-item-arrow" />
-                        </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('food-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'food-management'||$_GET['handle'] == 'create-food'||$_GET['handle'] == 'edit-food') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5382fea06edfd087c3c420b810d431f2de371ca0b53e50740652e7ecad029b87?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý đồ ăn icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Quản lý đồ ăn</span>
+                    </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
+                <div onclick="redirectTo('change-password')" class="<?php echo isset($_GET['handle']) && $_GET['handle'] == 'change-password' ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                    <div class="menu-item-content">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0dc8fa5f91f7673ed8b55eafd9703ee88d057f3b87ba663edaedff37d2eb4483?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Đổi mật khẩu icon" class="menu-item-icon" />
+                        <span class="menu-item-text">Đổi mật khẩu</span>
+                    </div>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
+                </div>
             </div>
         </div>
         <div class="header-content">

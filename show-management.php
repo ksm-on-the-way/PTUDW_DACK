@@ -119,13 +119,13 @@ $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $startRow = ($currentPage - 1) * $rowsPerPage;
 
 // Truy vấn để lấy dữ liệu từ bảng cities với phân trang
-$query = "SELECT  s.show_id, s.start_time, m.movie_name, s.room_id, date FROM shows s
+$query = "SELECT  s.show_id, s.start_time, m.movie_name, s.room_id, s.date FROM shows s
 LEFT JOIN movies m ON m.movie_id = s.movie_id
-WHERE date > CURRENT_DATE()
+WHERE s.date > CURRENT_DATE()
 ORDER BY show_id DESC
 LIMIT $startRow, $rowsPerPage";
 
- $queryCount = "SELECT COUNT(*) AS total FROM shows WHERE date > CURRENT_DATE()";
+ $queryCount = "SELECT COUNT(*) AS total FROM shows s WHERE s.date > CURRENT_DATE()";
  $resultCount = chayTruyVanTraVeDL($link, $queryCount);
  $rowCount = mysqli_fetch_assoc($resultCount);
  $totalPages = ceil($rowCount['total'] / $rowsPerPage);

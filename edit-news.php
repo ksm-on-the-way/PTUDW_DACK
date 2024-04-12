@@ -7,7 +7,7 @@
         $sql = " SELECT n.news_id, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
         FROM news n
         LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
-        WHERE news_id = $news_id AND is_deleted = '0';
+        WHERE news_id = $news_id AND n.is_deleted = '0';
         ";
         
         $result = chayTruyVanTraVeDL($link,$sql);
@@ -91,7 +91,7 @@
                             });
                             function Cancel() {
 
-                                window.location.href = "admin.php?handle=dashboard"; //ve dashboard
+                                window.location.href = "admin.php?handle=news-management"; //ve dashboard
                             }
                             document.addEventListener("DOMContentLoaded", function() {
                                 const bannerInput = document.getElementById("bannerInput");

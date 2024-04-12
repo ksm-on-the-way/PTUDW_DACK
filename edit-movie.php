@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['success_message'] = "Sửa thông tin rạp thành công.";
             echo "<script> window.location.href='admin.php?handle=film-management';</script>";
         } else {
-            echo "<script>alert('$actor');</script>";
+            echo "<script>alert('$actorname');</script>";
 
         }
         giaiPhongBoNho($link, $resultQueryBanner);

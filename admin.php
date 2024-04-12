@@ -186,7 +186,7 @@
                     </div>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe59e38e42cc9b61ab116a5b94255cd0b3258cd5dca2a48335db948db00bd06a?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="menu-item-arrow" />
                 </div>
-                <div onclick="redirectTo('news-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management'&&$_GET['handle'] == 'create-news'||$_GET['handle'] == 'edit-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
+                <div onclick="redirectTo('news-management')" class="<?php echo isset($_GET['handle']) && ($_GET['handle'] == 'news-management'||$_GET['handle'] == 'create-news'||$_GET['handle'] == 'edit-news') ? 'menu-item menu-item-active' : 'menu-item menu-item-default'; ?>">
                     <div class="menu-item-content">
                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/edf3b61290f0d8d6c17ab64b262286faf7283c49410ded99a4d96000414d0c34?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Quản lý bài viết icon" class="menu-item-icon" />
                         <span class="menu-item-text">Quản lý bài viết</span>

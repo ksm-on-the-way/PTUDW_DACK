@@ -30,16 +30,6 @@
     font-family: Roboto, sans-serif;
 }
 
-.banner-admin__container .banner-admin__heading .button_primary {
-    padding: 12px 14px;
-    background-color: #FFBE00;
-    color: white;
-    outline: none;
-    border-radius: 8px;
-    border: none;
-    font-family: Roboto, sans-serif;
-}
-
 .banner-admin__container .banner-admin__heading .form_button {
     padding: 12px 14px;
     color: white;
@@ -129,9 +119,7 @@ if (mysqli_num_rows($result) > 0) {
     // Nếu không có dữ liệu, hiển thị dòng thông báo
     $table_body .= "<tr><td colspan='5'>Không có dữ liệu</td></tr>";
 }
-
 ?>
-
 
 <div class='show-admin__container'>
     <div class='show-admin__heading'>
@@ -139,21 +127,6 @@ if (mysqli_num_rows($result) > 0) {
             Lên lịch chiếu
         </div>
     </div>
-    <div class="show-admin__heading">
-    <!-- Import link -->
-        <div class="show-admin__heading">
-            <a href="javascript:void(0);" style="text-decoration: none;" class="button" onclick="formToggle('importFrm');"> Import</a>
-        </div>
-        <!-- CSV file upload form -->
-        <div class="show-admin__heading" id="importFrm" style="display: none;">
-        <form class ="form_button" action="" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
-            <input class="button_primary" type="submit"  name="importSubmit" value="Tải lên">
-            
-        </form>
-        </div>
-    </div>
-   
 
     <div class='table-container'>
         <table>

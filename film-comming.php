@@ -6,7 +6,7 @@
                 Chờ đón sự xuất hiện của bộ phim yêu thích của bạn tại TIX ID!
             </div>
         </div>
-        <div class="show-all">Xem tất cả</div>
+        <div class="show-all" onclick="redirectToComingsoon()">Xem tất cả</div>
     </div>
     <div class="comming-items__container">
         <div class="comming-items__row">
@@ -22,6 +22,12 @@
         </div>
     </div>
 </div>
+<script>
+    function redirectToComingsoon(){
+        window.location.href = "./comingsoon.php"
+    }
+</script>
+
 <style>
 .film-comming__container {
     display: flex;
@@ -74,7 +80,9 @@
     flex-basis: auto;
     font: 500 24px/133% Roboto, sans-serif;
 }
-
+.film-comming__container .heading .show-all:hover{
+    cursor: pointer;
+}
 @media (min-width: 768px) {
     .film-comming__container .heading .show-all {
 

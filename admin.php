@@ -275,9 +275,19 @@
                             break;
                         case 'edit-food':
                             include 'edit-food.php';
-                            break;  
+                            break;
                             
                             
+                        case 'news-management':
+                            include 'news-management.php';
+                            break;      
+                        case 'create-news':
+                            include 'create-news.php';
+                            break; 
+                        case 'edit-news':
+                            include 'edit-news.php';
+                            break;     
+
                         default:
                             include 'cinema-management.php'; // Trang mặc định khi không có tham số hoặc tham số không hợp lệ
                             break;

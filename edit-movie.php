@@ -50,7 +50,7 @@ require_once './db_module.php';
 // Kết nối đến cơ sở dữ liệu
 $link = null;
 taoKetNoi($link);
-$movieId = isset($_GET['movieId']) ? $_GET['movieId'] : null;
+$movieid = isset($_GET['movieid']) ? $_GET['movieid'] : null;
 
 $moviename = "";
 $actorname = "";
@@ -66,8 +66,8 @@ $optionsGenre = "";
 $optionsRate = "";
 $optionsDirector = "";
 
-if ($movieId) {
-    $query = "SELECT * FROM movies WHERE movie_id = '$movieId' ";
+if ($movieid) {
+    $query = "SELECT * FROM movies WHERE movie_id = '$movieid' ";
     $result = chayTruyVanTraVeDL($link, $query);
 
     // Kiểm tra xem có dữ liệu trả về không
@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
     $result_upload_trailer = uploadFileTo("trailer", $folderSaveFileUpload, $fileNameTrailer);
     // Kiểm tra xem tên rạp và địa chỉ có được gửi không
-    if (isset($_POST['movie_name']) && isset($_POST['actor-name']) && isset($_POST['genre'])&& isset($_POST['description'])&& isset($_POST['duration'])&& isset($_POST['rate'])&& isset($_POST['director'])&& isset($_POST['release-date'])&& isset($_POST['end-date'])) {
+    if (isset($_POST['movie-name']) && isset($_POST['actor-name']) && isset($_POST['genre'])&& isset($_POST['description'])&& isset($_POST['duration'])&& isset($_POST['rate'])&& isset($_POST['director'])&& isset($_POST['release-date'])&& isset($_POST['end-date'])) {
         $moviename = $_POST['movie-name'];
         $actorname = $_POST['actor-name'];
         $banner = $folderSaveFileUpload . $fileNameBanner;
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $endDate = $_POST['end-date'];
 
         // Thực hiện truy vấn để chèn dữ liệu vào cơ sở dữ liệu
-        $querySaveMovie = "UPDATE movies SET movie_name='$moviename', actor='$actorname', movie_description='$description', movie_duration = '$duration', release_date = '$releaseDate', end_date = '$endDate', trailer_url = '$trailer', movie_director_id = '$director', movie_genre_id = '$genre', movie_rate_id = '$rate' WHERE theater_id = $theaterId";
+        $querySaveMovie = "UPDATE movies SET movie_name='$moviename', actor='$actorname', movie_description='$description', movie_duration = '$duration', release_date = '$releaseDate', end_date = '$endDate', trailer_url = '$trailer', movie_director_id = '$director', movie_genre_id = '$genre', movie_rate_id = '$rate' WHERE movie_id = $movieid";
         $resultSaveMovie = chayTruyVanKhongTraVeDL($link, $querySaveMovie);
 
 
@@ -176,11 +176,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $queryBanner = "UPDATE movie_banner_images SET image_url = $banner WHERE movie_id = '$movieid'";
         }
         $resultQueryBanner = chayTruyVanKhongTraVeDL($link, $queryBanner);
-        if ($querySaveMovie && $resultQueryBanner) {
+        if ($resultSaveMovie && $resultQueryBanner) {
             $_SESSION['success_message'] = "Sửa thông tin rạp thành công.";
             echo "<script> window.location.href='admin.php?handle=film-management';</script>";
         } else {
-            echo "<script>alert('Đã có lỗi xảy ra.');</script>";
+            echo "<script>alert('$actor');</script>";
 
         }
         giaiPhongBoNho($link, $resultQueryBanner);
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <div class='edit-movie__container'>
     <div>
-        <h3>Tạo phim mới</h3>
+        <h3>Thông tin phim</h3>
     </div>
     <div class='edit-movie__form'>
         <form method="POST" action="admin.php?handle=edit-movie" enctype="multipart/form-data">
@@ -221,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class='form-input'>
                 <label>mô tả</label>
-                <textarea name="description" placeholder="Mô tả phim" cols="30" rows="10" value="<?php echo $description?>"></textarea>
+                <textarea id = "description" name="description" placeholder="Mô tả phim" cols="30" rows="10" value="<?php echo $description?>"></textarea>
             </div>
             <div class='form-input'>
                 <label>Độ dài phim</label>
@@ -262,4 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function redirectToFilmManagement() {
         window.location.href = 'admin.php?handle=film-management';
     }
+
+    document.getElementById("description").defaultValue = "<?php echo $description?>";
+
 </script>

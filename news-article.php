@@ -6,7 +6,7 @@
                 Những tin tức mới nhất về thế giới điện ảnh dành cho bạn!
             </div>
         </div>
-        <div class="show-all">Xem tất cả</div>
+        <div class="show-all" onclick = "redirectToNews()">Xem tất cả</div>
     </div>
     <div class="news-items__container">
         <div class="news-items__row">
@@ -37,6 +37,11 @@
         </div>
     </div>
 </div>
+<script>
+    function redirectToNews(){
+        window.location.href = "./news.php";
+    }
+</script>
 <style>
 .news-container {
     display: flex;
@@ -61,11 +66,6 @@
 
 }
 
-@media (min-width: 768px) {
-    .news-container .heading {
-        /* padding: 0 20px; */
-    }
-}
 
 @media (max-width: 991px) {
     .news-container .heading {
@@ -92,6 +92,10 @@
 
     flex-basis: auto;
     font: 500 24px/133% Roboto, sans-serif;
+}
+
+.news-container .heading .show-all:hover{
+    cursor: pointer;
 }
 
 @media (min-width: 768px) {

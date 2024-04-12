@@ -4,7 +4,7 @@ if(isset ($_GET["id"])) { //kiểm tra phương thức get
     $article_id = $_GET["id"];
     $link = null;
     taoKetNoi($link);
-    $sql = "SELECT * FROM news WHERE news_id =".$article_id;
+    $sql = "SELECT * FROM news WHERE news_id ='.$article_id.' AND is_deleted='0'";
     $result = chayTruyVanTraVeDL($link, $sql);
 if(mysqli_num_rows($result)!=0) { //kiểm tra có id hay không
     include_once "header.php";
@@ -37,7 +37,7 @@ echo //fetch dữ liệu từ db
   $sql = "SELECT n.*, news_categories.*
   FROM news n
   JOIN news_categories ON n.news_category_id = news_categories.news_category_id
-  WHERE n.news_id != $article_id 
+  WHERE n.news_id != $article_id AND n.is_deleted='0'
   ORDER BY n.news_date DESC
   "; //truy vấn các bài viết và sắp xếp dựa trên ngày đăng
   $result = chayTruyVanTraVeDL($link, $sql);;

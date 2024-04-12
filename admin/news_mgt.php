@@ -108,6 +108,7 @@ $startRow = ($currentPage - 1) * $rowsPerPage;
 $query = "SELECT n.news_id, n.news_title, n.news_date, c.news_category_name
 FROM news n
 LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
+WHERE n.is_deleted = '0'
 ORDER BY n.news_date DESC
 LIMIT $startRow, $rowsPerPage";
 
@@ -131,13 +132,26 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
         $table_body .= '<td>
                         <button class="edit-btn" onclick="redirectToEditNews('.$row['news_id'].')">Sửa</button>
-                        <button class="delete-btn" >Xóa</button>
+                        <form method="post" action="" id="form-delete-news">
+                            <input type="hidden" name="newsid" value="'. $row['news_id'] .'"> <--! hidden input cho nút xóa -->
+                            <button class="delete-btn" onclick="handleClick()">Xóa</button>
+                        </form>
                        </td>';
         $table_body .= "</tr>";
     }
 } else {
     // Nếu không có dữ liệu, hiển thị dòng thông báo
     $table_body .= "<tr><td colspan='5'>Không có dữ liệu</td></tr>";
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") { //kiểm tra phương thức post xóa dữ liệu
+    $news_id = $_POST['newsid'];
+    $dquery = "UPDATE news SET is_deleted = '1' WHERE news_id = '$news_id'";
+    if (chayTruyVanKhongTraVeDL($link, $dquery)) {
+        // Redirect hoặc cập nhật trang tại đây nếu cần thiết
+        echo "<script> window.location.href='admin.php?handle=news-management';</script>";
+    } else {
+        echo "Xóa dữ liệu thất bại: ";
+    }
 }
 // Giải phóng bộ nhớ sau khi sử dụng
 giaiPhongBoNho($link, $result);
@@ -184,6 +198,12 @@ function redirectToCreateNews() {
 function redirectToEditNews(id) {
 
     window.location.href = 'admin.php?handle=edit-news&id=id'+id;
+}
+function handleClick() { //hiển thị thông báo xác nhận xóa khi nhấn nút
+    if (confirm("Bạn có chắc chắn muốn xóa?")) {
+        // Nếu người dùng xác nhận muốn xóa
+        document.getElementById("form-delete-news").submit(); // Gửi form
+    }
 }
 
 </script>

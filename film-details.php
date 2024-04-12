@@ -10,7 +10,7 @@ if(isset ($_GET["id"])) {
     LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
     LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
     LEFT JOIN movie_directors d ON m.movie_director_id = d.movie_director_id
-    WHERE m.is_deleted = '0' and m.movie_id = ".$filmDetails_id;
+    WHERE  m.movie_id = ".$filmDetails_id;
     //ORDER BY m.movie_id ASC";
     $result=chayTruyVanTraVeDL($link, $sql);
 
@@ -29,7 +29,6 @@ echo
 <body>
 
 <div class="detail-container">
-  <div class="detail-head">Mô tả</div>
   <div class="detail-container-gen">
     <div class="detail-item">
       <div class="column-1">
@@ -67,7 +66,8 @@ echo
 
           <div class="btn">
           
-            <button class="btn-trailer"><a href ="'.$rows['trailer_url'].'" style="text-decoration: none;">XEM TRAILER</a></button>
+            <button class="btn-trailer">XEM TRAILER</button>
+            <div id="overlay"></div>
             <button class="btn-mua-ve" onclick="redirectToSchedule('.$rows['movie_id'].')">MUA VÉ</button>
             
           </div>
@@ -100,10 +100,9 @@ html {
     }
 .detail-container {
     display: flex;
-    margin-top: 28px;
     width: 100%;
+    margin-top: 28px;
     flex-direction: column;
-    padding: 0 px;
 }
 @media (max-width: 991px) {
     .detail-container {
@@ -114,7 +113,6 @@ html {
   .detail-head {
     color: var(--Shade-900, #333);
     font: 700 36px Roboto, sans-serif;
-    margin-left: 120px;
   }
   @media (max-width: 991px) {
     .detail-head {
@@ -124,8 +122,8 @@ html {
   }
   .detail-container-gen {
     align-self: center;
-    margin-top: 50px;
-    width: 100%;
+    margin-top: 50px auto;
+    width: 90%;
     max-width: 1256px;
   }
   @media (max-width: 991px) {
@@ -140,8 +138,8 @@ html {
   }
   @media (max-width: 991px) {
     .detail-item {
-    display: flex;
-      gap: 5px;
+      display: block;
+      gap: 0px;
     }
   }
   .column-1 {
@@ -153,7 +151,10 @@ html {
   }
   @media (max-width: 991px) {
     .column-1 {
-      width: 32%;
+      display: block;
+      margin: 0 auto;
+      width: 70%;
+      align-items: center;
     }
   }
   .img {
@@ -182,7 +183,7 @@ html {
   }
 @media (max-width: 991px) {
     .column-2 {
-      width: 72%;
+      width: 90%;
     }
 }
   .detail-content {
@@ -196,7 +197,7 @@ html {
     .detail-content {
       max-width: 100%;
       margin-top: 40px;
-      display: flex;
+      font-size: 18px;
     }
   }
   .title {
@@ -207,6 +208,7 @@ html {
   @media (max-width: 991px) {
     .title {
       max-width: 100%;
+      font-size: 20px;
     }
   }
   .content1 {
@@ -233,11 +235,12 @@ html {
   
   .btn {
     display: flex;
-    gap: 25px;
-    font-size: 20px;
+    gap: 70px;
+    font-size: 30px;
     text-align: center;
     line-height: 133%;
     margin: 100px 120px 0;
+    justify-content: space-between;
   }
   @media (max-width: 991px) {
     .btn {
@@ -254,8 +257,9 @@ html {
     border-width: 2px;
     color: var(--Royal-Blue, #1a2c50);
     flex-grow: 1;
-    width: 60px;
-    padding: 10px 10px;
+    padding: 15px 15px;
+    width: 15%;
+    font-size: 22px;
   }
   .btn-mua-ve {
     font-family: Roboto, sans-serif;
@@ -264,7 +268,66 @@ html {
     background-color: var(--Royal-Blue, #1a2c50);
     color: var(--Sunshine-Yellow, #ffbe00);
     flex-grow: 1;
-    width: 60px;
-    padding: 10px 10px;
+    padding: 15px 15px;
+    width: 15%;
+    font-size: 22px;
   }
+  #overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  z-index: 9999; /* Ensure it appears above other elements */
+  display: none; /* Initially hide the overlay */;
+  align-items: center; /* Center vertically */
+  justify-content: center; 
+}
+@media screen and (max-width: 768px) {
+  iframe {
+    width: 100%;
+    height: auto;
+  }
+}
 </style>
+<script>
+ 
+    
+  document.addEventListener("DOMContentLoaded", function() {
+  const btnTrailer = document.querySelector(".btn-trailer");
+  const overlay = document.getElementById("overlay"); //gán biến overlay cho id overlay
+
+  btnTrailer.addEventListener("click", function() {
+    const trailerUrl = "<?php echo $rows['trailer_url']; ?>";
+    const videoId = trailerUrl.split("v=")[1];  //trích xuất vid id
+    // Tạo các thuộc tính của iframe dựa trên URL video
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("src", `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("width", "711");
+    iframe.setAttribute("height", "400");
+    iframe.style.position = "absolute";
+    iframe.style.top = "50%";
+    iframe.style.left = "50%";
+    iframe.style.transform = "translate(-50%, -50%)";
+    // Gắn iframe cho id overlay
+    overlay.appendChild(iframe);
+
+    // Hiển thị overlay
+    overlay.style.display = "block";
+  });
+
+  // Đóng overlay khi click vào overlay
+  if (overlay) {
+    overlay.addEventListener("click", function(event) {
+      if (event.target === overlay) {
+        overlay.style.display = "none";
+        overlay.innerHTML = ""; // Xóa iframe khỏi overlay
+      }
+    });
+  }
+});
+
+</script>

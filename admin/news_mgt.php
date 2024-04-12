@@ -104,7 +104,7 @@ $rowsPerPage = 4;
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $startRow = ($currentPage - 1) * $rowsPerPage;
 
-// Truy vấn để lấy dữ liệu từ bảng cities với phân trang
+// Truy vấn để lấy dữ liệu từ bảng news với phân trang
 $query = "SELECT n.news_id, n.news_title, n.news_date, c.news_category_name
 FROM news n
 LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
@@ -141,10 +141,8 @@ if (mysqli_num_rows($result) > 0) {
 }
 // Giải phóng bộ nhớ sau khi sử dụng
 giaiPhongBoNho($link, $result);
-
-
 ?>
-
+<!-- Hiển thị các thành phần trang -->
 <div class='cinema-admin__container'>
     <div class='cinema-admin__heading'>
         <div class='title'>
@@ -167,7 +165,7 @@ giaiPhongBoNho($link, $result);
                 </tr>
             </thead>
             <tbody>
-                <?php echo $table_body; ?>
+                <?php echo $table_body; //Hiển thị bảng đã tạo trước đó?> 
             </tbody>
         </table>
         <div>
@@ -179,10 +177,10 @@ giaiPhongBoNho($link, $result);
 </div>
 <script>
 function redirectToCreateNews() {
-    // Chuyển hướng đến URL chứa tham số "handle=create-cinema"
+    // Chuyển hướng đến URL chứa tham số "handle=create-news"
     window.location.href = 'admin.php?handle=create-news';
 }
-
+    // Chuyển hướng đến URL chứa tham số "handle=edit-news với id được truyền"
 function redirectToEditNews(id) {
 
     window.location.href = 'admin.php?handle=edit-news&id=id'+id;

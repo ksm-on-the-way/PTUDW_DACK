@@ -1,16 +1,16 @@
 <?php
 require_once "db_module.php";
-if(isset ($_GET["id"])) {
+if(isset ($_GET["id"])) { //kiểm tra phương thức get
     $article_id = $_GET["id"];
     $link = null;
     taoKetNoi($link);
-    $sql = "SELECT * FROM news WHERE newsid =".$article_id;
+    $sql = "SELECT * FROM news WHERE news_id =".$article_id;
     $result = chayTruyVanTraVeDL($link, $sql);
-if(mysqli_num_rows($result)!=0) {
+if(mysqli_num_rows($result)!=0) { //kiểm tra có id hay không
     include_once "header.php";
     $rows=mysqli_fetch_assoc($result);
     giaiPhongBoNho($link, $result);
-echo
+echo //fetch dữ liệu từ db 
 '<!DOCTYPE html>
 <html>
 <head>
@@ -34,21 +34,20 @@ echo
   </div>';
   $link = null;
   taoKetNoi($link);
-  $sql = "SELECT news.*, news_categories.*
-  FROM news
-  JOIN news_categories ON news.news_category_id = news_categories.news_category_id
-  WHERE news.newsid != $article_id
-  ORDER BY news.news_date DESC
-  ";
-  $result = chayTruyVanTraVeDL($link, $sql);
-  // mysqli_num_rows($result);
+  $sql = "SELECT n.*, news_categories.*
+  FROM news n
+  JOIN news_categories ON n.news_category_id = news_categories.news_category_id
+  WHERE n.news_id != $article_id 
+  ORDER BY n.news_date DESC
+  "; //truy vấn các bài viết và sắp xếp dựa trên ngày đăng
+  $result = chayTruyVanTraVeDL($link, $sql);;
   echo '
   <div class="other_news">
   <div class="news_items">';
   for ($x=1; $x<=3;$x++) {
     $rows=mysqli_fetch_assoc($result);
     echo '
-    <div class="column" onclick="navigateToArticle('.$rows['newsid'].')">
+    <div class="column" onclick="navigateToArticle('.$rows['news_id'].')">
         <img
           loading="lazy"
           srcset="'.$rows['news_banner_src'].'"
@@ -65,13 +64,7 @@ echo
   };
   echo '<script>
         function navigateToArticle(articleId) {
-            // window.location.href = "news_article.php?id=" + articleId;
-            const column = document.querySelector(".column");
-            column.style.transition = "transform 0.5s ease-in-out";
-            column.style.transform = "scale(0.9)"; 
-            setTimeout(() => {
-              window.location.href = "news_article.php?id=" + articleId;
-            }, 50); 
+            window.location.href = "news_article.php?id=" + articleId;
         }
       </script>';
 echo '</div>
@@ -81,9 +74,9 @@ echo '</div>
 </html>';
 include_once "footer.php";
 }
-else { echo "Error 404";}
+else { echo "Không tìm thấy bài viết";}
 }
-else { echo "Error 404";}
+else { echo "Không tìm thấy bài viết";}
 ?>
 <style>
     html {

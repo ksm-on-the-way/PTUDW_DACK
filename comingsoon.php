@@ -19,17 +19,17 @@ echo '<html>
 <div class="comingsoon_film_container">
   <div class="comingsoon_items">';
 $link = NULL;
-taoKetNoi($link);
-$sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
+taoKetNoi($link); //thực hiện truy vấn
+$sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
 LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
 LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
 LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
-WHERE release_date > CURDATE()
+WHERE release_date > CURDATE() AND m.is_deleted = '0'
 ORDER BY release_date ASC";
 $result=chayTruyVanTraVeDL($link, $sql);
 while($rows=mysqli_fetch_assoc($result)){
 echo '
-    <div class="column">
+    <div class="column" onclick="redirectToFilmDetails('.$rows['movie_id'].')">
         <img
           loading="lazy"
           srcset="'.$rows['image_url'].'"
@@ -59,6 +59,12 @@ echo '</div>
 </html>';
 giaiPhongBoNho($link, $result);
 ?>
+<script>
+  function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
+
+window.location.href = "film-details.php?id=" + id;
+  }
+</script>
 <style>
     .head {
     display: flex;

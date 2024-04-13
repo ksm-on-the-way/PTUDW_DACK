@@ -1,4 +1,5 @@
 <?php
+
 require_once './config.php';
 function taoKetNoi(&$link)
 {
@@ -30,5 +31,6 @@ function giaiPhongBoNho($link, $result)
     }
 }
 
-?>
 
+
+?>

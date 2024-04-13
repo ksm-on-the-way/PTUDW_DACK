@@ -1,5 +1,5 @@
 <?php
-include_once("header.php");
+include_once ("header.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -423,39 +423,47 @@ include_once("header.php");
 
                 <div class="film-title-container">
                     <p class="film-title-label">Tiêu đề phim</p>
-                    <p class="film-title"><?php echo $_SESSION['film-title'] ?></p>
+                    <p class="film-title">
+
+                    </p>
                 </div>
 
                 <div class="divider"></div>
 
                 <div class="date-container">
                     <p class="date-label">Ngày</p>
-                    <p class="date"><?php echo $_SESSION['date'] ?></p>
+                    <p class="date">
+                    </p>
                 </div>
 
                 <div class="divider"></div>
 
                 <div class="class-hours-container">
                     <div class="class-container">
-                        <p class="class-label">Hạng vé</p>
-                        <p class="class"><?php echo $_SESSION['class'] ?></p>
+                        <p class="class-label">Loại vé</p>
+                        <p class="class">
+
+                        </p>
                     </div>
                     <div class="hours-container">
                         <p class="hours-label">Thời gian</p>
-                        <p class="hours"><?php echo $_SESSION['hours'] ?></p>
+                        <p class="hours">
+                        </p>
                     </div>
                 </div>
 
                 <div class="divider"></div>
 
                 <div class="ticket-container">
-                    <p class="ticket-label">Vé (3)</p>
-                    <p class="ticket"><?php echo $_SESSION['ticket'] ?></p>
+                    <p class="ticket-label">Ghế đã chọn</p>
+                    <p class="ticket">
+                    </p>
                 </div>
             </div>
 
             <div class="back-button">
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fa81bf27bdbcf81e4202ab55cff292aaf6de617f290bcea10f235477064da8e3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="Back icon" class="back-icon" />
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fa81bf27bdbcf81e4202ab55cff292aaf6de617f290bcea10f235477064da8e3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
+                    alt="Back icon" class="back-icon" />
                 <p class="back-text">Quay lại</p>
             </div>
         </div>
@@ -504,7 +512,8 @@ include_once("header.php");
                 </div>
 
                 <div class="dana-payment">
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ed129848d2cb5b1fed239fc00eb5ee9ebbef693b440002fe86edb88c63fca0c3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&" alt="" class="dana-logo" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ed129848d2cb5b1fed239fc00eb5ee9ebbef693b440002fe86edb88c63fca0c3?apiKey=a7b5919b608d4a8d87d14c0f93c1c4bc&"
+                        alt="" class="dana-logo" />
                     <div class="dana-label">DANA</div>
                 </div>
 
@@ -523,6 +532,26 @@ include_once("header.php");
 
     <!-- Popup -->
     <script>
+        var selectedShow = localStorage.getItem('selectedShow') ? JSON.parse(localStorage.getItem('selectedShow')) : undefined;
+        if (selectedShow != undefined) {
+            var title = document.querySelector('.film-title-container .film-title')
+            title.textContent = selectedShow?.theater_name
+            var date = document.querySelector('.date-container .date')
+            date.textContent = selectedShow?.order_date
+            var classE = document.querySelector('.class-container .class')
+            classE.textContent = selectedShow?.type_room_name
+            var hour = document.querySelector('.hours-container .hours')
+            hour.textContent = selectedShow?.show_time
+        }
+        var selectedSeats = localStorage.getItem('selectedSeats') ? JSON.parse(localStorage.getItem('selectedSeats')) : undefined;
+        var ticket = document.querySelector('.ticket-container .ticket')
+
+        if (selectedSeats != undefined) {
+            const seatsShow = selectedSeats.map((i) => {
+                return i.name
+            })
+            ticket.textContent = seatsShow
+        }
         // Open
         var backButtons = document.getElementsByClassName("back-button");
         var modalContainers = document.getElementsByClassName("modal-popup-container");
@@ -532,7 +561,7 @@ include_once("header.php");
                 modalContainer.classList.add('open');
             }
         }
-        for (var backButton of backButtons) {}
+        for (var backButton of backButtons) { }
         backButton.addEventListener("click", openBackDialog);
 
         // Cancel
@@ -574,7 +603,7 @@ include_once("header.php");
                 modalChoosePaymentContainer.classList.add('open');
             }
         }
-        for (var showAllPaymentMethodButton of showAllPaymentMethodButtons) {}
+        for (var showAllPaymentMethodButton of showAllPaymentMethodButtons) { }
         showAllPaymentMethodButton.addEventListener("click", openShowAllPaymentMethodDialog);
 
         // Close

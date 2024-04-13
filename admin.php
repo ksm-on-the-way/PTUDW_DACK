@@ -310,13 +310,13 @@
 
 
                         case 'news-management':
-                            include 'news-management.php';
+                            include 'news_mgt.php';
                             break;
                         case 'create-news':
-                            include 'create-news.php';
+                            include 'new_news.php';
                             break;
                         case 'edit-news':
-                            include 'edit-news.php';
+                            include 'edit_news.php';
                             break;
                         case 'report':
                             include 'report.php';

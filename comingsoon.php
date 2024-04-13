@@ -27,14 +27,14 @@ $link = NULL;
 taoKetNoi($link);
 $sql = '';
 if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
-  $sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
+  $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
   LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
   LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
   LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
   WHERE release_date > CURDATE() AND m.is_deleted = '0'
   ORDER BY release_date ASC";
 } else {
-  $sql = "SELECT m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
+  $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
   LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
   LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
   LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
@@ -45,7 +45,7 @@ if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
 $result = chayTruyVanTraVeDL($link, $sql);
 while ($rows = mysqli_fetch_assoc($result)) {
   echo '
-    <div class="column">
+    <div onclick="redirectToFilmDetails(' . $rows['movie_id'] . ')" class="column">
         <img
           loading="lazy"
           srcset="' . $rows['image_url'] . '"
@@ -69,8 +69,11 @@ while ($rows = mysqli_fetch_assoc($result)) {
   ';
 }
 echo '</div>
-</div>
+</div>';
 
+include_once "footer.php";
+
+echo '
 </body>
 </html>';
 giaiPhongBoNho($link, $result);
@@ -78,7 +81,7 @@ giaiPhongBoNho($link, $result);
 <script>
   function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
 
-    window.location.href = "film-details.php?id=" + id;
+    window.location.href = "film-details.php?movieid=" + id;
   }
 </script>
 <style>

@@ -670,6 +670,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 // Lấy id và tên của ghế
                 var seatId = this.getAttribute('data-id');
                 var seatName = this.innerText; // hoặc this.textContent;
+                var seatPrice = this.getAttribute('data-price');
 
 
                 // Toggle class 'choosing' để thể hiện ghế đã chọn hay chưa
@@ -681,7 +682,8 @@ if (session_status() == PHP_SESSION_NONE) {
                 // Tạo một object chứa thông tin về ghế
                 var seatInfo = {
                     id: seatId,
-                    name: seatName
+                    name: seatName,
+                    price: seatPrice,
                 };
 
                 // Nếu ghế được chọn, thêm vào mảng selectedSeats, ngược lại, loại bỏ khỏi mảng

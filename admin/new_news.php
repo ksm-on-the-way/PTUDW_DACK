@@ -2,7 +2,7 @@
 require_once "../db_module.php";
 $link = NULL;
 taoKetNoi($link);
-$q = "SELECT * FROM news_categories";
+$q = "SELECT * FROM news_categories"; //fetch tất cả các phân loại tin tức để ghép vào chuỗi $options
 $catelist = chayTruyVanTraVeDL($link,$q);
 $options ="";
 while ($cate = mysqli_fetch_assoc($catelist)) {
@@ -15,7 +15,7 @@ while ($cate = mysqli_fetch_assoc($catelist)) {
     <head>
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script> <!--trỏ đến địa chỉ thư viện Quill -->
     </head>
     <body>
             <div class = "content">
@@ -67,9 +67,9 @@ while ($cate = mysqli_fetch_assoc($catelist)) {
     </body>
 </html>
 <?php
-// Check if form is submitted
+// Kiểm tra phương thức post
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //lay file
+    //lấy file source
     function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
     {
         $filetemp = $_FILES["$uploadfile"]['tmp_name'];
@@ -80,20 +80,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $folderSaveFileUpload = "./uploadFile/";
     $fileNameBanner = '';
     $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
-    //fetch data
+    //gán dữ liệu form vào các biến
     $title = $_POST["title"];
     $content = $_POST["content"];
     $news_banner_src = $folderSaveFileUpload . $fileNameBanner;
     $news_category = $_POST["category"];
     $news_date = $_POST["date"];
-    //sql statement tranh sql injection
+    // Chuẩn bị câu lệnh SQL để thực thi với các tham số ?
     $sql = "INSERT INTO news (news_title, news_content, news_banner_src, news_category_id, news_date ) VALUES (?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
 
-    // Bind parameters to the prepared statement
+    // Hàm liên kết các tham số với truy vấn SQL và cho cơ sở dữ liệu biết các tham số là gì
     mysqli_stmt_bind_param($stmt, "sssss", $title, $content, $news_banner_src, $news_category, $news_date);
 
-    // Execute the statement
+    // Hàm liên kết các tham số với truy vấn SQL và cho cơ sở dữ liệu biết các tham số là gì
+    //Thực thi câu lệnh
     $insert_result= mysqli_stmt_execute($stmt);
     if ($insert_result) {
         $_SESSION['success_message'] = "Thêm bài viết thành công.";
@@ -101,14 +102,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "<script>alert('Đã có lỗi xảy ra.');</script>";
     }
-    // Close the statement
+    // Đóng câu lệnh
     mysqli_stmt_close($stmt);
-    // $result = chayTruyVanKhongTraVeDL($link,$sql);
     giaiPhongBoNho($link,$result);
 
 
 } else {
-    // Redirect to the form page if form is not submitted
 }
 ?>
 <style>

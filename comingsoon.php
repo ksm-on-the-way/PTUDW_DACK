@@ -9,17 +9,8 @@ require_once ("db_module.php");
 if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
   echo '<html>
 <head>
-    <link rel="stylesheet" href="comingsoon.css">
     <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <script src="comingsoon.js">
-    // function showButtons() {
-    //     document.querySelector(".overlay").style.display = "flex";
-    // }
-    
-    // function hideButtons() {
-    //     document.querySelector(".overlay").style.display = "none";
-    // }
-    </script>
+
 </head>
 <body>
 <div class= "head">
@@ -84,6 +75,12 @@ echo '</div>
 </html>';
 giaiPhongBoNho($link, $result);
 ?>
+<script>
+  function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
+
+    window.location.href = "film-details.php?id=" + id;
+  }
+</script>
 <style>
   .head {
     display: flex;
@@ -146,6 +143,7 @@ giaiPhongBoNho($link, $result);
       margin: auto; */
       display: grid;
       grid-template-columns: 45% 45%;
+      margin: auto;
     }
   }
 
@@ -164,7 +162,7 @@ giaiPhongBoNho($link, $result);
   }
 
   .img {
-    /* aspect-ratio: 0.71; */
+    aspect-ratio: 0.67;
     object-fit: auto;
     object-position: center;
     width: 100%;
@@ -196,7 +194,8 @@ giaiPhongBoNho($link, $result);
   }
 
   .comingsoon_info_container {
-    margin-bottom: 20px;
+    bottom: 20px;
+    position: absolute;
   }
 
   .column:hover {
@@ -206,6 +205,9 @@ giaiPhongBoNho($link, $result);
 
   .content {
     padding-left: 20px;
+    height: 190px;
+    position: relative;
+
   }
 
   /* .overlay {

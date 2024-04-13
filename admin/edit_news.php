@@ -1,46 +1,46 @@
 <?php
-    if(isset($_GET['id'])) {
+    if(isset($_GET['id'])) { //kiểm tra có phương thức get
         $news_id = $_GET['id'];
         require_once "../db_module.php";
         $link = NULL;
         taoKetNoi($link);
-        $sql = " SELECT n.newsid, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
+        $sql = " SELECT n.news_id, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
         FROM news n
         LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
-        WHERE newsid = $news_id AND is_deleted = '0';
+        WHERE news_id = $news_id AND is_deleted = '0';
         ";
-        
+        //query dữ liệu
         $result = chayTruyVanTraVeDL($link,$sql);
-        if (mysqli_num_rows($result) > 0) {
+        if (mysqli_num_rows($result) > 0) { //kiểm tra có id đó không
         $row = mysqli_fetch_assoc($result);
-        $gettitle = $row['news_title'];
+        $gettitle = $row['news_title']; //gán biến theo dữ liệu query
         $getcontent = $row['news_content'];
         $getbanner = $row['news_banner_src'];
         $getcategory = $row['news_category_name'];
         $getdate = $row['news_date'];
         $q = "SELECT * FROM news_categories";
-        $catelist = chayTruyVanTraVeDL($link,$q);
-        $options ="";
-        while ($cate = mysqli_fetch_assoc($catelist)) {
-        $selectedcate = chayTruyVanTraVeDL($link,$sql);
+        $catelist = chayTruyVanTraVeDL($link,$q); //truy vấn tất cả các phân loại tin tức
+        $options =""; //tạo biến option
+        while ($cate = mysqli_fetch_assoc($catelist)) { //tạo vòng lặp duyệt qua mỗi phân loại tin tức
+        $selectedcate = chayTruyVanTraVeDL($link,$sql); //truyền hàng chứa id vào biến selectedcate
         $selected = mysqli_fetch_assoc($selectedcate);
         $cate_id = $cate['news_category_id'];
         $cate_name = $cate['news_category_name'];
-        if ($selected['news_category_id'] == $cate_id) {
+        if ($selected['news_category_id'] == $cate_id) { //kiểm tra nếu phân loại tin tức cate bằng với phân loại của dòng dữ liệu chứa id
             $options .= "<option value='$cate_id' selected>$cate_name</option>";
-        }
+        } //nếu bằng thì ghép chuỗi tag option và phân loại đó trở thành lựa chọn mặc định vào biến option
         else $options .= "<option value='$cate_id'>$cate_name</option>";
-        }
+        } //nếu không bằng thì ghép chuỗi tag option
         echo '
         <html>
             <head>
                 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet">
                 <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
                 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>';
-                echo '<script>var getcontent = '.json_encode($getcontent).'; //encode bien thanh json object
-                var getbanner = '.json_encode($getbanner).';
+                echo '<script>var getcontent = '.json_encode($getcontent).';
+                var getbanner = '.json_encode($getbanner).'; //encode các biến thành json object
                 </script>';
-                
+                //fetch dữ liệu thành html
             echo '</head>
             <body>
                     <div class = "content">
@@ -52,7 +52,7 @@
                             <input type="date" name="date" required value = '.$getdate.'>
                             <label>Phân loại</label>
                             <select name="category" required>';
-                            echo $options;                
+                            echo $options;
                             echo '</select>
                             <label>Banner</label>
                             <img src='.$getbanner.'>
@@ -76,38 +76,6 @@
                             </div>
                         </form>
                         
-                        <script>          
-                            const quill = new Quill("#editor", {
-                            modules: {
-                                toolbar: "#toolbar"
-                            },
-                            theme: "snow"
-                            });
-                            document.querySelector(".ql-editor").innerHTML = getcontent;
-                            const editorContentInput = document.getElementById("content");
-                            document.getElementById("myForm").addEventListener("submit", function() {
-                                var htmlContent = document.querySelector(".ql-editor").innerHTML;
-                                editorContentInput.value = htmlContent;
-                            });
-                            function Cancel() {
-
-                                window.location.href = "admin.php?handle=dashboard"; //ve dashboard
-                            }
-                            document.addEventListener("DOMContentLoaded", function() {
-                                const bannerInput = document.getElementById("bannerInput");
-                                const filenameSpan = document.getElementById("filename");
-                        
-                                bannerInput.addEventListener("change", function(event) {
-                                    const files = event.target.files;
-                                    if (files.length > 0) {
-                                        filenameSpan.textContent = files[0].name;
-                                    } else {
-                                        filenameSpan.textContent = "getcontent"; // Revert to original content if no file selected
-                                    }
-                                });
-                            });
-                        
-                        </script>
                     </div>
             </body>
         </html>
@@ -119,7 +87,7 @@
 ?>
 <?php
 // Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") { //Kiểm tra phương thức post
     function uploadFileTo($uploadfile, $uploaddir, &$oldfilename)
     {
         $filetemp = $_FILES["$uploadfile"]['tmp_name'];
@@ -129,11 +97,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $folderSaveFileUpload = "./uploadFile/";
     $fileNameBanner = '';
     $result_upload_banner = uploadFileTo("banner", $folderSaveFileUpload, $fileNameBanner);
-    // Retrieve form data
+    // Gán các biến bằng dữ liệu form được fetch lên
     $newsid = $_POST["newsid"];
     $title = $_POST["title"];
     $content = $_POST["content"];
-    //check co update banner hay khong
+    //check có update banner hay không, nếu không thì biến news_banner_src bằng biến được fetch lên từ DB trước đó
     if ($result_upload_banner) {
         $news_banner_src = $folderSaveFileUpload.$fileNameBanner;
      } else $news_banner_src = $getbanner;
@@ -142,14 +110,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $link = NULL;
     taoKetNoi($link);
     
-    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category_id = ?, news_date = ? WHERE newsid = ?";
-    // // Prepare SQL statement to insert data into database
+    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category_id = ?, news_date = ? WHERE news_id = ?";
+    // Chuẩn bị câu lệnh SQL để thực thi với các tham số ?
     $stmt = mysqli_prepare($link, $sql);
-
-    // Bind parameters to the prepared statement
+    // Hàm liên kết các tham số với truy vấn SQL và cho cơ sở dữ liệu biết các tham số là gì
     mysqli_stmt_bind_param($stmt, "sssssi", $title, $content, $news_banner_src, $news_category, $news_date, $newsid);
 
-    // Execute the statement
+    //Thực thi câu lệnh
     $insert_result= mysqli_stmt_execute($stmt);
     if ($insert_result) {
         $_SESSION['success_message'] = "Sửa bài viết thành công.";
@@ -159,15 +126,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Đã có lỗi xảy ra.');</script>";
     }
 
-    // Close the statement
+    // Đóng câu lệnh
     mysqli_stmt_close($stmt);
     giaiPhongBoNho($link,$result);
 
 
 } else {
-    // Redirect to the form page if form is not submitted
+    
 }
 ?>
+<script>          
+    const quill = new Quill("#editor", { //tạo đối tượng QUill editor
+        modules: {
+            toolbar: "#toolbar"
+        },
+        theme: "snow"
+        });
+    document.querySelector(".ql-editor").innerHTML = getcontent; //fetch dữ liệu từ biến getcontent vào trong thành phần có id ql-editor
+    const editorContentInput = document.getElementById("content");
+    document.getElementById("myForm").addEventListener("submit", function() { //khi submit form, lấy dữ liệu từ trong id ql-editor đổ vào trường dữ liệu content ở dạng hidden
+        var htmlContent = document.querySelector(".ql-editor").innerHTML;
+        editorContentInput.value = htmlContent;
+    });
+    function Cancel() {
+
+        window.location.href = "admin.php?handle=dashboard"; //điều hướng về dashboard
+    }
+    document.addEventListener("DOMContentLoaded", function() { 
+        const bannerInput = document.getElementById("bannerInput");
+        const filenameSpan = document.getElementById("filename");
+                        
+        bannerInput.addEventListener("change", function(event) {
+            const files = event.target.files;
+            if (files.length > 0) { //Nếu có file được up lên thì thay tên file vào vị trí class filename
+                filenameSpan.textContent = files[0].name;
+            } else {
+                filenameSpan.textContent = "getcontent"; //Nếu không có file được up lên thì không đổi tên
+            }
+        });
+    });
+</script>
 <style>
     body {
     margin: 0px;
@@ -190,13 +188,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 #editor {
-    width: 100%; /* Set the desired width */
-    max-width: 100%; /* Limit the width to the viewport width */
-    height: 300px; /* Set the desired height */
-    overflow-y: auto; /* Add vertical scrollbar when content overflows */
-    border: 1px solid #ccc; /* Add border for visual clarity */
-    padding: 5px; /* Add padding for spacing */
-    margin: 0 auto; /* Center the container horizontally */
+    width: 100%;
+    max-width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 0 auto;
 }
 
 form {

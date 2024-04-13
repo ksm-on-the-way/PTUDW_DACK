@@ -4,10 +4,10 @@
         require_once "../db_module.php";
         $link = NULL;
         taoKetNoi($link);
-        $sql = " SELECT n.newsid, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
+        $sql = " SELECT n.news_id, n.news_title, n.news_date, c.news_category_name, n.news_content, n.news_banner_src, c.news_category_id
         FROM news n
         LEFT JOIN news_categories c ON n.news_category_id = c.news_category_id
-        WHERE newsid = $news_id AND is_deleted = '0';
+        WHERE news_id = $news_id AND is_deleted = '0';
         ";
         //query dữ liệu
         $result = chayTruyVanTraVeDL($link,$sql);
@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Kiểm tra phương thức post
     $link = NULL;
     taoKetNoi($link);
     
-    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category_id = ?, news_date = ? WHERE newsid = ?";
+    $sql = "UPDATE news SET news_title = ?, news_content = ?, news_banner_src = ?, news_category_id = ?, news_date = ? WHERE news_id = ?";
     // Chuẩn bị câu lệnh SQL để thực thi với các tham số ?
     $stmt = mysqli_prepare($link, $sql);
     // Hàm liên kết các tham số với truy vấn SQL và cho cơ sở dữ liệu biết các tham số là gì

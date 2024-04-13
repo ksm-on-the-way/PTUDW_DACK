@@ -4,7 +4,7 @@ if(isset ($_GET["id"])) { //kiểm tra phương thức get
     $article_id = $_GET["id"];
     $link = null;
     taoKetNoi($link);
-    $sql = "SELECT * FROM news WHERE news_id ='.$article_id.' AND is_deleted='0'";
+    $sql = "SELECT * FROM news WHERE news_id = $article_id AND is_deleted='0'";
     $result = chayTruyVanTraVeDL($link, $sql);
 if(mysqli_num_rows($result)!=0) { //kiểm tra có id hay không
     include_once "header.php";
@@ -128,8 +128,8 @@ else { echo "Không tìm thấy bài viết";}
     }
   }
   .news_img {
-    aspect-ratio: 1.92;
-    object-fit: auto;
+    aspect-ratio: 1.75;
+    object-fit: contain;
     object-position: center;
     width: 100%;
     margin-top: 88px;

@@ -8,18 +8,16 @@
         </div>
         <div class="show-all" onclick="redirectToComingsoon()">Xem tất cả</div>
     </div>
-    <div class="comming-items__container">
-        <div class="comming-items__row">
-            <?php
-            include "card-film.php";
-            ?>
-        </div>
-    </div>
+
+    <?php
+    include "comingsoon.php";
+    ?>
+
 </div>
 <script>
-    function redirectToComingsoon(){
-        window.location.href = "./comingsoon.php"
-    }
+function redirectToComingsoon() {
+    window.location.href = "./comingsoon.php"
+}
 </script>
 
 <style>
@@ -74,9 +72,11 @@
     flex-basis: auto;
     font: 500 24px/133% Roboto, sans-serif;
 }
-.film-comming__container .heading .show-all:hover{
+
+.film-comming__container .heading .show-all:hover {
     cursor: pointer;
 }
+
 @media (min-width: 768px) {
     .film-comming__container .heading .show-all {
 

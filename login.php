@@ -1,6 +1,13 @@
 <?php
+session_start();
+
 require_once './db_module.php';
 
+if (isset($_SESSION["fullname"])) {
+    echo '<script>
+    location.href="./homepage.php"
+    </script>';
+}
 // Hàm check tài khoản, mật khẩu có trùng trong DB hay không
 function authenticateUser($username, $password)
 {
@@ -124,8 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Thực hiện kiểm tra đăng nhập bằng hàm authenticateUser
         if (authenticateUser($username, $password)) {
             // Nếu đăng nhập thành công, lấy thông tin người dùng từ DB bằng hàm dưới  
-            session_start();
             $userInfo = getUserInfoFromDatabase($username);
+            $_SESSION["isLogin"] = true;
             // Lưu thông tin người dùng vào session
             $_SESSION['email'] = $userInfo['email'];
             $_SESSION['phone'] = $userInfo['phone'];
@@ -146,8 +153,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             } else {
                 // Người dùng không có quyền admin, có thể chuyển hướng đến một trang thông báo hoặc trang khác
-                header("Location: ./homepage.php");
-                exit;
+                echo '<script>
+                if (!localStorage.getItem("loginToBuyTicket")) {
+                    // Nếu không có, chuyển hướng người dùng về trang homepage.php
+                    window.location.href = "homepage.php"
+                } else {
+                    
+                    window.location.href = "schedule.php?id=" + JSON.parse(localStorage.getItem("loginToBuyTicket"));
+                    localStorage.removeItem("loginToBuyTicket");
+                }
+                
+                </script>';
+
             }
         } else {
             // Đăng nhập thất bại, hiển thị thông báo lỗi
@@ -169,146 +186,146 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <style>
-        body {
-            font-family: "Roboto", sans-serif;
-            margin: 30px 0 0;
-            /* Đặt margin-top cho trang */
-            padding: 0;
-            /* Xóa padding mặc định của trang */
-            background-image: url("./images/pic2.jfif");
-            background-size: contain;
-            background-position: center;
-            overflow-x: hidden;
-            /* Ẩn thanh cuộn trái phải */
-            display: flex;
-            flex-direction: column;
-            /* Sắp xếp các phần tử theo chiều dọc */
-            align-items: center;
-            width: 100vw;
-        }
+    body {
+        font-family: "Roboto", sans-serif;
+        margin: 30px 0 0;
+        /* Đặt margin-top cho trang */
+        padding: 0;
+        /* Xóa padding mặc định của trang */
+        background-image: url("./images/pic2.jfif");
+        background-size: contain;
+        background-position: center;
+        overflow-x: hidden;
+        /* Ẩn thanh cuộn trái phải */
+        display: flex;
+        flex-direction: column;
+        /* Sắp xếp các phần tử theo chiều dọc */
+        align-items: center;
+        width: 100vw;
+    }
 
-        @media screen and (max-width: 768px) {
-            .login-signup-container {
-                position: fixed !important;
-                /* hoặc position: absolute; tùy thuộc vào yêu cầu cụ thể */
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 80% !important;
-                /* Thay đổi chiều rộng của form */
-            }
-
-            .login-signup-container h2 {
-                font-size: 16px !important;
-                white-space: nowrap !important;
-
-            }
-        }
-
-
-        a {
-            text-decoration: none;
-        }
-
+    @media screen and (max-width: 768px) {
         .login-signup-container {
-            margin-top: 10px;
-            margin-right: 100px;
-            margin-left: auto;
-            /* Đảm bảo rằng phần tử được căn bên phải */
-            width: 420px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            height: 440px;
+            position: fixed !important;
+            /* hoặc position: absolute; tùy thuộc vào yêu cầu cụ thể */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80% !important;
+            /* Thay đổi chiều rộng của form */
         }
 
         .login-signup-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            /* Thêm khoảng cách dưới tiêu đề */
-            color: #fff;
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
+            font-size: 16px !important;
+            white-space: nowrap !important;
+
         }
-
-        .login-signup-container h2 span {
-            color: #ddd;
-            cursor: pointer;
-            margin: 0 20px;
-            padding: 20px 15px 8px;
-            text-transform: uppercase;
-        }
-
-        .login-signup-container h2 span.active {
-            border-bottom: 3px solid rgba(0, 0, 0, 0.212);
-            color: black;
-        }
+    }
 
 
-        .login-signup-container h2 span.inactive a {
-            color: rgba(0, 0, 0, 0.267);
-        }
+    a {
+        text-decoration: none;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .login-signup-container {
+        margin-top: 10px;
+        margin-right: 100px;
+        margin-left: auto;
+        /* Đảm bảo rằng phần tử được căn bên phải */
+        width: 420px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        height: 440px;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    .login-signup-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        /* Thêm khoảng cách dưới tiêu đề */
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
 
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .login-signup-container h2 span {
+        color: #ddd;
+        cursor: pointer;
+        margin: 0 20px;
+        padding: 20px 15px 8px;
+        text-transform: uppercase;
+    }
 
-        .form-group button {
-
-            width: 100%;
-            padding: 10px;
-            border: none;
-            background-color: #1A2C50;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-
-        label {
-            font-size: 14px;
-            /* Điều chỉnh kích thước font cho các nhãn */
-        }
-
-        .forgot-password {
-            /* text-align: left; */
-            font-size: 14px;
-            color: #555;
-        }
-
-        .error-message {
-            color: red;
-            /* Đặt màu chữ là đỏ */
-            font-style: italic;
-            /* In nghiêng */
-            margin-top: 10px;
-            /* Khoảng cách với các phần tử khác */
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
+    .login-signup-container h2 span.active {
+        border-bottom: 3px solid rgba(0, 0, 0, 0.212);
+        color: black;
+    }
 
 
-        .error-input {
-            border: 1px solid red !important;
-            /* Đặt màu đỏ cho viền của input */
-        }
+    .login-signup-container h2 span.inactive a {
+        color: rgba(0, 0, 0, 0.267);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .form-group button {
+
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #1A2C50;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .form-group button:hover {
+        background-color: #0056b3;
+    }
+
+    label {
+        font-size: 14px;
+        /* Điều chỉnh kích thước font cho các nhãn */
+    }
+
+    .forgot-password {
+        /* text-align: left; */
+        font-size: 14px;
+        color: #555;
+    }
+
+    .error-message {
+        color: red;
+        /* Đặt màu chữ là đỏ */
+        font-style: italic;
+        /* In nghiêng */
+        margin-top: 10px;
+        /* Khoảng cách với các phần tử khác */
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+
+
+    .error-input {
+        border: 1px solid red !important;
+        /* Đặt màu đỏ cho viền của input */
+    }
     </style>
     <div class="login-signup-container">
         <!-- Heaader chuyển đổi giữa đăng nhập và đăng ký -->
@@ -324,7 +341,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Tên đăng nhập -->
             <div class="form-group">
                 <label for="username">Email hoặc số điện thoại:</label>
-                <input type="text" id="username" name="username" placeholder="Email hoặc SĐT" value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
+                <input type="text" id="username" name="username" placeholder="Email hoặc SĐT"
+                    value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
                 <div id="username-error" class="error-message"></div>
             </div>
 
@@ -336,8 +354,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <!-- Hiển thị lỗi (nếu có) -->
-            <?php if (!empty($error_message)) : ?>
-                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php if (!empty($error_message)): ?>
+            <div class="error-message">
+                <?php echo $error_message; ?>
+            </div>
             <?php endif; ?>
 
             <!-- Nút submit -->
@@ -354,39 +374,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        // Phần kiểm tra người dùng có nhập username or password chưa
-        document.addEventListener("DOMContentLoaded", function() {
-            var usernameInput = document.getElementById("username");
-            var passwordInput = document.getElementById("password");
-            var usernameError = document.getElementById("username-error");
-            var passwordError = document.getElementById("password-error");
+    // Phần kiểm tra người dùng có nhập username or password chưa
+    document.addEventListener("DOMContentLoaded", function() {
+        var usernameInput = document.getElementById("username");
+        var passwordInput = document.getElementById("password");
+        var usernameError = document.getElementById("username-error");
+        var passwordError = document.getElementById("password-error");
 
-            function checkUsername() {
-                if (usernameInput.value.trim() === "") {
-                    usernameError.textContent = "Hãy nhập email hoặc số điện thoại";
-                    usernameInput.classList.add("error-input"); // Thêm lớp error-input để biến ô input thành màu đỏ (hiệu ứng focus)
-                } else {
-                    usernameError.textContent = "";
-                    usernameInput.classList.remove("error-input"); // Xóa lớp error-input nếu không có lỗi
-                }
+        function checkUsername() {
+            if (usernameInput.value.trim() === "") {
+                usernameError.textContent = "Hãy nhập email hoặc số điện thoại";
+                usernameInput.classList.add(
+                    "error-input"); // Thêm lớp error-input để biến ô input thành màu đỏ (hiệu ứng focus)
+            } else {
+                usernameError.textContent = "";
+                usernameInput.classList.remove("error-input"); // Xóa lớp error-input nếu không có lỗi
             }
+        }
 
-            function checkPassword() {
-                if (passwordInput.value.trim() === "") {
-                    passwordError.textContent = "Hãy nhập mật khẩu";
-                    passwordInput.classList.add("error-input"); // Thêm lớp error-input để biến ô input thành màu đỏ (hiệu ứng focus)
-                } else {
-                    passwordError.textContent = "";
-                    passwordInput.classList.remove("error-input"); // Xóa lớp error-input nếu không có lỗi
-                }
+        function checkPassword() {
+            if (passwordInput.value.trim() === "") {
+                passwordError.textContent = "Hãy nhập mật khẩu";
+                passwordInput.classList.add(
+                    "error-input"); // Thêm lớp error-input để biến ô input thành màu đỏ (hiệu ứng focus)
+            } else {
+                passwordError.textContent = "";
+                passwordInput.classList.remove("error-input"); // Xóa lớp error-input nếu không có lỗi
             }
+        }
 
-            usernameInput.addEventListener("input", checkUsername);
-            usernameInput.addEventListener("blur", checkUsername);
+        usernameInput.addEventListener("input", checkUsername);
+        usernameInput.addEventListener("blur", checkUsername);
 
-            passwordInput.addEventListener("input", checkPassword);
-            passwordInput.addEventListener("blur", checkPassword);
-        });
+        passwordInput.addEventListener("input", checkPassword);
+        passwordInput.addEventListener("blur", checkPassword);
+    });
     </script>
 
 </body>

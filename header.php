@@ -116,6 +116,16 @@ body {
     }
 }
 </style>
+<?php
+if (isset($_POST['action']) && $_POST['action'] == 'logout') {
+    unset($_SESSION["email"]);
+    unset($_SESSION["phone"]);
+    unset($_SESSION["fullname"]);
+    unset($_SESSION["birth_date"]);
+    unset($_SESSION["gender"]);
+    unset($_SESSION["userid"]);
+}
+?>
 
 <body>
     <div class="header">
@@ -129,6 +139,9 @@ body {
                 class="header-noti" />
             <div class="avt-container">
                 <div class="avt">A</div>
+            </div>
+            <div onclick='signOut()'>
+                Đăng xuất
             </div>
         </div>
 
@@ -146,6 +159,25 @@ function redirectToNews() {
 
 function redirectToMyTicket() {
     window.location = './my-ticket.php';
+}
+
+function signOut() {
+    // Kiểm tra xem session có tồn tại không
+    <?php if (isset($_SESSION['fullname'])) { ?>
+    // Nếu có, thì gửi request đến server để unset session
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData();
+    formData.append('action', 'logout');
+    xhr.open("POST", window.location.href, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Nếu request thành công, redirect hoặc thực hiện các hành động khác
+            // Ví dụ: 
+            window.location.href = "login.php";
+        }
+    };
+    xhr.send(formData);
+    <?php } ?>
 }
 </script>
 

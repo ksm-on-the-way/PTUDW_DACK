@@ -59,11 +59,19 @@ include_once ("header.php");
 <body>
     <style>
     .confirm-payment-schedule {
-        display: grid;
-        grid-template-columns: 644px 1fr;
+
         column-gap: 100px;
-        width: 1200px;
         margin: 0 auto;
+        padding: 0 10px;
+    }
+
+    @media (min-width: 764px) {
+        .confirm-payment-schedule {
+            display: grid;
+            grid-template-columns: 644px 1fr;
+            width: 1200px;
+            padding: unset;
+        }
     }
 
     .confirm-payment-title {
@@ -195,6 +203,12 @@ include_once ("header.php");
         justify-content: space-between;
         font-family: Roboto, sans-serif;
         width: 50px;
+    }
+
+    @media (max-width: 991px) {
+        .back-button {
+            margin-bottom: 10px;
+        }
     }
 
     .back-button:hover {

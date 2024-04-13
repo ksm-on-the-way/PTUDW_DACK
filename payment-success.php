@@ -99,7 +99,7 @@
 </body>
 <script>
 function redirectToTransactionDetail() {
-    window.location.href = "transaction-detail.php"
+    window.location.href = "my-ticket.php"
 }
 </script>
 

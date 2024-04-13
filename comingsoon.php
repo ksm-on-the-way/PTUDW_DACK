@@ -57,6 +57,7 @@ echo '</div>
 
 </body>
 </html>';
+
 giaiPhongBoNho($link, $result);
 ?>
 <script>

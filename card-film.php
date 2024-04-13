@@ -13,7 +13,8 @@ while ($row = mysqli_fetch_assoc($resultfilm)) {
     echo "<div class='title'>" . $row['movie_name'] . "</div>";
     echo "</div>";
 }
-?>
+giaiPhongBoNho($link, $resultfilm)
+    ?>
 
 <script>
 function redirectToFilmDetail(movieid) {

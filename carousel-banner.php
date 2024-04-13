@@ -69,19 +69,26 @@
     right: -25px;
 }
 </style>
+<?php
+require_once './db_module.php';
+$link = NULL;
+taoKetNoi($link);
+$queryfilm = "SELECT m.banner_src FROM promo_banners m
+";
+$resultfilm = chayTruyVanTraVeDL($link, $queryfilm);
+$html = '';
+while ($row = mysqli_fetch_assoc($resultfilm)) {
+
+    $html .= '<div>
+   <img class="img" src="' . $row['banner_src'] . '" />
+   </div>';
+}
+?>
 
 <body>
     <div class='carousel-banner__container'>
         <div class="owl-carousel">
-            <div>
-                <img class='img' src='./images/banner-1.png' />
-            </div>
-            <div>
-                <img class='img' src='./images/banner-2.png' />
-            </div>
-            <div>
-                <img class='img' src='./images/banner-3.jpg' />
-            </div>
+            <?php echo $html; ?>
         </div>
     </div>
 </body>

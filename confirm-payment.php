@@ -760,7 +760,7 @@ include_once ("header.php");
                 window.location.href = 'payment-success.php'
                 localStorage.removeItem('selectedShow')
                 localStorage.removeItem('selectedSeats')
-                localStorage.removeItem('selectedFood?')
+                localStorage.removeItem('selectedFood')
             }
         };
         xhttp.open("POST", window.location.href, true);

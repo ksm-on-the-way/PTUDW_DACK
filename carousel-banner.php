@@ -36,7 +36,7 @@
 .carousel-banner__container img {
     width: 100%;
     height: 304px;
-    object-fit: fill;
+    object-fit: cover;
 }
 
 .carousel-banner__container .owl-carousel {

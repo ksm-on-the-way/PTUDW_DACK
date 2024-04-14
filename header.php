@@ -272,6 +272,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'logout') {
             <div class="header-navigation" onclick="redirectToHomePage()">Trang chủ</div>
             <div class="header-navigation" onclick="redirectToMyTicket()">Vé của tôi</div>
             <div class="header-navigation" onclick="redirectToNews()">Tin tức</div>
+            <?php if (isset($_SESSION['fullname'])): ?>
+            <div class="header-navigation" onclick='redirectToUpdateInfo()' href="update_info.php">Thông tin cá nhân
+            </div>
+            <div class="header-navigation" href="#" onclick="signOut()">Đăng xuất</div>
+            <?php else: ?>
+            <div class="header-navigation">
+                <a href="login.php">Đăng nhập</a>
+            </div>
+            <?php endif; ?>
+
         </div>
         <div class='header-right_mobile'>
             <img href="javascript:void(0);" class="icon" onclick="myFunction()"
@@ -298,6 +308,8 @@ function redirectToMyTicket() {
 function redirectToUpdateInfo() {
     window.location = './update_info.php';
 }
+
+
 
 // function toggleMenu() {
 //     var menu = document.getElementById("burgerMenu");

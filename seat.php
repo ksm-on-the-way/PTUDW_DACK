@@ -166,7 +166,7 @@ if (session_status() == PHP_SESSION_NONE) {
         align-items: center;
         justify-content: center;
         background: #fff;
-        width: 30px;
+        width: 32px;
         height: 30px;
         padding: 10px;
         border-radius: 6px;

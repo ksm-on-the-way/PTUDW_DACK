@@ -15,7 +15,7 @@ if (isset($_GET['search_query'])) {
 
     if ($result_search->num_rows > 0) {
         while ($row_search = $result_search->fetch_assoc()) {
-            echo "<article>";
+            echo "<article onclick = 'redirectToNewsDetail(" . $row_search['news_id'] . ")'>";
             echo "<img src='" . $row_search["news_banner_src"] . "'>";
             echo "<div class='wrapper'>";
             echo "<p class='category'>" . $row_search["news_category_name"] . "</p>";
@@ -30,3 +30,9 @@ if (isset($_GET['search_query'])) {
 }
 
 giaiPhongBoNho($link, $result);
+?>
+<script>
+function redirectToNewsDetail(id) {
+    window.location.href = "./news-detail.php?id=" + id;
+}
+</script>

@@ -15,6 +15,7 @@ if (isset($_GET['search_query'])) {
 
     if ($result_search->num_rows > 0) {
         while ($row_search = $result_search->fetch_assoc()) {
+            echo "<article onclick = 'redirectToNewsDetail(" . $row['news_id'] . ")'>";
             echo "<article>";
             echo "<img src='" . $row_search["news_banner_src"] . "'>";
             echo "<div class='wrapper'>";

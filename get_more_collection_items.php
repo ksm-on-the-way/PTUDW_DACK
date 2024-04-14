@@ -16,6 +16,7 @@ function fetchMoreNews($offset, $limit, $link)
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            echo "<article onclick = 'redirectToNewsDetail(" . $row['news_id'] . ")'>";
             echo "<article>";
             echo "<img src='" . $row["news_banner_src"] . "'>";
             echo "<div class='wrapper'>";

@@ -742,7 +742,7 @@ include_once ("header.php");
     var backButtons = document.getElementsByClassName("modal-back-btn");
 
     function goBackPage() {
-        window.location = "admin.php";
+        history.back();
     }
     for (var backButton of backButtons) {
         backButton.addEventListener("click", goBackPage);

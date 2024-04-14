@@ -1,6 +1,6 @@
 <?php
 define("HOST", "localhost");
-define("DB", "cinema2");
+define("DB", "cinema");
 define("USER", "root");
 define("PASSWORD", "");
 ?>

@@ -15,17 +15,18 @@ function fetchMoreNews($offset, $limit, $newsCategoryId, $link)
     $result = $link->query($sql);
 
     if ($result->num_rows > 0) {
+        echo '<div>';
         while ($row = $result->fetch_assoc()) {
             echo "<article onclick = 'redirectToNewsDetail(" . $row['news_id'] . ")'>";
-            echo "<article>";
             echo "<img src='" . $row["news_banner_src"] . "'>";
             echo "<div class='wrapper'>";
             echo "<p class='category'>" . $row["news_category_name"] . "</p>";
             echo "<h2 class='mt-2'>" . $row["news_title"] . "</h2>";
-            echo "<p class='body_shade600 line_clamp'>" . strip_tags($row["news_content"]) . "</p>";
+            echo "<span class='body_shade600 line_clamp'>" . strip_tags($row["news_content"]) . "</span>";
             echo "</div>";
             echo "</article>";
         }
+        echo '</div>';
     } else {
         echo "";
     }
@@ -52,3 +53,9 @@ if (isset($_GET['offset']) && isset($_GET['limit']) && isset($_GET['news_categor
     echo "Error: Offset, limit, and news category ID parameters are required.";
 }
 ?>
+
+<script>
+function redirectToNewsDetail(id) {
+    window.location.href = "./news-detail.php?id=" + id;
+}
+</script>

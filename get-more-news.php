@@ -21,7 +21,7 @@ function fetchMoreNews($offset, $limit, $newsCategoryId, $link)
             echo "<div class='wrapper'>";
             echo "<p class='category'>" . $row["news_category_name"] . "</p>";
             echo "<h2 class='mt-2'>" . $row["news_title"] . "</h2>";
-            echo "<p class='body_shade600 line_clamp'>" . $row["news_content"] . "</p>";
+            echo "<p class='body_shade600 line_clamp'>" . strip_tags($row["news_content"]) . "</p>";
             echo "</div>";
             echo "</article>";
         }

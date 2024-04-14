@@ -1,90 +1,96 @@
 <style>
-    .movie-admin__container {
-        width: 100%;
-        max-width: 1075px;
-        margin: 0 auto;
-        margin-top: 30px;
-    }
+.movie-admin__container {
+    width: 100%;
+    max-width: 1075px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
 
-    .movie-admin__container .movie-admin__heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+.movie-admin__container .movie-admin__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-    .movie-admin__container .movie-admin__heading .title {
-        color: #4F4F4F;
-    }
+.movie-admin__container .movie-admin__heading .title {
+    color: #4F4F4F;
+}
 
-    .movie-admin__container .movie-admin__heading .button button {
-        padding: 12px 14px;
-        background-color: #FFBE00;
-        color: white;
-        outline: none;
-        border-radius: 8px;
-        border: none;
-    }
+.movie-admin__container .movie-admin__heading .button button {
+    padding: 12px 14px;
+    background-color: #FFBE00;
+    color: white;
+    outline: none;
+    border-radius: 8px;
+    border: none;
+}
 
-    .movie-admin__container .movie-admin__heading .button button:hover {
-        cursor: pointer;
-    }
-    .button:hover{
-        cursor: pointer;
-    }
+.movie-admin__container .movie-admin__heading .button button:hover {
+    cursor: pointer;
+}
 
-    .movie-admin__container .table-container {
-        margin-top: 20px;
-    }
+.button:hover {
+    cursor: pointer;
+}
 
-    .movie-admin__container table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+.movie-admin__container .table-container {
+    margin-top: 20px;
+}
 
-    .movie-admin__container th,
-    td {
-        padding: 8px;
-        text-align: center;
+.movie-admin__container table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    }
+.movie-admin__container th,
+td {
+    padding: 8px;
+    text-align: center;
 
-    .movie-admin__container th:not(:last-child),
-    td:not(:last-child) {
+}
+
+.movie-admin__container th:not(:last-child),
+td:not(:last-child) {
 
 
-        border-right: 1px solid #ddd;
-    }
+    border-right: 1px solid #ddd;
+}
 
-    .movie-admin__container th {
-        background-color: #1A2C50;
-        color: white;
-    }
+.movie-admin__container th {
+    background-color: #1A2C50;
+    color: white;
+}
 
-    .movie-admin__container tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+.movie-admin__container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-    .movie-admin__container table .edit-btn,
-    .movie-admin__container table .delete-btn {
-        padding: 6px 10px;
-        margin-right: 5px;
-        border: none;
-        cursor: pointer;
-        border-radius: 3px;
-        color: white;
-    }
+.movie-admin__container table .edit-btn,
+.movie-admin__container table .delete-btn {
+    padding: 6px 10px;
+    margin-right: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    color: white;
+}
 
-    .movie-admin__container table .edit-btn {
-        background-color: #1A2C50;
-        color: white;
-        border: solid 1px #1A2C50;
-    }
+.movie-admin__container table .edit-btn {
+    background-color: #1A2C50;
+    color: white;
+    border: solid 1px #1A2C50;
+}
 
-    .movie-admin__container table .delete-btn {
-        background-color: white;
-        color: #1A2C50;
-        border: solid 1px black;
-    }
+.movie-admin__container table .delete-btn {
+    background-color: white;
+    color: #1A2C50;
+    border: solid 1px black;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
 </style>
 <?php
 
@@ -137,7 +143,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['movie_name'] . "</td>";
         $table_body .= "<td>" . $row['release_date'] . "</td>";
         $table_body .= "<td>" . $row['end_date'] . "</td>";
-        $table_body .= "<td>
+        $table_body .= "<td class='button-container'>
                         <button class='edit-btn' onclick='redirectToEditMovie(" . $row['movie_id'] . ")'>Sửa</button>
                         <form method='post' action=''>
                         <input type='hidden' name='movie_id' value='" . $row['movie_id'] . "'>
@@ -200,13 +206,13 @@ giaiPhongBoNho($link, $result);
     </div>
 </div>
 <script>
-    function redirectToCreateMovie() {
-        // Chuyển hướng đến URL chứa tham số "handle=create-movie"
-        window.location.href = 'admin.php?handle=create-movie';
-    }
+function redirectToCreateMovie() {
+    // Chuyển hướng đến URL chứa tham số "handle=create-movie"
+    window.location.href = 'admin.php?handle=create-movie';
+}
 
-    function redirectToEditMovie(movieId) {
+function redirectToEditMovie(movieId) {
 
-        window.location.href = `admin.php?handle=edit-movie&movieid=${movieId}`;
-    }
+    window.location.href = `admin.php?handle=edit-movie&movieid=${movieId}`;
+}
 </script>

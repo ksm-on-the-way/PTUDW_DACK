@@ -7,7 +7,7 @@ require_once ("db_module.php");
 ?>
 <?php
 if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
-  echo '<html>
+    echo '<html>
 <head>
     <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 
@@ -20,21 +20,21 @@ if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
 <div class="comingsoon_film_container">
   <div class="comingsoon_items">';
 } else {
-  echo '<div class="comingsoon_film_container">
+    echo '<div class="comingsoon_film_container">
   <div class="comingsoon_items">';
 }
 $link = NULL;
 taoKetNoi($link);
 $sql = '';
 if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
-  $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
+    $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
   LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
   LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
   LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
   WHERE release_date > CURDATE() AND m.is_deleted = '0'
   ORDER BY release_date ASC";
 } else {
-  $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
+    $sql = "SELECT m.movie_id, m.movie_name, g.movie_genre_name, m.movie_duration, m.release_date, b.image_url FROM movies m 
   LEFT JOIN movie_rates r ON m.movie_rate_id = r.movie_rate_id
   LEFT JOIN movie_banner_images b ON m.movie_id = b.movie_id
   LEFT JOIN movie_genres g ON m.movie_genre_id = g.movie_genre_id
@@ -44,7 +44,7 @@ if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
 
 $result = chayTruyVanTraVeDL($link, $sql);
 while ($rows = mysqli_fetch_assoc($result)) {
-  echo '
+    echo '
     <div onclick="redirectToFilmDetails(' . $rows['movie_id'] . ')" class="column">
         <img
           loading="lazy"
@@ -71,7 +71,7 @@ while ($rows = mysqli_fetch_assoc($result)) {
 echo '</div>
 </div>';
 if (substr($_SERVER['REQUEST_URI'], 12) == 'comingsoon.php') {
-  include_once "footer.php";
+    include_once "footer.php";
 
 }
 
@@ -92,6 +92,13 @@ function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
     flex-direction: column;
     position: relative;
     margin-left: 68px;
+}
+
+@media (max-width: 991px) {
+    .head {
+        margin-left: unset;
+    }
+
 }
 
 .comingsoon_head {
@@ -128,8 +135,8 @@ function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
 @media (max-width: 991px) {
     .comingsoon_film_container {
         max-width: 100%;
-        padding-right: 20px;
-        margin: 40px 40px;
+        padding-right: unset;
+        margin: unset !important;
     }
 }
 
@@ -147,7 +154,8 @@ function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
       gap: 30px;
       margin: auto; */
         display: grid;
-        grid-template-columns: 45% 45%;
+        column-gap: 20px;
+        grid-template-columns: 1fr 1fr;
         margin: auto;
     }
 }
@@ -185,6 +193,8 @@ function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
     .comingsoon_film_title {
         margin-top: 25px;
         margin-bottom: 10px;
+        font: 600 16px/133% Roboto, sans-serif;
+
     }
 }
 
@@ -213,6 +223,13 @@ function redirectToFilmDetails(id) { //nhảy đến chi tiết phim
     height: 190px;
     position: relative;
 
+}
+
+@media (max-width: 991px) {
+    .content {
+        padding-left: 10px;
+
+    }
 }
 
 /* .overlay {

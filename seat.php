@@ -347,13 +347,13 @@ if (session_status() == PHP_SESSION_NONE) {
     </style>
     <?php
     // Kiểm tra xem session 'isLogin' tồn tại và có giá trị true hay không
-    $account = '';
-    if (isset($_SESSION)) {
-        $account .= '<div>';
-        $account .= '    Tài khoản đang đăng nhập: ' . $_SESSION['email'];
-        $account .= '</div>';
-
-    }
+    // $account = '';
+    // if (isset($_SESSION)) {
+    //     $account .= '<div>';
+    //     $account .= '    Tài khoản đang đăng nhập: ' . $_SESSION['email'];
+    //     $account .= '</div>';
+    
+    // }
     ?>
     <?php
     require_once './db_module.php';
@@ -518,7 +518,6 @@ if (session_status() == PHP_SESSION_NONE) {
                 </div>
             </div>
         </div>
-        <?php echo $account; ?>
         <?php
         include "footer.php";
         ?>
@@ -723,8 +722,16 @@ if (session_status() == PHP_SESSION_NONE) {
     }
 
     function redirectConfirm() {
+        const updatedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
+
+        if (updatedSeats.length == 0) {
+            alert("Bạn phải chọn ghế trước khi chuyển qua trang khác")
+
+        } else {
+            window.location.href = 'food_order_customer.php';
+        }
         // Chuyển hướng đến URL chứa tham số "handle=create-movie"
-        window.location.href = 'food_order_customer.php';
+
     }
     </script>
 </body>

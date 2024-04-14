@@ -56,178 +56,178 @@
     </div>
 </div>
 <style>
+.footer {
+    background-color: var(--White, #fff);
+    display: flex;
+    padding-bottom: 80px;
+    flex-direction: column;
+    margin-top: 100px
+}
+
+@media (max-width: 991px) {
     .footer {
-        background-color: var(--White, #fff);
-        display: flex;
-        padding-bottom: 80px;
-        flex-direction: column;
-        margin-top: 100px
+        padding-bottom: 20px;
     }
-
-    @media (max-width: 991px) {
-        .footer {
-            padding-bottom: 20px;
-        }
-    }
+}
 
 
+.footer-line {
+    background-color: var(--Shade-300, #bdc5d4);
+    min-height: 1px;
+    width: 100%;
+}
+
+@media (max-width: 991px) {
     .footer-line {
-        background-color: var(--Shade-300, #bdc5d4);
-        min-height: 1px;
-        width: 100%;
+        max-width: 100%;
     }
+}
 
-    @media (max-width: 991px) {
-        .footer-line {
-            max-width: 100%;
-        }
-    }
+.footer-container {
 
+    margin-top: 39px;
+    width: 100%;
+    max-width: 1179px;
+    gap: 20px;
+    text-align: center;
+}
+
+@media (min-width: 765px) {
     .footer-container {
-
-        margin-top: 39px;
-        width: 100%;
-        max-width: 1179px;
-        gap: 20px;
-        text-align: center;
+        align-self: center;
+        display: flex;
+        text-align: left;
     }
+}
 
-    @media (min-width: 765px) {
-        .footer-container {
-            align-self: center;
-            display: flex;
-            text-align: left;
-        }
-    }
+.img-logo__footer {
+    aspect-ratio: 3.57;
+    object-fit: contain;
+    object-position: center;
+    width: 130px;
+    align-self: start;
+    max-width: 100%;
+}
 
-    .img-logo__footer {
-        aspect-ratio: 3.57;
-        object-fit: auto;
-        object-position: center;
-        width: 130px;
-        align-self: start;
-        max-width: 100%;
-    }
+.footer-category {
+    flex-grow: 1;
+    flex-basis: auto;
+}
 
+@media (max-width: 991px) {
     .footer-category {
-        flex-grow: 1;
-        flex-basis: auto;
-    }
-
-    @media (max-width: 991px) {
-        .footer-category {
-            max-width: 100%;
-        }
-    }
-
-    .footer-category__container {
-        gap: 20px;
-        display: flex;
-    }
-
-    @media (max-width: 991px) {
-        .footer-category__container {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 36px;
-            margin-top: 36px;
-        }
-    }
-
-    .footer-category__item {
-        display: flex;
-        row-gap: 20px;
-        flex-direction: column;
-        line-height: normal;
-        width: 33%;
-        margin-left: 0px;
-        font-size: 16px;
-        color: var(--Shade-900, #333);
-        text-align: center;
-    }
-
-    @media (max-width: 991px) {
-        .footer-category__item {
-            width: 100%;
-        }
-    }
-
-
-    .footer-social {
-        display: flex;
-        flex-direction: column;
-    }
-
-    @media (max-width: 991px) {
-        .footer-social {
-            margin-top: 30px;
-            text-align: center;
-        }
-    }
-
-    .footer-social .follow-title {
-        color: var(--Shade-900, #333);
-        font: 500 18px Roboto, sans-serif;
-    }
-
-    .footer-social .social-container {
-        display: flex;
-        margin-top: 24px;
-        padding-right: 80px;
-        gap: 18px;
-    }
-
-    @media (max-width: 991px) {
-        .footer-social .social-container {
-            padding-right: unset;
-            justify-content: center;
-        }
-    }
-
-    .footer-social .img {
-        aspect-ratio: 1;
-        object-fit: auto;
-        object-position: center;
-        width: 24px;
-    }
-
-    .footer-social .download-title {
-        color: var(--Shade-900, #333);
-        margin-top: 42px;
-        font: 500 18px Roboto, sans-serif;
-    }
-
-    @media (max-width: 991px) {
-        .footer-social .download-title {
-            margin-top: 40px;
-        }
-    }
-
-    .footer-social .download-container {
-        display: flex;
-        margin-top: 24px;
-        gap: 20px;
-        justify-content: space-between;
-    }
-
-    @media (max-width: 991px) {
-        .footer-social .download-container {
-            justify-content: center;
-        }
-    }
-
-
-    .footer-social .img-download {
-        aspect-ratio: 3.33;
-        object-fit: auto;
-        object-position: center;
-        width: 110px;
         max-width: 100%;
     }
+}
 
-    .footer-social .term {
-        color: var(--Shade-900, #333);
-        margin-top: 38px;
-        font: 400 12px Roboto, sans-serif;
+.footer-category__container {
+    gap: 20px;
+    display: flex;
+}
+
+@media (max-width: 991px) {
+    .footer-category__container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 36px;
+        margin-top: 36px;
     }
+}
+
+.footer-category__item {
+    display: flex;
+    row-gap: 20px;
+    flex-direction: column;
+    line-height: normal;
+    width: 33%;
+    margin-left: 0px;
+    font-size: 16px;
+    color: var(--Shade-900, #333);
+    text-align: center;
+}
+
+@media (max-width: 991px) {
+    .footer-category__item {
+        width: 100%;
+    }
+}
+
+
+.footer-social {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 991px) {
+    .footer-social {
+        margin-top: 30px;
+        text-align: center;
+    }
+}
+
+.footer-social .follow-title {
+    color: var(--Shade-900, #333);
+    font: 500 18px Roboto, sans-serif;
+}
+
+.footer-social .social-container {
+    display: flex;
+    margin-top: 24px;
+    padding-right: 80px;
+    gap: 18px;
+}
+
+@media (max-width: 991px) {
+    .footer-social .social-container {
+        padding-right: unset;
+        justify-content: center;
+    }
+}
+
+.footer-social .img {
+    aspect-ratio: 1;
+    object-fit: auto;
+    object-position: center;
+    width: 24px;
+}
+
+.footer-social .download-title {
+    color: var(--Shade-900, #333);
+    margin-top: 42px;
+    font: 500 18px Roboto, sans-serif;
+}
+
+@media (max-width: 991px) {
+    .footer-social .download-title {
+        margin-top: 40px;
+    }
+}
+
+.footer-social .download-container {
+    display: flex;
+    margin-top: 24px;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+@media (max-width: 991px) {
+    .footer-social .download-container {
+        justify-content: center;
+    }
+}
+
+
+.footer-social .img-download {
+    aspect-ratio: 3.33;
+    object-fit: auto;
+    object-position: center;
+    width: 110px;
+    max-width: 100%;
+}
+
+.footer-social .term {
+    color: var(--Shade-900, #333);
+    margin-top: 38px;
+    font: 400 12px Roboto, sans-serif;
+}
 </style>

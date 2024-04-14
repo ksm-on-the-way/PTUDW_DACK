@@ -27,12 +27,14 @@ function redirectToComingsoon() {
     width: 100%;
     margin: 0 auto;
     margin-top: 50px;
+    padding: 0 10px;
 }
 
 @media (min-width: 768px) {
     .film-comming__container {
         max-width: 1300px;
         margin-top: 100px;
+        padding: unset;
     }
 }
 

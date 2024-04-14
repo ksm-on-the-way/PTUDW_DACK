@@ -1,86 +1,91 @@
 <style>
-    .cinema-admin__container {
-        width: 100%;
-        max-width: 1075px;
-        margin: 0 auto;
-        margin-top: 30px;
-        font-family: Roboto, sans-serif;
-    }
+.cinema-admin__container {
+    width: 100%;
+    max-width: 1075px;
+    margin: 0 auto;
+    margin-top: 30px;
+    font-family: Roboto, sans-serif;
+}
 
-    .cinema-admin__container .cinema-admin__heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 100px;
-    }
+.cinema-admin__container .cinema-admin__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 100px;
+}
 
-    .cinema-admin__container .cinema-admin__heading .title {
-        color: #4F4F4F;
-        font-size: 40px;
-    }
+.cinema-admin__container .cinema-admin__heading .title {
+    color: #4F4F4F;
+    font-size: 40px;
+}
 
-    .cinema-admin__container .cinema-admin__heading .button button {
-        padding: 12px 14px;
-        background-color: #FFBE00;
-        color: white;
-        outline: none;
-        border-radius: 8px;
-        border: none;
-    }
+.cinema-admin__container .cinema-admin__heading .button button {
+    padding: 12px 14px;
+    background-color: #FFBE00;
+    color: white;
+    outline: none;
+    border-radius: 8px;
+    border: none;
+}
 
-    .cinema-admin__container .table-container {
-        margin-top: 20px;
-    }
+.cinema-admin__container .table-container {
+    margin-top: 20px;
+}
 
-    .cinema-admin__container table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+.cinema-admin__container table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .cinema-admin__container th,
-    td {
-        padding: 8px;
-        text-align: center;
+.cinema-admin__container th,
+td {
+    padding: 8px;
+    text-align: center;
 
-    }
+}
 
-    .cinema-admin__container th:not(:last-child),
-    td:not(:last-child) {
+.cinema-admin__container th:not(:last-child),
+td:not(:last-child) {
 
 
-        border-right: 1px solid #ddd;
-    }
+    border-right: 1px solid #ddd;
+}
 
-    .cinema-admin__container th {
-        background-color: #1A2C50;
-        color: white;
-    }
+.cinema-admin__container th {
+    background-color: #1A2C50;
+    color: white;
+}
 
-    .cinema-admin__container tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+.cinema-admin__container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-    .cinema-admin__container table .edit-btn,
-    .cinema-admin__container table .delete-btn {
-        padding: 6px 10px;
-        margin-right: 5px;
-        border: none;
-        cursor: pointer;
-        border-radius: 3px;
-        color: white;
-    }
+.cinema-admin__container table .edit-btn,
+.cinema-admin__container table .delete-btn {
+    padding: 6px 10px;
+    margin-right: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    color: white;
+}
 
-    .cinema-admin__container table .edit-btn {
-        background-color: #1A2C50;
-        color: white;
-        border: solid 1px #1A2C50;
-    }
+.cinema-admin__container table .edit-btn {
+    background-color: #1A2C50;
+    color: white;
+    border: solid 1px #1A2C50;
+}
 
-    .cinema-admin__container table .delete-btn {
-        background-color: white;
-        color: #1A2C50;
-        border: solid 1px black;
-    }
+.cinema-admin__container table .delete-btn {
+    background-color: white;
+    color: #1A2C50;
+    border: solid 1px black;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
 </style>
 
 <?php
@@ -129,7 +134,7 @@ if (mysqli_num_rows($result) > 0) {
         $table_body .= "<td>" . $row['news_title'] . "</td>";
         $table_body .= "<td>" . $row['news_date'] . "</td>";
         $table_body .= "<td>" . $row['news_category_name'] . "</td>";
-        $table_body .= '<td>
+        $table_body .= '<td class="button-container">
                         <button class="edit-btn" onclick="redirectToEditNews(' . $row['news_id'] . ')">Sửa</button>
                         <form method="post" action="" id="form-delete-news">
                             <input type="hidden" name="newsid" value="' . $row['news_id'] . '">
@@ -189,20 +194,20 @@ giaiPhongBoNho($link, $result);
     </div>
 </div>
 <script>
-    function redirectToCreateNews() {
-        // Chuyển hướng đến URL chứa tham số "handle=create-news"
-        window.location.href = 'admin.php?handle=create-news';
-    }
-    // Chuyển hướng đến URL chứa tham số "handle=edit-news với id được truyền"
-    function redirectToEditNews(id) {
+function redirectToCreateNews() {
+    // Chuyển hướng đến URL chứa tham số "handle=create-news"
+    window.location.href = 'admin.php?handle=create-news';
+}
+// Chuyển hướng đến URL chứa tham số "handle=edit-news với id được truyền"
+function redirectToEditNews(id) {
 
-        window.location.href = 'admin.php?handle=edit-news&id=' + id;
-    }
-    function handleClick() { //hiển thị thông báo xác nhận xóa khi nhấn nút
-        if (confirm("Bạn có chắc chắn muốn xóa?")) {
-            // Nếu người dùng xác nhận muốn xóa
-            document.getElementById("form-delete-news").submit(); // Gửi form
-        }
-    }
+    window.location.href = 'admin.php?handle=edit-news&id=' + id;
+}
 
+function handleClick() { //hiển thị thông báo xác nhận xóa khi nhấn nút
+    if (confirm("Bạn có chắc chắn muốn xóa?")) {
+        // Nếu người dùng xác nhận muốn xóa
+        document.getElementById("form-delete-news").submit(); // Gửi form
+    }
+}
 </script>

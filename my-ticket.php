@@ -56,7 +56,6 @@
     padding: 0 20px;
     font-size: 16px;
     font-weight: 400;
-    line-height: 150%;
     margin-bottom: 39px;
 }
 
@@ -69,7 +68,7 @@
 
 .ticket-description {
     width: 100%;
-    margin-top: 24px;
+    margin-top: 0rem;
     color: #5a637a;
     font-family: Roboto, sans-serif;
 }
@@ -109,7 +108,6 @@
 .ticket-content {
     gap: 20px;
     display: flex;
-    cursor: pointer;
 }
 
 @media (max-width: 991px) {
@@ -125,7 +123,7 @@
     flex-direction: column;
     line-height: normal;
     width: 81%;
-    margin-left: 0;
+
 }
 
 @media (max-width: 991px) {
@@ -141,7 +139,6 @@
 @media (max-width: 991px) {
     .ticket-info {
         max-width: 100%;
-        margin-top: 40px;
     }
 }
 
@@ -192,7 +189,6 @@
     flex-direction: column;
     line-height: normal;
     width: 71%;
-    margin-left: 20px;
 }
 
 @media (max-width: 991px) {
@@ -276,10 +272,12 @@
 @media (max-width: 991px) {
     .ticket-status {
         width: 100%;
+        margin-left: unset;
     }
 }
 
 .status-label {
+    display: flex;
     border-radius: 4px;
     background-color: var(--Sky-blue, #118eea);
     align-self: stretch;
@@ -295,6 +293,7 @@
     .status-label {
         margin-top: 40px;
         padding: 0 20px;
+        width: unset;
     }
 }
 
@@ -310,6 +309,7 @@ body {
 
 .my-ticket-sidebar {
     background-color: #f5f5f5;
+    margin-top: 1rem;
 }
 
 .my-ticket-content-header {
@@ -322,6 +322,44 @@ body {
 
 .menu-item-default {
     color: #333;
+}
+
+
+@media (max-width: 767px) {
+
+    .my-ticket-container {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        padding: 0 2em;
+    }
+
+    .my-ticket-content {
+        margin-top: 20px;
+    }
+
+    .poster-image {
+        width: 100%;
+    }
+
+    .movie-poster {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ticket-details {
+        margin-top: -3rem;
+    }
+
+}
+
+
+@media (min-width: 768px) {
+    .my-ticket-sidebar {
+        min-width: 313px;
+    }
+
+
 }
 </style>
 <div class="my-ticket-container">

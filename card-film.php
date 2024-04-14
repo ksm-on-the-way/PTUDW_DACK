@@ -8,8 +8,8 @@ $queryfilm = "SELECT * FROM movies m
 $resultfilm = chayTruyVanTraVeDL($link, $queryfilm);
 while ($row = mysqli_fetch_assoc($resultfilm)) {
 
-    echo "<div class='card-film'>";
-    echo "<img loading='lazy' srcset='" . $row['image_url'] . "' class='img' onclick='redirectToFilmDetail(" . $row['movie_id'] . ")'/>";
+    echo "<div class='card-film' onclick='redirectToFilmDetail(" . $row['movie_id'] . ")'>";
+    echo "<img loading='lazy' srcset='" . $row['image_url'] . "' class='img' />";
     echo "<div class='title'>" . $row['movie_name'] . "</div>";
     echo "</div>";
 }

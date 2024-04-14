@@ -52,11 +52,42 @@
 
 .chart-container {
     display: flex;
-    margin-top: 20px;
+    margin-top: 40px;
+    flex-direction: column;
 }
 
 .chart-container #earning {
+    width: 500px !important;
+    height: 250px !important;
+    margin-top: 50;
+}
+
+.chart-container #food {
+    width: 300px !important;
     height: 300px !important;
+}
+
+.chart-container #film {
+    width: 500px !important;
+    height: 250px !important;
+    margin-top: 50px;
+}
+
+.chart-container #customer {
+    width: 300px !important;
+    height: 300px !important;
+}
+
+.headline {
+    font: 600 16px/137% Inter, sans-serif;
+}
+
+.chart-container .row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 60px;
+    width: 100%;
+    justify-content: space-between;
 }
 </style>
 <?php
@@ -65,6 +96,61 @@ require_once './db_module.php';
 // Kết nối đến cơ sở dữ liệu
 $link = null;
 taoKetNoi($link);
+//query số lượng mỗi food
+$foodquery = "SELECT cf.combo_name, SUM(cod.quantity) AS total_ordered_quantity
+FROM combo_food cf
+JOIN combo_order_details cod ON cf.combo_id = cod.combo_id
+GROUP BY cf.combo_name";
+$fooddata = array_fill(0, 4, 0);
+$foodresult = chayTruyVanTraVeDL($link, $foodquery);
+if ($foodresult->num_rows > 0) {
+    while ($row = $foodresult->fetch_assoc()) {
+        $fooddata[] = $row['total_ordered_quantity'];
+    }
+}
+//query số lượng vé đã bán
+$filmquery = "SELECT m.movie_name, COUNT(r.reservation_id) AS total_ordered_quantity
+FROM movies m
+JOIN shows s ON s.movie_id = m.movie_id
+JOIN reservations r ON s.show_id = r.show_id
+GROUP BY m.movie_name
+ORDER BY total_ordered_quantity DESC
+LIMIT 10";
+$filmresult = chayTruyVanTraVeDL($link, $filmquery);
+$movie_names = array();
+$total_ordered_quantities = array();
+if ($filmresult->num_rows > 0) {
+    while ($row = $filmresult->fetch_assoc()) {
+        $movie_names[] = $row['movie_name'];
+        $total_ordered_quantities[] = $row['total_ordered_quantity'];
+    }
+}
+//query phân loại khách hàng
+$customerquery = "SELECT 
+CASE
+    WHEN reservations_count < 4 THEN 'Rời bỏ'
+    WHEN reservations_count >= 4 AND reservations_count < 8 THEN 'Bình thường'
+    ELSE 'Trung thành'
+END AS user_category,
+COUNT(*) AS number_of_users
+FROM (
+SELECT user_id, COUNT(*) AS reservations_count
+FROM reservations
+WHERE reservation_time >= DATE_SUB(NOW(), INTERVAL 30 DAY) -- Filter reservations within the last 30 days
+GROUP BY user_id
+) AS user_reservations
+GROUP BY user_category;";
+$customerresult = chayTruyVanTraVeDL($link, $customerquery);
+$user_category = array();
+$number_of_users = array();
+if ($customerresult->num_rows > 0) {
+    while ($row = $customerresult->fetch_assoc()) {
+        $user_category[] = $row['user_category'];
+        $number_of_users[] = $row['number_of_users'];
+    }
+}
+
+//query doanh thu từng tháng
 $query = "SELECT 
             DATE_FORMAT(res.reservation_time, '%Y-%m') AS reservation_month,
             SUM(rt.room_price) AS total_price
@@ -171,15 +257,24 @@ giaiPhongBoNho($link, $result);
         </div>
     </div>
     <div class='chart-container'>
-        <canvas id='earning'></canvas>
+        <div class="headline">Tình hình doanh thu</div>
+        <div class='row'>
+            <canvas id='earning'></canvas>
+            <canvas id='food'></canvas>
+        </div>
+        <div class="headline">Xu hướng mua hàng</div>
+        <div class='row'>
+            <canvas id='film'></canvas>
+            <canvas id='customer'></canvas>
+        </div>
     </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 var earning = document.getElementById('earning').getContext('2d');
-var myChart = new Chart(earning, {
-    type: 'bar',
+var lineChart = new Chart(earning, {
+    type: 'line',
     data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
             'October', 'November', 'December'
@@ -188,10 +283,110 @@ var myChart = new Chart(earning, {
             label: 'Revenue',
             data: <?php echo json_encode($data); ?>,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
+                '#003566',
 
             ]
         }]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Doanh thu theo thời gian',
+                position: 'bottom',
+            }
+        }
+    }
+})
+var food = document.getElementById('food').getContext('2d');
+var pieChart = new Chart(food, {
+    type: 'pie',
+    data: {
+        labels: ['MINI ADVENTURE SING', 'MY COMBO', 'PREMIUM TIX ID COMBO', 'TIX ID COMBO'],
+        datasets: [{
+            label: 'Quantity',
+            data: <?php echo json_encode($fooddata); ?>,
+            backgroundColor: [
+                '#001D3D', '#003566', '#FFC300', '#ffe45e'
+            ]
+        }]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Tỉ lệ mua của các combo',
+                position: 'bottom',
+            },
+            legend: {
+                display: true,
+                postion: 'right',
+                responsive: true,
+                align: 'start'
+            }
+        }
+    }
+})
+var film = document.getElementById('film').getContext('2d');
+var barChart = new Chart(film, {
+    type: 'bar',
+    data: {
+        labels: <?php echo json_encode($movie_names); ?>,
+        datasets: [{
+            label: 'Quantity',
+            data: <?php echo json_encode($total_ordered_quantities); ?>,
+            backgroundColor: [
+                '#003566',
+            ]
+        }]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Số lượng mua các phim',
+                position: 'bottom',
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    callback: function(value, index, values) {
+                        // Truncate value if it exceeds a certain length
+                        var maxLength = 5; // Define the maximum length
+                        if (value.length > maxLength) {
+                            return value.substring(0, maxLength) + '...'; // Truncate and add ellipsis
+                        }
+                        return value;
+                    }
+                }
+            },
+        }
+
+    }
+})
+var customer = document.getElementById('customer').getContext('2d');
+var doughnut = new Chart(customer, {
+    type: 'doughnut',
+    data: {
+        labels: <?php echo json_encode($user_category); ?>,
+        datasets: [{
+            label: 'Quantity',
+            data: <?php echo json_encode($number_of_users); ?>,
+            backgroundColor: [
+                '#001D3D', '#003566', '#FFC300',
+
+            ]
+        }]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Tỉ lệ khách hàng trong 30 ngày qua',
+                position: 'bottom',
+            }
+        }
     }
 })
 </script>

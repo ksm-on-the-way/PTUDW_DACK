@@ -397,6 +397,7 @@
         aspect-ratio: 1.14;
         object-fit: auto;
         object-position: center;
+        border-radius: 20px;
         width: 100%;
     }
 

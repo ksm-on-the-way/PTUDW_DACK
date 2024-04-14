@@ -21,6 +21,7 @@
     position: relative;
     margin-top: 30px;
     /* padding: 0 20px */
+    padding-left: 8px;
     /* Thêm thuộc tính position */
 }
 
@@ -28,6 +29,7 @@
     .carousel-banner__container {
         max-width: 1300px;
         padding: unset;
+        padding-left: unset;
     }
 }
 
@@ -45,7 +47,7 @@
 .carousel-banner__container .owl-carousel .owl-nav .owl-prev,
 .carousel-banner__container .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    top: 50%;
+    top: 38%;
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
@@ -98,15 +100,18 @@ while ($row = mysqli_fetch_assoc($resultfilm)) {
 <script>
 $('.carousel-banner__container .owl-carousel').owlCarousel({
     loop: true,
-    margin: 0,
+    margin: 20,
     navText: [
         "<i class='fas fa-chevron-left'></i>",
         "<i class='fas fa-chevron-right'></i>",
     ],
     nav: false,
     items: 1,
+    dots: false,
     responsive: {
         600: {
+            margin: 0,
+
             items: 1,
             nav: true
         }

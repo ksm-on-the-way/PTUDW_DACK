@@ -15,7 +15,7 @@
 <body>
     <?php
     // Kết nối đến cơ sở dữ liệu
-    require_once("db_module.php");
+    require_once ("db_module.php");
     $link = NULL;
     $result = null;
     taoKetNoi($link);
@@ -29,7 +29,7 @@
             <div class="category_list">
                 <ul>
                     <li><a href='news.php' <?php if (!$current_category_id)
-                                                echo 'class="selected"' ?>>Mớinhất</a></li>
+                        echo 'class="selected"' ?>>Mới nhất</a></li>
                     <?php
                     // Truy vấn để lấy danh sách thể loại tin tức
                     $sql_categories = "SELECT * FROM news_categories";
@@ -39,9 +39,10 @@
                         while ($row_category = $result_categories->fetch_assoc()) {
                             $category_id = $row_category["news_category_id"];
                             $category_name = $row_category["news_category_name"];
-                    ?>
-                            <li><a href='news.php?news_category_id=<?php echo $category_id ?>' <?php if ($current_category_id == $category_id)
-                                                                                                    echo 'class="selected"' ?>><?php echo $category_name ?></a></li>
+                            ?>
+                    <li><a href='news.php?news_category_id=<?php echo $category_id ?>' <?php if ($current_category_id == $category_id)
+                                   echo 'class="selected"' ?>><?php echo $category_name ?>
+                        </a></li>
                     <?php
                         }
                     } else {
@@ -84,7 +85,7 @@
                         echo "<div class='wrapper'>";
                         echo "<p class='category'>" . $row_news["news_category_name"] . "</p>";
                         echo "<h2 class='mt-2'>" . $row_news["news_title"] . "</h2>";
-                        echo "<span class='body_shade600 line_clamp'>" . $row_news["news_content"] . "</span>";
+                        echo "<span class='body_shade600 line_clamp'>" . strip_tags($row_news["news_content"]) . "</span>";
                         echo "</div>";
                         echo "</article>";
                     }
@@ -99,9 +100,9 @@
 
         <?php
         if (!$news_category_id) {
-        ?>
-            <div class="spotlight_items">
-                <?php
+            ?>
+        <div class="spotlight_items">
+            <?php
                 // Truy vấn để lấy tin tức nổi bật
                 $sql_spotlight = "SELECT news.*, news_categories.news_category_name 
                       FROM news 
@@ -113,15 +114,15 @@
 
                 if ($result_spotlight->num_rows > 0) {
                     $order = 1; // Khởi tạo biến order
-
+            
                     // Hiển thị dữ liệu từ cơ sở dữ liệu
                     while ($row_spotlight = $result_spotlight->fetch_assoc()) {
                         // Thêm class và order cho phần tử
-                        echo "<img src='" . $row_spotlight["news_banner_src"] . "' class='spotlight_img" . $order . "' onclick = redirectToNewsDetail(".$row_spotlight['news_id'].")>";
+                        echo "<img src='" . $row_spotlight["news_banner_src"] . "' class='spotlight_img" . $order . "' onclick = redirectToNewsDetail(" . $row_spotlight['news_id'] . ")>";
                         echo "<div class='spotlight_text" . $order . "'>";
                         echo "<p class='category'>" . $row_spotlight["news_category_name"] . "</p>";
-                        echo "<h1 class='mt-2' onclick = redirectToNewsDetail(".$row_spotlight['news_id'].")>" . $row_spotlight["news_title"] . "</h1>";
-                        echo "<span class='body_shade600 line_clamp mt-2'>" . $row_spotlight["news_content"] . "</span>";
+                        echo "<h1 class='mt-2' onclick = redirectToNewsDetail(" . $row_spotlight['news_id'] . ")>" . $row_spotlight["news_title"] . "</h1>";
+                        echo "<span class='body_shade600 line_clamp mt-2'>" . strip_tags($row_spotlight["news_content"]) . "</span>";
                         echo "<h3 class='mt-1'>" . date("d/m/Y", strtotime($row_spotlight["news_date"])) . "</h3>";
                         echo "</div>";
                         $order++; // Tăng giá trị của biến order cho mỗi phần tử
@@ -131,11 +132,11 @@
                     echo "0 results";
                 }
                 ?>
-            </div>
+        </div>
 
 
-            <div class="review_items">
-                <?php
+        <div class="review_items">
+            <?php
                 // Truy vấn để lấy tin tức phổ biến
                 $sql_review = "SELECT news.*, news_categories.news_category_name 
                                 FROM news 
@@ -161,10 +162,10 @@
                     echo "0 results";
                 }
                 ?>
-            </div>
+        </div>
 
-            <div class="collection_items">
-                <?php
+        <div class="collection_items">
+            <?php
                 // Truy vấn để lấy tất cả tin tức trừ những tin được hiển thị phía trên
                 $sql_collection = "SELECT news.*, news_categories.news_category_name 
                 FROM news 
@@ -182,7 +183,7 @@
                         echo "<div class='wrapper'>";
                         echo "<p class='category'>" . $row_collection["news_category_name"] . "</p>";
                         echo "<h2 class='mt-2'>" . $row_collection["news_title"] . "</h2>";
-                        echo "<span class='body_shade600 line_clamp'>" . $row_collection["news_content"] . "</span>";
+                        echo "<span class='body_shade600 line_clamp'>" . strip_tags($row_collection["news_content"]) . "</span>";
                         echo "</div>";
                         echo "</article>";
                     }
@@ -190,152 +191,162 @@
                     echo "0 results";
                 }
                 ?>
-            </div>
+        </div>
         <?php
         }
         ?>
 
         <div class="center">
             <?php if (!$news_category_id) { ?>
-                <button id="loadMoreNews" style="display: none;">Xem thêm</button>
+            <button id="loadMoreNews" style="display: none;">Xem thêm</button>
             <?php } else { ?>
-                <button id="loadMoreNews">Xem thêm</button>
+            <button id="loadMoreNews">Xem thêm</button>
             <?php } ?>
 
             <?php if ($news_category_id) { ?>
-                <button id="loadMoreCollection" style="display: none;">Xem thêm</button>
+            <button id="loadMoreCollection" style="display: none;">Xem thêm</button>
             <?php } else { ?>
-                <button id="loadMoreCollection">Xem thêm</button>
+            <button id="loadMoreCollection">Xem thêm</button>
             <?php } ?>
 
         </div>
         <?php include_once './footer.php'; ?>
 
         <script>
-            function redirectToNewsDetail(id) {
-                window.location.href = "./news-detail.php?id=" + id;
-            }
+        function redirectToNewsDetail(id) {
+            window.location.href = "./news-detail.php?id=" + id;
+        }
         </script>
 
         <!-- Nút xem thêm vs ô tìm kiếm -->
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // const loadMoreButton = document.querySelector('.center button');
-                // Sử dụng document.querySelector('.center button'): Điều này chỉ sẽ chọn các phần tử <button> nằm 
-                //trong phần tử có lớp CSS là "center". Điều này sẽ chọn cả hai nút "Xem thêm" 
-                //tuy nhiên, nếu một trong hai nút này có thuộc tính style="display: none;" thì nó sẽ không được chọn.
-                const searchButton = document.getElementById('searchButton');
-                const searchInput = document.getElementById('searchInput');
-                // let offset = 3;
-                // const limit = 3;
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchButton = document.getElementById('searchButton');
+            const searchInput = document.getElementById('searchInput');
+            const loadMoreNewsButton = document.getElementById('loadMoreNews');
+            const loadMoreCollectionButton = document.getElementById('loadMoreCollection');
 
-                // loadMoreButton.addEventListener('click', function() {
-                //     // Code load more items here...
-                // });
-
-                searchInput.addEventListener('keyup', function(event) {
-                    if (event.key === 'Enter') { // Check if the pressed key is 'Enter'
-                        searchButton.click(); // Simulate a click on the search button
-                    }
-                });
-
-                searchButton.addEventListener('click', function() {
-                    const searchQuery = searchInput.value.trim();
-                    if (searchQuery !== '') {
-                        const xhr = new XMLHttpRequest();
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === XMLHttpRequest.DONE) {
-                                if (xhr.status === 200) {
-                                    document.querySelector('.collection_items').innerHTML = xhr.responseText;
-
-                                    // Ẩn các phần khác
-                                    document.querySelector('.spotlight_items').style.display = 'none';
-                                    document.querySelector('.review_items').style.display = 'none';
-
-                                    // Hiển thị kết quả tìm kiếm
-                                    collectionItems.innerHTML = xhr.responseText;
-                                    collectionItems.style.display = 'block';
-
-                                } else {
-                                    console.error('Failed to fetch search results.');
-                                }
-                            }
-                        };
-                        xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
-                        xhr.send();
-                    }
-                });
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    searchButton.click();
+                }
             });
+
+            searchButton.addEventListener('click', function() {
+                const searchQuery = searchInput.value.trim();
+                if (searchQuery !== '') {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                if (xhr.responseText.trim() === 'Không tìm thấy tin tức.') {
+                                    // Disable load more buttons
+                                    loadMoreNewsButton.disabled = true;
+                                    loadMoreCollectionButton.disabled = true;
+                                } else {
+                                    // Enable load more buttons if search result is not empty
+                                    loadMoreNewsButton.disabled = false;
+                                    loadMoreCollectionButton.disabled = false;
+                                }
+
+                                document.querySelector('.collection_items').innerHTML = xhr
+                                    .responseText;
+
+                                // Ẩn các phần khác
+                                document.querySelector('.spotlight_items').style.display = 'none';
+                                document.querySelector('.review_items').style.display = 'none';
+
+                                // Hiển thị kết quả tìm kiếm
+                                collectionItems.innerHTML = xhr.responseText;
+                                collectionItems.style.display = 'block';
+
+                            } else {
+                                console.error('Failed to fetch search results.');
+                            }
+                        }
+                    };
+                    xhr.open('GET', 'search.php?search_query=' + searchQuery, true);
+                    xhr.send();
+                }
+            });
+        });
         </script>
 
+
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const loadMoreNewsButton = document.getElementById('loadMoreNews');
-                const loadMoreCollectionButton = document.getElementById('loadMoreCollection');
-                let newsOffset = 3;
-                let collectionOffset = 3;
-                const limit = 3;
+        document.addEventListener("DOMContentLoaded", function() {
+            const loadMoreNewsButton = document.getElementById('loadMoreNews');
+            const loadMoreCollectionButton = document.getElementById('loadMoreCollection');
+            let newsOffset = 3;
+            let collectionOffset = 3;
+            const limit = 3;
 
-                loadMoreNewsButton.addEventListener('click', function() {
-                    const newsCategoryId = <?php echo json_encode($news_category_id); ?>;
+            loadMoreNewsButton.addEventListener('click', function() {
+                const newsCategoryId = <?php echo json_encode($news_category_id); ?>;
 
-                    const xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                // Chèn HTML trả về vào cuối phần hiển thị tin tức
-                                document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
-                                // Tăng offset lên để lấy tin tức tiếp theo
-                                newsOffset += limit;
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Chèn HTML trả về vào cuối phần hiển thị tin tức
+                            document.querySelector('.collection_items').insertAdjacentHTML(
+                                'beforeend', xhr.responseText);
+                            // Tăng offset lên để lấy tin tức tiếp theo
+                            newsOffset += limit;
 
-                                // Check if the response was empty to disable the button
-                                if (xhr.responseText.trim() === '') {
-                                    loadMoreNewsButton.disabled = true;
-                                    // Optionally add visual feedback, like a message:
-                                    let message = document.createElement('p');
-                                    message.textContent = 'No more news to load';
-                                    loadMoreNewsButton.parentNode.insertBefore(message, loadMoreNewsButton.nextSibling);
-                                }
-                            } else {
-                                console.error('Failed to fetch news items.');
+                            // Check if the response was empty to disable the button
+                            if (xhr.responseText.trim() === '') {
+                                loadMoreNewsButton.disabled = true;
+                                // Optionally add visual feedback, like a message:
+                                let message = document.createElement('p');
+                                message.textContent = 'Bạn đã xem hết tin tức';
+                                loadMoreNewsButton.parentNode.insertBefore(message,
+                                    loadMoreNewsButton.nextSibling);
                             }
+                        } else {
+                            console.error('Failed to fetch news items.');
                         }
-                    };
+                    }
+                };
 
-                    // Gửi yêu cầu AJAX với tham số offset và limit
-                    xhr.open('GET', 'get_more_news.php?offset=' + newsOffset + '&limit=' + limit + '&news_category_id=' + newsCategoryId, true);
-                    xhr.send();
-                });
-
-                loadMoreCollectionButton.addEventListener('click', function() {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                // Chèn HTML trả về vào cuối phần hiển thị bộ sưu tập
-                                document.querySelector('.collection_items').insertAdjacentHTML('beforeend', xhr.responseText);
-                                // Tăng offset lên để lấy bộ sưu tập tiếp theo
-                                collectionOffset += limit;
-
-                                // Check if the response was empty to disable the button
-                                if (xhr.responseText.trim() === '') {
-                                    loadMoreCollectionButton.disabled = true;
-                                    // Optionally add visual feedback, like a message:
-                                    let message = document.createElement('p');
-                                    message.textContent = 'No more news to load';
-                                    loadMoreCollectionButton.parentNode.insertBefore(message, loadMoreCollectionButton.nextSibling);
-                                }
-                            } else {
-                                console.error('Failed to fetch collection items.');
-                            }
-                        }
-                    };
-
-                    // Gửi yêu cầu AJAX với tham số offset và limit
-                    xhr.open('GET', './get_more_collection_items.php?offset=' + collectionOffset + '&limit=' + limit, true);
-                    xhr.send();
-                });
+                // Gửi yêu cầu AJAX với tham số offset và limit
+                xhr.open('GET', 'get-more-news.php?offset=' + newsOffset + '&limit=' + limit +
+                    '&news_category_id=' + newsCategoryId, true);
+                xhr.send();
             });
+
+            loadMoreCollectionButton.addEventListener('click', function() {
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Chèn HTML trả về vào cuối phần hiển thị bộ sưu tập
+                            document.querySelector('.collection_items').insertAdjacentHTML(
+                                'beforeend', xhr.responseText);
+                            // Tăng offset lên để lấy bộ sưu tập tiếp theo
+                            collectionOffset += limit;
+
+                            // Check if the response was empty to disable the button
+                            if (xhr.responseText.trim() === '') {
+                                loadMoreCollectionButton.disabled = true;
+                                // Optionally add visual feedback, like a message:
+                                let message = document.createElement('p');
+                                message.textContent = 'Bạn đã xem hết tin tức';
+                                loadMoreCollectionButton.parentNode.insertBefore(message,
+                                    loadMoreCollectionButton.nextSibling);
+                            }
+                        } else {
+                            console.error('Failed to fetch collection items.');
+                        }
+                    }
+                };
+
+                // Gửi yêu cầu AJAX với tham số offset và limit
+                xhr.open('GET', './get_more_collection_items.php?offset=' + collectionOffset +
+                    '&limit=' + limit, true);
+                xhr.send();
+            });
+        });
         </script>
 
     </main>
@@ -345,184 +356,408 @@
     ?>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        main {
-            margin: 0 5%;
-        }
+    main {
+        margin: 0 5%;
+    }
 
-        :host,
-        html {
-            -webkit-text-size-adjust: 100%;
-            font-family: "Roboto", sans-serif;
-        }
+    :host,
+    html {
+        -webkit-text-size-adjust: 100%;
+        font-family: "Roboto", sans-serif;
+    }
 
-        h1,
-        h2,
-        h6 {
-            font-weight: 700;
-        }
+    h1,
+    h2,
+    h6 {
+        font-weight: 700;
+    }
 
-        h3,
-        h4,
-        h5 {
-            font-weight: 500;
-        }
+    h3,
+    h4,
+    h5 {
+        font-weight: 500;
+    }
 
-        p {
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+    p {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.5;
+    }
 
+    h1 {
+        font-size: 56px;
+    }
+
+    h2 {
+        font-size: 36px;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    .body_shade600 {
+        color: #5a637a;
+    }
+
+    .mt-1 {
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        color: #5a637a;
+        opacity: 80%;
+    }
+
+    .mt-2 {
+        margin-top: 0.5rem;
+    }
+
+    .mt-5 {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 1rem;
+    }
+
+    .mt-6 {
+        margin-bottom: 1.2rem;
+
+    }
+
+    .filter {
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 1.25em;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    ul {
+        --category-list-width: 30%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        margin-block-end: 0.5em;
+    }
+
+    li {
+        padding: 1.5rem;
+        width: calc(var(--category-list-width) + 1);
+    }
+
+    a {
+        font-weight: 500;
+        display: inline-block;
+        font-size: 16px;
+        font-style: normal;
+        line-height: 1.4;
+        letter-spacing: -0.12px;
+        color: #5f5f5f;
+
+        transition: all 0.3s;
+
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+    .category_list ul li a:hover {
+        color: #5a637a;
+        transform: scale(1.1);
+    }
+
+    .selected {
+        color: #FF6B6B;
+        transition: color 0.3s ease;
+    }
+
+    .selected:hover {
+        transform: scale(1.1);
+    }
+
+    .selected:active {
+        opacity: 0.8;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fcfcfc;
+        margin-top: 1rem;
+        padding-left: 30px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        width: 30rem;
+        height: 2.8rem;
+        overflow: hidden;
+    }
+
+    .search-box input[type="text"] {
+        flex: 1;
+        border: none;
+        font-size: 15px;
+        opacity: 50%;
+        outline: none;
+        background-color: #fcfcfc;
+        color: #333;
+    }
+
+    .search-box button {
+        align-items: center;
+        border: none !important;
+        cursor: pointer;
+        background-color: #fcfcfc;
+        padding: 1rem;
+        margin-right: 0.2rem;
+        opacity: 50%;
+    }
+
+    .search-box button img {
+        height: 15px;
+    }
+
+    .search-box button:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 100px;
+    }
+
+    .spotlight_items {
+        padding-top: 2rem;
+        margin-bottom: 4rem;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 8%;
+        row-gap: 10%;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10rem;
+    }
+
+    .spotlight_img1 {
+        order: 1;
+        width: 100%;
+        border-radius: 12px;
+        max-height: 410px;
+        object-fit: cover;
+    }
+
+    .spotlight_img2 {
+        order: 4;
+        width: 100%;
+        border-radius: 12px;
+        max-height: 410px;
+        object-fit: cover;
+    }
+
+    .spotlight_text1 {
+        order: 2;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .spotlight_text2 {
+        order: 3;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .category {
+        border: 1px solid rgba(90, 99, 122, 0.5);
+        padding: 0.5rem 1rem;
+        width: fit-content;
+        color: #5a637a;
+        font-weight: 300;
+        opacity: 60%;
+    }
+
+    .description {
+        margin-bottom: 2rem;
+        color: #414a62;
+    }
+
+    .line_clamp {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: pre-wrap;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    article {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 30%;
+        min-height: 20rem;
+        padding: 1.25rem;
+        border-radius: 10px;
+    }
+
+    .review_items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 0 auto;
+        padding-bottom: 3rem;
+    }
+
+    .review_items article {
+        border: 1px solid rgba(90, 99, 122, 0.2);
+    }
+
+    .review_items img {
+        flex-grow: 1;
+        width: 100%;
+        max-height: 70%;
+        border-radius: 12px;
+        object-fit: cover;
+        overflow: hidden;
+    }
+
+    .review_items .category {
+        font-size: 12px;
+        padding: 0.25rem 0.375rem;
+        border-color: #5a637a;
+        color: #5a637a;
+    }
+
+    .review_items p {
+        font-size: 12px;
+        color: #5a637a;
+    }
+
+    .review_items h3 {
+        font-style: bolder;
+    }
+
+    .collection_items article {
+        width: 100%;
+        flex-direction: row;
+        border-radius: 0;
+        border-top: 1px solid #ddd;
+    }
+
+    .collection_items article img {
+        border-radius: 20px;
+        max-width: 30%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        overflow: hidden;
+    }
+
+    .wrapper {
+        gap: 0.5rem;
+        margin-left: 5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 60%;
+    }
+
+    .spotlight_items img,
+    .review_items article,
+    .collection_items article img {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .spotlight_items img:hover,
+    .review_items article:hover,
+    .collection_items article img:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .spotlight_text1 h1:hover,
+    .spotlight_text2 h1:hover,
+    .collection_items h2:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    button {
+        background-color: rgb(26 44 80);
+        color: rgb(255 255 255);
+        border-style: none;
+
+        align-items: center;
+        border-radius: 8px;
+        display: inline-flex;
+        justify-content: center;
+
+        height: 48px;
+        padding: 0.75rem 1.5rem;
+        margin: 1.25rem 0;
+
+        text-transform: uppercase;
+        transition-duration: 0.3;
+        vertical-align: middle;
+        font-weight: 600;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    button:hover {
+        background-color: rgb(40 39 100);
+    }
+
+    button:active {
+        background-color: rgb(56 55 130);
+    }
+
+    button:disabled {
+        background-color: #dadfe8;
+        color: #9DA8BE;
+
+    }
+
+    @media (max-width: 768px) {
         h1 {
-            font-size: 56px;
-        }
-
-        h2 {
             font-size: 36px;
         }
 
-        h3 {
-            font-size: 24px;
-        }
-
         .mt-1 {
-            font-size: 1.3rem;
-            margin-top: 1.5rem;
-            color: #5a637a;
-            opacity: 80%;
-        }
-
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-
-        .mt-6 {
-            margin-bottom: 1.2rem;
-
-        }
-
-        .filter {
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 1.25em;
-            display: flex;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-        }
-
-        ul {
-            --category-list-width: 30%;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            margin-block-end: 0.5em;
-        }
-
-        .selected {
-            color: #FF6B6B;
-            transition: color 0.3s ease;
-        }
-
-        .selected:hover {
-            transform: scale(1.1);
-        }
-
-        .selected:active {
-            opacity: 0.8;
-        }
-
-
-        li {
-            padding: 1.5rem;
-            width: calc(var(--category-list-width) + 1);
-        }
-
-        .category_list ul li a {
-            transition: color 0.3s, transform 0.3s;
-        }
-
-        .category_list ul li a:hover {
-            color: #5a637a;
-            transform: scale(1.1);
-        }
-
-        a {
-            font-weight: 500;
-            display: inline-block;
-            font-size: 16px;
-            font-style: normal;
-            line-height: 1.4;
-            letter-spacing: -0.12px;
-            color: #5f5f5f;
-
-            transition: all 0.3s;
-
-            text-decoration: none;
-            background-color: transparent;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #fcfcfc;
+            font-size: 1rem;
             margin-top: 1rem;
-            padding-left: 30px;
-            border-radius: 6px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            width: 30rem;
-            height: 2.8rem;
-            overflow: hidden;
         }
 
-        .search-box input[type="text"] {
-            flex: 1;
-            border: none;
-            font-size: 15px;
-            opacity: 50%;
-            outline: none;
-            background-color: #fcfcfc;
-            color: #333;
+        .category_list ul {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+            scroll-padding-left: 30px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            margin-block-end: 0;
         }
 
-        .search-box button {
-            align-items: center;
-            border: none !important;
-            cursor: pointer;
-            background-color: #fcfcfc;
-            padding: 1rem;
-            margin-right: 0.2rem;
-            opacity: 50%;
-        }
-
-        .search-box button img {
-            height: 15px;
-        }
-
-        .search-box button:hover {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 100px;
+        .category_list ul li {
+            display: inline-block;
         }
 
         .spotlight_items {
-            padding-top: 2rem;
-            margin-bottom: 4rem;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            column-gap: 8%;
-            row-gap: 10%;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10rem;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
         }
 
-        .spotlight_img1 {
-            order: 1;
+        .spotlight_img2 {
+            order: 3;
             width: 100%;
             border-radius: 12px;
             max-height: 410px;
@@ -530,306 +765,66 @@
         }
 
         .spotlight_img2 {
-            order: 4;
-            width: 100%;
-            border-radius: 12px;
-            max-height: 410px;
-            object-fit: cover;
-        }
-
-        .spotlight_text1 {
-            order: 2;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .spotlight_text2 {
             order: 3;
             display: flex;
             justify-content: center;
             flex-direction: column;
         }
 
-
-        .line_clamp {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: pre-wrap;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-        }
-
-        .category {
-            border: 1px solid rgba(90, 99, 122, 0.5);
-            padding: 0.5rem 1rem;
-            width: fit-content;
-            color: #5a637a;
-            font-weight: 300;
-            opacity: 60%;
-        }
-
-        .description {
-            margin-bottom: 2rem;
-            color: #414a62;
-        }
-
-        .body_shade600 {
-            color: #5a637a;
-        }
-
-        .review_items img,
-        .collection_items img,
-        .spotlight_items img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-
-        article {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            width: 30%;
-            min-height: 20rem;
-            padding: 1.25rem;
-            border-radius: 10px;
-        }
-
-        .review_items article {
-            border: 1px solid rgba(90, 99, 122, 0.2);
+        .spotlight_text1,
+        .spotlight_text2 {
+            margin-top: 1rem;
         }
 
         .review_items {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 0 auto;
-            padding-bottom: 3rem;
+            gap: 1rem;
         }
 
-        .review_items .category {
+        .review_items article {
+            width: 100%;
+        }
+
+        .collection_items article img {
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .category {
             font-size: 12px;
             padding: 0.25rem 0.375rem;
         }
 
-        .review_items img {
-            flex-grow: 1;
-            width: 100%;
-            max-height: 70%;
-            border-radius: 12px;
-            object-fit: cover;
-            overflow: hidden;
-        }
-
-        .review_items p {
-            font-size: 12px;
-            color: #5a637a;
-        }
-
-        .mt-5 {
-            position: absolute;
-            bottom: 0;
-            margin-bottom: 1rem;
-        }
-
-        .review_items h3 {
-            font-style: bolder;
-        }
-
-        .review_items .category {
-            border-color: #5a637a;
-            color: #5a637a;
-        }
-
-        .collection_items article img {
-            border-radius: 20px;
-            max-width: 30%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            overflow: hidden;
-        }
-
-        .wrapper {
-            gap: 0.5rem;
-            margin-left: 5%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .collection_items h2 {
+            font-size: 24px;
         }
 
         .collection_items article {
+            flex-direction: column;
+            border-top: none;
+        }
+
+        .search-box {
             width: 100%;
-            flex-direction: row;
-            border-radius: 0;
-            border-top: 1px solid #ddd;
+            padding: 0 1rem;
         }
 
-        .spotlight_items img,
-        .review_items article,
-        .collection_items article img {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        .filter {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    }
+
+    @media screen and (max-width: 1600) and (min-width: 600px) {
+        .spotlight_items {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding-bottom: 50px;
         }
 
-        .spotlight_items img:hover,
-        .review_items article:hover,
-        .collection_items article img:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        .mt-2 {
+            font-size: 1rem;
         }
-
-        .spotlight_text1 h1:hover,
-        .spotlight_text2 h1:hover,
-        .collection_items h2:hover {
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        button {
-            background-color: rgb(26 44 80);
-            color: rgb(255 255 255);
-            border-style: none;
-
-            align-items: center;
-            border-radius: 8px;
-            display: inline-flex;
-            justify-content: center;
-
-            height: 48px;
-            padding: 0.75rem 1.5rem;
-            margin: 1.25rem 0;
-
-            text-transform: uppercase;
-            transition-duration: 0.3;
-            vertical-align: middle;
-            font-weight: 600;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        button:hover {
-            background-color: rgb(40 39 100);
-        }
-
-        button:active {
-            background-color: rgb(56 55 130);
-        }
-
-        button:disabled {
-            background-color: #dadfe8;
-            color: #9DA8BE;
-
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 36px;
-            }
-
-            .category_list ul {
-                overflow-x: auto;
-                overflow-y: hidden;
-                white-space: nowrap;
-                scroll-snap-type: x mandatory;
-                scroll-padding-left: 30px;
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-                margin-block-end: 0;
-            }
-
-            .category_list ul li {
-                display: inline-block;
-            }
-
-            .mt-1 {
-                font-size: 1rem;
-                margin-top: 1rem;
-            }
-
-            .spotlight_items {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                padding-bottom: 50px;
-                display: flex;
-                flex-direction: column;
-                align-content: center;
-            }
-
-            .spotlight_img2 {
-                order: 3;
-                width: 100%;
-                border-radius: 12px;
-                max-height: 410px;
-                object-fit: cover;
-            }
-
-            .spotlight_img2 {
-                order: 3;
-                display: flex;
-                justify-content: center;
-                flex-direction: column;
-            }
-
-            .spotlight_text1,
-            .spotlight_text2 {
-                margin-top: 1rem;
-            }
-
-            .review_items {
-                gap: 1rem;
-            }
-
-            .review_items article {
-                width: 100%;
-            }
-
-            .collection_items article img {
-                max-width: 100%;
-                margin-bottom: 1rem;
-            }
-
-            .category {
-                font-size: 12px;
-                padding: 0.25rem 0.375rem;
-            }
-
-            .collection_items h2 {
-                font-size: 24px;
-            }
-
-            .collection_items article {
-                flex-direction: column;
-                border-top: none;
-            }
-
-            .search-box {
-                width: 100%;
-                padding: 0 1rem;
-            }
-
-            .filter {
-                display: flex;
-                flex-direction: column-reverse;
-            }
-        }
-
-        @media screen and (max-width: 1600) and (min-width: 600px) {
-            .spotlight_items {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                padding-bottom: 50px;
-            }
-
-            .mt-2 {
-                font-size: 1rem;
-            }
-        }
+    }
     </style>
 
 

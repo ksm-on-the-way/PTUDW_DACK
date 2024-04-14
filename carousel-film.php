@@ -20,13 +20,14 @@
     margin: 0 auto;
     position: relative;
     margin-top: 20px;
+    padding-left: 5px;
 }
 
 @media (min-width: 768px) {
     .carousel-film__container {
         max-width: 1300px;
         margin-top: 70px;
-
+        padding-left: unset
     }
 }
 
@@ -42,13 +43,13 @@
 .carousel-film__container .owl-carousel .owl-nav .owl-prev {
     position: absolute;
     left: 25px;
-    top: 50%;
+    top: 38%;
 }
 
 .carousel-film__container .owl-carousel .owl-nav .owl-next {
     position: absolute;
     right: 25px;
-    top: 50%;
+    top: 38%;
 }
 
 .carousel-film__container .owl-carousel .owl-nav .owl-next,
@@ -157,18 +158,20 @@
 <script>
 $('.carousel-film__container .owl-carousel').owlCarousel({
     loop: true,
-    margin: 0,
     navText: [
         "<i class='fas fa-chevron-left'></i>",
         "<i class='fas fa-chevron-right'></i>",
     ],
     nav: true,
+    dots: false,
     responsive: {
         0: {
             items: 1,
+            margin: 20,
             nav: false
         },
         600: {
+            margin: 0,
             items: 2
         },
 

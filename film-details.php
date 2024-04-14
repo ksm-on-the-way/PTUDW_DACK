@@ -122,87 +122,85 @@ function redirectToSchedule(movieId) {
 ?>
 
 <script>
-  //Mua vé
- 
+//Mua vé
+
 
 //Trailer
-
 </script>
 <style>
-  html {
+html {
     margin: 0px;
     padding: 0px;
-  }
+}
 
-  .detail-container {
+.detail-container {
     display: flex;
     margin-top: 28px;
     width: 100%;
     flex-direction: column;
     padding: 0 px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .detail-container {
-      max-width: 100%;
-      padding: 0 20px;
+        max-width: 100%;
     }
-  }
+}
 
-  .detail-head {
+.detail-head {
     color: var(--Shade-900, #333);
     font: 700 36px Roboto, sans-serif;
     margin-left: 120px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .detail-head {
-      max-width: 100%;
-      margin-right: 12px;
+        max-width: 100%;
+        margin-right: 12px;
     }
-  }
+}
 
-  .detail-container-gen {
+.detail-container-gen {
     align-self: center;
     margin-top: 50px;
     width: 100%;
     max-width: 1256px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .detail-container-gen {
-      max-width: 100%;
-      margin-top: 20px;
+        max-width: 100%;
+        margin-top: 20px;
     }
-  }
+}
 
-  .detail-item {
+.detail-item {
     gap: 40px;
     display: flex;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .detail-item {
-      display: flex;
-      gap: 5px;
+        display: block;
+        gap: 5px;
     }
-  }
+}
 
-  .column-1 {
+.column-1 {
     display: flex;
     flex-direction: column;
     line-height: normal;
     width: 30%;
     margin-left: 0px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .column-1 {
-      width: 32%;
+        width: 100%;
     }
-  }
+}
 
-  .img {
+.img {
     aspect-ratio: 0.71;
     object-fit: auto;
     object-position: center;
@@ -211,100 +209,101 @@ function redirectToSchedule(movieId) {
     flex-grow: 1;
     border-radius: 15px;
     height: 65%;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .img {
-      max-width: 100%;
-      margin-top: 40px;
-      height: 20%;
+        max-width: 100%;
+        margin-top: 40px;
+        height: 20%;
     }
-  }
+}
 
-  .column-2 {
+.column-2 {
     display: flex;
     flex-direction: column;
     line-height: normal;
     width: 65%;
     margin-left: 20px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .column-2 {
-      width: 72%;
+        width: 100%;
+        margin-left: unset;
     }
-  }
+}
 
-  .detail-content {
+.detail-content {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
     font-size: 18px;
     font-weight: 500;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .detail-content {
-      max-width: 100%;
-      margin-top: 40px;
-      display: flex;
+        max-width: 100%;
+        margin-top: 40px;
+        display: flex;
     }
-  }
+}
 
-  .title {
+.title {
     color: var(--Royal-Blue, #1a2c50);
     font: 700 36px Roboto, sans-serif;
     text-transform: uppercase;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .title {
-      max-width: 100%;
+        max-width: 100%;
     }
-  }
+}
 
-  .content1 {
+.content1 {
     color: var(--Shade-600, #5a637a);
     text-align: justify;
     margin-top: 16px;
     font: 400 16px/24px Roboto, sans-serif;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .content1 {
-      max-width: 100%;
+        max-width: 100%;
     }
-  }
+}
 
-  .content2 {
+.content2 {
     color: var(--Royal-Blue, #1a2c50);
     font-family: Roboto, sans-serif;
     margin-top: 16px;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .content2 {
-      max-width: 100%;
+        max-width: 100%;
     }
-  }
+}
 
-  .btn {
+.btn {
     display: flex;
     gap: 25px;
     font-size: 20px;
     text-align: center;
     line-height: 133%;
     margin: 100px 120px 0;
-  }
+}
 
-  @media (max-width: 991px) {
+@media (max-width: 991px) {
     .btn {
-      flex-wrap: wrap;
-      margin: 40px 10px 0 0;
+        flex-wrap: wrap;
+        margin: 40px 10px 0 0;
     }
-  }
+}
 
-  .btn-trailer {
+.btn-trailer {
     font-family: Roboto, sans-serif;
     justify-content: center;
     border-radius: 12px;
@@ -315,9 +314,9 @@ function redirectToSchedule(movieId) {
     flex-grow: 1;
     width: 60px;
     padding: 10px 10px;
-  }
+}
 
-  .btn-mua-ve {
+.btn-mua-ve {
     font-family: Roboto, sans-serif;
     justify-content: center;
     border-radius: 12px;
@@ -327,5 +326,5 @@ function redirectToSchedule(movieId) {
     width: 60px;
     padding: 10px 10px;
     cursor: pointer;
-  }
+}
 </style>

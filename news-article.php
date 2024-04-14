@@ -460,6 +460,7 @@ article {
     /* padding-bottom: 3rem; */
     max-width: 1300px;
     cursor: pointer;
+    margin-top: 40px;
 }
 
 .review_items .category {
@@ -636,6 +637,7 @@ button:disabled {
 
     .review_items {
         gap: 1rem;
+        padding: 0 10px;
     }
 
     .review_items article {
@@ -697,6 +699,7 @@ button:disabled {
     .review_items .heading {
         max-width: 100%;
         flex-wrap: wrap;
+        margin-top: 20px;
     }
 }
 
